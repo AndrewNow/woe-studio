@@ -1,20 +1,5 @@
 import {defineField, defineType} from 'sanity'
 
-// [DONE] project title (string)
-// [DONE] project clients (array of strings)
-// [DONE] project description (rich text)
-// [DONE] secondary project description (rich text)
-// [DONE] award name (array of strings)
-// [DONE] award logo (array of images)
-// [DONE] services (array of strings)
-// [DONE] credits (array of strings)
-// [DONE] video file preview length (video)
-// [DONE] video thumbnail preview (image)
-// [DONE] video file full length (video)
-// [DONE] video episodes (array of objects -> { video, title, description })
-// project images carousel (array of images, carousel)
-// project images (array of images)
-
 export default defineType({
   name: 'projects',
   title: 'Projects',
