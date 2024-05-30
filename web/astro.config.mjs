@@ -8,7 +8,7 @@ export default defineConfig({
       projectId: "n8fc5ydg",
       dataset: "production",
       // set useCDN to false if building statically
-      useCDN: false
+      useCDN: false,
     })
   ]
 });
