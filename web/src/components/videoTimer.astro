@@ -1,0 +1,177 @@
+---
+const { data } = Astro.props;
+import Image from "astro/components/Image.astro";
+import logo from "../assets/woe-full.png";
+const isIndexPage = Astro.url.pathname == "/";
+---
+
+<div class="timer__parent">
+  <div class="timer__container">
+    {
+      isIndexPage && (
+        <Image
+          src={logo}
+          alt="WOE Studio logo"
+          width="511"
+          height="25"
+          loading="eager"
+          class="woe-logo"
+        />
+      )
+    }
+    <div class="timer__wrapper">
+      {
+        data &&
+          data.map((video) => {
+            return (
+              <div class="timer-item">
+                <p>{video.title}</p>
+                <p>{video.subtitle}</p>
+                <div class="timer-countdown">
+                  <div class="timer-countdown__progress" />
+                </div>
+              </div>
+            );
+          })
+      }
+    </div>
+  </div>
+  <a
+    href="/projects"
+    class="link hero-projects-link"
+    data-value="View all projects"
+  >
+    <p>View all projects</p>
+  </a>
+</div>
+
+<style>
+  .woe-logo {
+    margin-left: 3vw;
+    margin-bottom: 1.5vw;
+    aspect-ratio: 511/25;
+    /* width: 100%; */
+    /* height: auto; */
+  }
+  .timer__container {
+    /* border: 1px solid red; */
+    position: relative;
+  }
+  .timer__parent {
+    z-index: 10;
+    position: absolute;
+    width: 100%;
+    bottom: 3vh;
+    padding: 0rem;
+    left: 0rem;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+  .hero-projects-link {
+    margin-right: 3vw;
+  }
+  .timer__wrapper {
+    margin-left: 3vw;
+    color: var(--white);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .timer-item {
+    width: 165px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    & p {
+      transition: 0.35s all ease;
+    }
+  }
+  .timer-countdown {
+    position: relative;
+    width: 100%;
+    margin-top: 2rem;
+    height: 1px;
+    background-color: rgba(var(--rgb-white), 0.5);
+  }
+  .timer-countdown__progress {
+    transition: width 3s linear;
+    background-color: rgba(var(--rgb-white), 1);
+    height: 1px;
+    width: 0%;
+  }
+</style>
+
+<script>
+  const timerItems = document.querySelectorAll(".timer-item");
+  const timerVideoArr = document.querySelectorAll("#timer-video");
+  const duration = 3000; // Duration of each video in seconds (adjust as needed)
+  let currentIndex = 0;
+
+  setInterval(() => {
+    timerVideoArr.forEach((video, i) => {
+      video.pause();
+      if (i == currentIndex) {
+        // only play the current video
+        video.style.transition = ".5s all ease";
+        video.style.opacity = "1";
+        video.currentTime = 0;
+        video.play();
+      } else {
+        // pause and fade other videos
+        video.style.transition = ".5s all ease";
+        video.style.opacity = "0";
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+
+    // Get the current progress element
+    const currentProgress = timerItems[currentIndex].querySelector(
+      ".timer-countdown__progress"
+    );
+    // Set the width of the current progress to 100%
+    currentProgress.style.width = "100%";
+
+    // for each timer item, if the item == current index, set text opacity to 1. else, 0.5
+    timerItems.forEach((item, i) => {
+      const currentTextElements = item.querySelectorAll("p");
+      if (i === currentIndex) {
+        currentTextElements[0].style.opacity = "1";
+        currentTextElements[1].style.opacity = ".75";
+        // currentTextElements.forEach((el) => {
+        //   el.style.opacity = "1";
+        // });
+      } else {
+        currentTextElements.forEach((el) => {
+          el.style.opacity = "0.5";
+        });
+      }
+    });
+
+    // Get the previous progress element
+    const prevIndex =
+      currentIndex === 0 ? timerItems.length - 1 : currentIndex - 1;
+    const prevProgress = timerItems[prevIndex].querySelector(
+      ".timer-countdown__progress"
+    );
+
+    // Set the width of the previous progress to 0% and remove the transition
+    prevProgress.style.width = "0%";
+    prevProgress.style.transitionDuration = "0s";
+
+    // Reset the transition duration for the previous progress
+    prevProgress.offsetHeight; // Trigger a reflow to ensure the transition takes effect
+    prevProgress.style.transitionDuration = "3s";
+
+    // Increment the counter
+    if (currentIndex < timerItems.length - 1) {
+      currentIndex++;
+    } else {
+      // If we're at the end of the loop, reset it to 0
+      currentIndex = 0;
+    }
+  }, duration);
+</script>

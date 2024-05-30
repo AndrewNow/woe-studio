@@ -1,0 +1,291 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Image from "astro/components/Image.astro";
+import sample from "../assets/sample.png";
+import Team from "../components/team.astro";
+import Marquee from "../components/marquee.astro";
+import VideoTimer from "../components/videoTimer.astro";
+import Footer from "../components/footer.astro";
+
+const videoData = [
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "Anything",
+    subtitle: "Long title",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+];
+---
+
+<Layout>
+  <div class="canvas__wrapper">
+    <div class="blur">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+      <!-- <canvas id="gradient-canvas" data-js-darken-top></canvas> -->
+    </div>
+  </div>
+  <div class="about-hero">
+    <div class="about-images__wrapper">
+      <div class="about-images__col" id="about-col1">
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+      </div>
+      <div class="about-images__col" id="about-col2">
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+      </div>
+      <div class="about-images__col" id="about-col3">
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+        <Image src={sample} width="553" height="287" alt="sample image" />
+      </div>
+    </div>
+    <h2 class="about-bio">
+      WOE Studio [What on Earth], founded by Jerome Riel & Kevin Lien, is a
+      communication company. We craft stories, we challenge conventional notions
+      of taste across diverse domains. Our intentional ambiguity allows for
+      freedom to grow and experiment, setting us apart from creative norms that
+      often adhere to specific narratives and aesthetics.
+    </h2>
+  </div>
+  <Team />
+  <Marquee />
+  <div class="sticky__container">
+    <div class="sticky-gradient"></div>
+    <div class="about-video__container">
+      {
+        videoData.map((video, i) => {
+          return (
+            <video
+              class="hero-video hover-area"
+              preload="metadata"
+              autoplay="true"
+              loop="true"
+              muted="true"
+              id={`timer-video`}
+            >
+              <source src={video.src} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          );
+        })
+      }
+      <VideoTimer data={videoData} />
+    </div>
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  @keyframes rotate360 {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  .about-images__wrapper {
+    position: relative;
+    z-index: 10;
+    margin: 0 auto;
+    margin-top: -25vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .about-images__col {
+    flex: 1;
+    margin: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & img {
+      margin-top: 1rem;
+      width: 100%;
+      aspect-ratio: 553/287;
+      height: auto;
+    }
+  }
+  .about-hero {
+    overflow-x: hidden;
+    height: auto;
+    position: relative;
+    /* height: 145vh; */
+  }
+  .about-bio {
+    position: relative;
+    z-index: 100;
+    width: var(--inner-width);
+    margin: 8rem auto;
+    color: white;
+  }
+  .canvas__wrapper {
+    overflow: hidden;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    height: 150vh;
+    width: 100%;
+  }
+  .blur {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    filter: blur(250px);
+  }
+
+  .circle {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0);
+    width: 90vw;
+    height: 45vw;
+    border-radius: 999999px;
+  }
+  .circle-1 {
+    animation: rotate360 12s linear infinite;
+    background: linear-gradient(
+      191deg,
+      #9aeadd 8.23%,
+      rgba(120, 124, 123, 0) 64.05%
+    );
+  }
+  .circle-2 {
+    animation: rotate360 15s linear infinite reverse;
+    background: linear-gradient(
+      193deg,
+      #ba00a7 9.57%,
+      rgba(21, 94, 137, 0) 57.59%
+    );
+  }
+  .circle-3 {
+    animation: rotate360 20s linear infinite;
+    background: linear-gradient(
+      193deg,
+      #155e89 9.57%,
+      rgba(21, 94, 137, 0) 57.59%
+    );
+  }
+  #about-col1,
+  #about-col2,
+  #about-col3 {
+    transform: translateY(-150vh);
+    opacity: 0;
+  }
+
+  .sticky__container {
+    position: relative;
+    display: unset;
+    overflow-x: hidden;
+    height: 100%;
+  }
+  .sticky-gradient {
+    z-index: 11;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 21.56%,
+      rgba(0, 0, 0, 0.25) 48.54%,
+      #000 100%
+    );
+  }
+  .about-video__container {
+    transform: translateY(-200px);
+    aspect-ratio: 16/6;
+    z-index: 10;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+  }
+  .hover-area {
+    overflow: hidden;
+  }
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  import { Gradient } from "../components/utils/gradient.js";
+
+  // Create your instance
+  const gradient = new Gradient();
+
+  // Call `initGradient` with the selector to your canvas
+  gradient.initGradient("#gradient-canvas");
+
+  import { animate } from "motion";
+  const col1 = document.getElementById("about-col1");
+  const col2 = document.getElementById("about-col2");
+  const col3 = document.getElementById("about-col3");
+
+  animate(
+    col1,
+    {
+      transform: "translateY(-10vh)",
+      opacity: 1,
+    },
+    { duration: 2.4, delay: 0.25, easing: [0.35, 0.5, 0, 1] }
+  );
+  animate(
+    col2,
+    {
+      transform: "translateY(0px)",
+      opacity: 1,
+    },
+    { duration: 2.5, delay: 0.5, easing: [0.35, 0.5, 0, 1] }
+  );
+  animate(
+    col3,
+    {
+      transform: "translateY(-15vh)",
+      opacity: 1,
+    },
+    { duration: 2.7, delay: 0.75, easing: [0.35, 0.5, 0, 1] }
+  );
+</script>

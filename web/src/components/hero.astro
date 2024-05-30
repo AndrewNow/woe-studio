@@ -1,0 +1,181 @@
+---
+import VideoTimer from "./videoTimer.astro";
+const { videoData } = Astro.props;
+---
+
+<div class="wrapper">
+  <div class="video-container" id="hero-video-container">
+    <svg
+      class="corner corner-top-left"
+      width="51"
+      height="51"
+      viewBox="0 0 51 51"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
+        fill="var(--black)"></path>
+    </svg>
+    <svg
+      class="corner corner-bottom-left"
+      width="51"
+      height="51"
+      viewBox="0 0 51 51"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
+        fill="var(--black)"></path>
+    </svg>
+    {
+      videoData.map((video, i) => {
+        return (
+          <video
+            class="hero-video hover-area"
+            preload="metadata"
+            autoplay="true"
+            loop="true"
+            muted="true"
+            id={`timer-video`}
+          >
+            <source src={video.src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        );
+      })
+    }
+    <VideoTimer data={videoData} />
+  </div>
+  <div class="about-container" id="hero-about-container">
+    <svg
+      class="corner corner-top-right"
+      width="51"
+      height="51"
+      viewBox="0 0 51 51"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
+        fill="var(--black)"></path>
+    </svg>
+    <svg
+      class="corner corner-bottom-right"
+      width="51"
+      height="51"
+      viewBox="0 0 51 51"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
+        fill="var(--black)"></path>
+    </svg>
+    <a href="/about" class="link hero-link" data-value="View all projects">
+      <p>About us</p>
+    </a>
+    <video
+      class="about-video hover-area"
+      preload="metadata"
+      autoplay="true"
+      loop="true"
+      muted="true"
+    >
+      <source
+        src="https://s3-figma-videos-production-sig.figma.com/video/1322265666267064901/TEAM/9cf5/0e4f/-9002-4e52-baf8-e04685942e74?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hqcEfzRZl5GzkNXphqse7sZFJS7BFumhMR74vlvqSdat~LDS2wSDH2JoawjeNmMk6RtHRi-rLLst~6dB4MvN1Wz7GrxMc~6NEp334JChb-I3h6iaCoPQXyHyQc4kB18btS84XxMsVtxZbcsBpdhpGzxPpfgkoflQXpcxjx1YEPNijopjiw1H5wMqQYjRSmpnCNIjQyn4Aa0kX0xeZRaj3r~8fZok12Yhxb78Z4FYi8QqOqMeIlr2iOMfbz2zZ6FGNrpj9zIqw-0J1K54O6ObVS8aaYwVKaDfYD~358xw8tV4hl04Q1MaFRVrH17~3JRG0SNlAJZGbEAGaTUbwncNOg__"
+        type="video/mp4"
+      />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
+<style>
+  .wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    border-radius: 20px;
+    gap: 0.5rem;
+  }
+  .hero-link {
+    /* padding-right: 3rem; */
+    position: absolute;
+    z-index: 99;
+    bottom: 3vh;
+    left: 0;
+    margin-left: 3vw;
+  }
+
+  .hover-area {
+    overflow: hidden;
+  }
+  .video-container {
+    flex: 0;
+    margin: 1rem;
+    margin-right: 0;
+    height: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .about-container {
+    position: relative;
+    flex: 1;
+    margin: 1rem;
+    margin-left: 0;
+    height: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  .about-video {
+    position: relative;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 992px) {
+    .wrapper {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  import { animate } from "motion";
+
+  const videoContainer = document.getElementById("hero-video-container");
+  const aboutContainer = document.getElementById("hero-about-container");
+
+  document.querySelector("body").onload = () => {
+    animate(
+      videoContainer,
+      {
+        flex: 1.5,
+      },
+      {
+        duration: 3,
+        // delay: 2,
+        // duration: 0,
+      }
+    );
+  };
+</script>

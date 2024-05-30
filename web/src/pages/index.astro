@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/hero.astro";
+
+const videoData = [
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "Anything",
+    subtitle: "Long title",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+  {
+    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
+    title: "WOE Studio",
+    subtitle: "2024 Demo Reel",
+  },
+];
+---
+
+<Layout title="Welcome to Astro.">
+  <Hero videoData={videoData} />
+</Layout>
+
+<style>
+  .hero {
+    color: white;
+  }
+</style>

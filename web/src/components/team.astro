@@ -1,0 +1,155 @@
+---
+import { Image } from "astro:assets";
+import teamSample from "../assets/team-sample.png";
+const teamData = [
+  {
+    name: "Jerome Riel",
+    title: "Co-Founder | Executive Producer | Director",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Kevin Lien",
+    title: "Co-Founder | Executive Producer | Director",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Mel de Melo",
+    title: "Operations | Producer",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Chris Yue",
+    title: "Operations | Producer",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Alexander Medeiros",
+    title: "Project Manager",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Ashley Mach",
+    title: "Studio Coordinator",
+    imageSrc: { teamSample },
+  },
+  {
+    name: "Melissa Riel",
+    title: "Stills Photographer",
+    imageSrc: { teamSample },
+  },
+];
+---
+
+<div class="team__wrapper">
+  <div class="team__container">
+    {
+      teamData.map((member, i) => {
+        return (
+          <div class="team-entry" id="team-entry" data-index={i}>
+            <div class="member-name">
+              <p>{member.name}</p>
+            </div>
+            <div class="member-title">
+              <p>{member.title}</p>
+            </div>
+            <div class="member-image__wrapper">
+              <Image
+                class="member-image"
+                src={teamSample}
+                width="270"
+                height="130"
+                alt={`Portrait image of ${member.name}`}
+              />
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+  <div class="team-expertise">
+    <p>Expertise</p>
+    <ul>
+      <li>Creative Direction</li>
+      <li>Motion Production</li>
+      <li>Brand Development</li>
+      <li>Commercials</li>
+      <li>Branded Content</li>
+      <li>Documentary</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .team__wrapper {
+    width: var(--inner-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .team-expertise {
+    width: 200px;
+    color: var(--white);
+    & ul {
+      list-style: none;
+      padding-left: 0;
+      color: rgba(var(--rgb-white), 0.5);
+    }
+  }
+  .team__container {
+    flex: 1;
+    display: block;
+  }
+  .team-entry {
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr 2fr 1fr;
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+  }
+  .team-entry:before {
+    position: absolute;
+    left: 0;
+    bottom: 1.5rem;
+    content: "";
+    height: 1px;
+    width: 0%;
+    transition: all 0.36s ease;
+    background: rgba(var(--rgb-white), 0.15);
+  }
+  .team-entry:hover:before {
+    content: "";
+    height: 1px;
+    width: 74.5%;
+    background: rgba(var(--rgb-white), 1);
+  }
+  .team-entry:hover {
+    & .member-image {
+      clip-path: inset(0% 0% 0% 0%);
+      opacity: 1;
+    }
+  }
+  .member-name {
+    cursor: default;
+    min-width: max(200px, 25vw);
+    color: var(--white);
+  }
+  .member-title {
+    cursor: default;
+    color: rgba(var(--rgb-white), 0.5);
+  }
+  .member-image__wrapper {
+  }
+  .member-image {
+    opacity: 0;
+    clip-path: inset(100% 0% 0% 0%);
+    transition: 0.36s all ease;
+    position: absolute;
+    top: -60%;
+    aspect-ratio: 270/130;
+    width: auto;
+    height: 130px;
+  }
+</style>
+
+<script></script>

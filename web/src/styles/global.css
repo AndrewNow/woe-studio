@@ -1,0 +1,155 @@
+  :root {
+    --black: rgb(0 0 0);
+    --white: rgb(239 237 237);
+    --rgb-white: 239, 237, 237;
+    --rgb-black: 0, 0, 0;
+    --inner-width: 94%;
+  }
+
+
+html,
+  body {
+    font-family: system-ui, sans-serif;
+    background: var(--black);
+    margin: 0;
+    padding: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  small,
+  a,
+  li {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  @font-face {
+    font-family: "n27-light";
+    src: url("../fonts/n27-light.woff2") format("woff2");
+        font-weight: lighter;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "n27-regular";
+    src: url("../fonts/n27-regular.woff2") format("woff2");
+        font-weight: lighter;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "n27-medium";
+    src: url("../fonts/n27-medium.woff2") format("woff2");
+        font-weight: lighter;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  h1 {
+    font-size: 96px;
+    line-height: 100%;
+    letter-spacing: -0.03rem;
+    font-family: "n27-medium";
+  }
+  h2 {
+    font-size: 40px;
+    line-height: 135%;
+    letter-spacing: -0.09rem;
+    font-family: "n27-light";
+  }
+  h3 {
+    font-size: 28px;
+    line-height: 135%;
+    letter-spacing: -0.02rem;
+    font-family: "n27-regular";
+  }
+  h4 {
+    font-size: 24px;
+    line-height: 115%;
+    font-weight: lighter;
+    letter-spacing: -0.03rem;
+    font-family: "n27-regular";
+  }
+  h5 {
+    font-size: 20px;
+    line-height: 135%;
+    letter-spacing: -0.01rem;
+    font-family: "n27-regular";
+  }
+  h6 {
+    font-size: 20px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    font-family: "n27-regular";
+  }
+  p {
+    font-size: 16px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    font-family: "n27-regular";
+  }
+  a {
+    font-size: 14px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    font-family: "n27-medium";
+  }
+  small {
+    font-size: 14px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    font-family: "n27-light";
+  }
+
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 48px;
+    }
+    h2 {
+      font-size: 20px;
+      line-height: 135%;
+      letter-spacing: -0.05rem;
+    }
+    h3 {
+      font-size: 18px;
+      line-height: 115%;
+    }
+    h4 {
+      font-size: 15px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    h5 {
+      font-size: 20px;
+      line-height: 135%;
+      letter-spacing: -0.01rem;
+      font-family: "n27-regular";
+    }
+    h6 {
+      font-size: 20px;
+      line-height: 135%;
+      letter-spacing: -0.03rem;
+      font-family: "n27-regular";
+    }
+    p {
+      font-size: 12px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    a {
+      font-size: 12px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    small {
+      font-size: 12px;
+      line-height: 115%;
+    }
+  }

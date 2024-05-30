@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+// import Image from "astro/components/Image.astro";
+import clover from "../assets/woe-clover.png";
+---
+
+<nav class="nav">
+  <a href="/">
+    <Image
+      src={clover}
+      alt="Clover logo"
+      width="40"
+      height="40"
+      loading="eager"
+    />
+  </a>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--inner-width);
+    margin: 0 auto;
+    z-index: 99999;
+  }
+</style>
