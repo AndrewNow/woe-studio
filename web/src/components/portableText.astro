@@ -1,0 +1,17 @@
+---
+import { PortableText } from "astro-portabletext";
+
+const { data } = Astro.props;
+---
+
+<div class="styled-markdown">
+  <PortableText value={data} />
+</div>
+
+<style is:global>
+  .styled-markdown {
+    & p {
+      margin-bottom: 1rem;
+    }
+  }
+</style>

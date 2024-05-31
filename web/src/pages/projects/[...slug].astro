@@ -1,0 +1,134 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getProjectPageData } from "../../sanity/api";
+// import { PortableText } from "astro-portabletext";
+import PortableText from "../../components/portableText.astro";
+
+const pages = await getProjectPageData();
+
+const { slug } = Astro.params;
+const page = pages.find((page) => page.slug === slug);
+if (!page) return Astro.redirect("/404");
+
+const {
+  title,
+  awardArray,
+  clientArray,
+  creditsArray,
+  servicesArray,
+  awardImageArray,
+  description,
+  secondaryDescription,
+  thumbnail,
+  video,
+  episodeArray,
+  imageArray,
+} = page;
+---
+
+<Layout>
+  <div class="main-video__wrapper">
+    <video
+      class="main-video"
+      preload="metadata"
+      loop="true"
+      controls
+      muted="true"
+      poster={thumbnail}
+    >
+      <source src={video} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="project-details__wrapper">
+    <div class="project-details__flex">
+      <div class="project-details-left">
+        <h1>{title}</h1>
+      </div>
+      <div>
+        {
+          clientArray.map((client) => {
+            return <p>{client}</p>;
+          })
+        }
+      </div>
+      <div class="project-details-right">
+        <div class="project-details-overview">
+          <h5>Project Overview</h5>
+          <p>
+            <PortableText data={description} />
+          </p>
+        </div>
+        <div class="project-details-credits">
+          <div class="project-details-credits-item">
+            <p class="item-title">Services</p>
+            {
+              servicesArray.map((service) => {
+                return <p>{service}</p>;
+              })
+            }
+          </div>
+          <div class="project-details-credits-item">
+            <p class="item-title">Credits</p>
+            {
+              creditsArray.map((credit) => {
+                return <p>{credit}</p>;
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .main-video__wrapper {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+  }
+  .main-video {
+    aspect-ratio: 16/9;
+    background: grey;
+    height: 100%;
+    width: 100%;
+  }
+
+  .project-details__wrapper {
+    color: var(--white);
+    margin: 4rem;
+  }
+  .project-details__flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  .project-details-left {
+    flex: 2;
+  }
+  .project-details-right {
+    color: var(--white);
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .project-details-overview {
+    & h5 {
+      margin-bottom: 2rem;
+    }
+  }
+  .project-details-credits {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .project-details-credits-item {
+    color: rgba(var(--rgb-white), 0.5);
+  }
+  .item-title {
+    color: var(--white);
+  }
+</style>

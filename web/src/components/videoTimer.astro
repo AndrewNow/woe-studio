@@ -97,7 +97,7 @@ const isIndexPage = Astro.url.pathname == "/";
     background-color: rgba(var(--rgb-white), 0.5);
   }
   .timer-countdown__progress {
-    transition: width 3s linear;
+    transition: width 5s linear;
     background-color: rgba(var(--rgb-white), 1);
     height: 1px;
     width: 0%;
@@ -107,7 +107,7 @@ const isIndexPage = Astro.url.pathname == "/";
 <script>
   const timerItems = document.querySelectorAll(".timer-item");
   const timerVideoArr = document.querySelectorAll("#timer-video");
-  const duration = 3000; // Duration of each video in seconds (adjust as needed)
+  const duration = 5000; // Duration of each video in seconds (adjust as needed)
   let currentIndex = 0;
 
   setInterval(() => {
@@ -164,7 +164,7 @@ const isIndexPage = Astro.url.pathname == "/";
 
     // Reset the transition duration for the previous progress
     prevProgress.offsetHeight; // Trigger a reflow to ensure the transition takes effect
-    prevProgress.style.transitionDuration = "3s";
+    prevProgress.style.transitionDuration = "5s";
 
     // Increment the counter
     if (currentIndex < timerItems.length - 1) {

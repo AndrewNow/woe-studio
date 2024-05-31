@@ -10,8 +10,7 @@ export default defineConfig({
     sanity({
       projectId: "n8fc5ydg",
       dataset: "production",
-      // set useCDN to false if building statically
-      useCDN: true,
+      useCDN: true, // set useCDN to false if building statically
     })
   ]
 });

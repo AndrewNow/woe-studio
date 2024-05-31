@@ -1,0 +1,125 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import { getProjectsInOrder } from "../../sanity/api";
+import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
+import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
+import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
+import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
+
+const allProjectData = await getProjectsInOrder();
+const data = allProjectData.projects;
+---
+
+<Layout>
+  <div class="project-grid__container">
+    {
+      data.map((data, i) => {
+        const className = i % 5 === 0 ? "double-column" : "project__wrapper";
+        return (
+          <a
+            class={className}
+            style={{ color: "white" }}
+            href={`/projects/${data.slug}`}
+          >
+            <video
+              class="project-video-media"
+              preload="metadata"
+              loop="true"
+              muted="true"
+            >
+              <source src={data.video} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="project-text">
+              <span class="project-titleset">
+                <p>{data.clientArray[0]}</p>
+                <p>{data.title}</p>
+              </span>
+              <span class="project-titleset">
+                <p>{data.creditsArray[0]}</p>
+                <p>{data.servicesArray[0]}</p>
+              </span>
+            </div>
+          </a>
+        );
+      })
+    }
+    <CornerTopLeft />
+    <CornerTopRight />
+    <CornerBottomLeft />
+    <CornerBottomRight />
+  </div>
+</Layout>
+
+<script>
+  const videos = document.querySelectorAll(".project-video-media");
+
+  videos.forEach((video) => {
+    video.addEventListener("mouseenter", () => {
+      video.play();
+    });
+    video.addEventListener("mouseleave", () => {
+      video.pause();
+    });
+  });
+</script>
+
+<style>
+  .project-grid__container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: calc(100% - 2rem);
+    margin: 1rem auto;
+  }
+
+  .project__wrapper {
+    border-radius: 20px;
+    overflow: hidden;
+    flex: 1;
+    box-sizing: border-box;
+    flex-basis: 33.1%;
+    height: 90vh;
+    transition: 1s cubic-bezier(0.77, 0, 0.175, 1);
+    position: relative;
+  }
+
+  .double-column {
+    height: 90vh;
+    flex: 1 1 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .project__wrapper:hover {
+    transition: 1s cubic-bezier(0.77, 0, 0.175, 1);
+    min-width: none;
+    flex-grow: 500;
+  }
+
+  .project-video-media {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .project-text {
+    position: absolute;
+    bottom: 2.5vw;
+    left: 2.5vw;
+  }
+  .project-titleset {
+    display: block;
+    color: rgba(var(--rgb-white), 0.5);
+    padding-bottom: 0.5rem;
+  }
+  .project-titleset p:first-child {
+    color: rgba(var(--rgb-white), 1);
+  }
+  .project-titleset:last-child {
+    padding-bottom: 0;
+  }
+</style>

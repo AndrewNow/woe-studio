@@ -1,34 +1,16 @@
 ---
 import VideoTimer from "./videoTimer.astro";
 const { videoData } = Astro.props;
+import CornerTopLeft from "./cornerPieces/cornerTopLeft.astro";
+import CornerTopRight from "./cornerPieces/cornerTopRight.astro";
+import CornerBottomRight from "./cornerPieces/cornerBottomRight.astro";
+import CornerBottomLeft from "./cornerPieces/cornerBottomLeft.astro";
 ---
 
 <div class="wrapper">
   <div class="video-container" id="hero-video-container">
-    <svg
-      class="corner corner-top-left"
-      width="51"
-      height="51"
-      viewBox="0 0 51 51"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
-        fill="var(--black)"></path>
-    </svg>
-    <svg
-      class="corner corner-bottom-left"
-      width="51"
-      height="51"
-      viewBox="0 0 51 51"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
-        fill="var(--black)"></path>
-    </svg>
+    <CornerTopLeft />
+    <CornerBottomLeft />
     {
       videoData.map((video, i) => {
         return (
@@ -49,30 +31,8 @@ const { videoData } = Astro.props;
     <VideoTimer data={videoData} />
   </div>
   <div class="about-container" id="hero-about-container">
-    <svg
-      class="corner corner-top-right"
-      width="51"
-      height="51"
-      viewBox="0 0 51 51"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
-        fill="var(--black)"></path>
-    </svg>
-    <svg
-      class="corner corner-bottom-right"
-      width="51"
-      height="51"
-      viewBox="0 0 51 51"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M50.22 0C44.93 0 39.84 2.11 36.1 5.85L5.84 36.1C2.09 39.85 0 44.93 0 50.22V0H50.22Z"
-        fill="var(--black)"></path>
-    </svg>
+    <CornerTopRight />
+    <CornerBottomRight />
     <a href="/about" class="link hero-link" data-value="View all projects">
       <p>About us</p>
     </a>
