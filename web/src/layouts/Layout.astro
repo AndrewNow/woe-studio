@@ -90,6 +90,9 @@ import "../styles/global.css";
   .corner {
     z-index: 10;
     position: absolute;
+    aspect-ratio: 1/1;
+    width: 50px;
+    height: auto;
   }
   .corner-top-left {
     top: -1px;
@@ -109,6 +112,12 @@ import "../styles/global.css";
     transform: rotate(-180deg);
     bottom: -1px;
     right: -1px;
+  }
+
+  @media (max-width: 576px) {
+    .corner {
+      width: 20px;
+    }
   }
 </style>
 

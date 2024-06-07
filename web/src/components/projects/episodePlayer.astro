@@ -1,0 +1,313 @@
+---
+const { episodeData } = Astro.props;
+import { Image } from "astro:assets";
+// If there is only one video, this component will render a single video that autoplays, muted
+// If there is more than one video, it will render an episode player component with controls.
+---
+
+<div class="video-player">
+  <div class="video-container">
+    <video
+      id="episodeVideo"
+      poster={episodeData[0].thumbnail}
+      controls
+      autoplay={episodeData.length < 2}
+      muted={episodeData.length < 2}
+    >
+      <source src={episodeData[0].episodeVideo} type="video/mp4" />
+    </video>
+  </div>
+  {
+    episodeData.length > 1 && (
+      <div class="title" id="episodeHeader">
+        <h5 id="episodeSubtitle">{episodeData[0].episodeSubtitle}</h5>
+        <h3 id="episodeTitle">{episodeData[0].episodeTitle}</h3>
+      </div>
+    )
+  }
+  {
+    episodeData.length > 1 && (
+      <div class="custom-select-wrapper" id="episodeHeader">
+        <select class="select-hidden" id="episode-select">
+          {episodeData.map((episode, i) => {
+            return <option value={i}>{episode.episodeTitle}</option>;
+          })}
+        </select>
+        <div class="custom-select-display">
+          <p>View episodes</p>
+          <svg
+            id="custom-select-caret"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3 7.06066L4.06066 6L9.53033 11.4697L15 6L16.0607 7.06066L9.53033 13.591L3 7.06066Z"
+              fill="#EFEDED"
+            />
+          </svg>
+        </div>
+        <ul class="custom-select-options">
+          {episodeData.map((episode, i) => {
+            return (
+              <li data-value={i}>
+                <Image
+                  class="custom-select-image"
+                  src={episode.thumbnail}
+                  alt=""
+                  inferSize
+                />
+                <small>{episode.episodeSubtitle}</small>
+                <p>{episode.episodeTitle}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
+  }
+</div>
+
+<script define:vars={{ episodeData }}>
+  const episodeSelect = document.getElementById("episode-select");
+  const video = document.getElementById("episodeVideo");
+  const subTitle = document.getElementById("episodeSubtitle");
+  const title = document.getElementById("episodeTitle");
+  const caret = document.getElementById("custom-select-caret");
+  const episodeHeaderElements = document.querySelectorAll("#episodeHeader");
+
+  let isRotated = false;
+  let lastMouseMoveTime = 0;
+  let isMouseMoving = false;
+  let animationFrame;
+  let isVideoPlaying = false;
+
+  // Function to show headers
+  const showHeaders = () => {
+    episodeHeaderElements.forEach((el) => {
+      el.style.opacity = "1";
+      el.style.transition = "opacity 0.5s ease";
+    });
+  };
+
+  // Function to hide headers
+  const hideHeaders = () => {
+    episodeHeaderElements.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transition = "opacity 0.5s ease";
+    });
+  };
+
+  // Function to check mouse movement and update headers' visibility
+  const checkMouseMovement = () => {
+    if (!isVideoPlaying) {
+      showHeaders();
+      return;
+    }
+
+    if (isMouseMoving) {
+      showHeaders();
+      isMouseMoving = false;
+    } else {
+      const currentTime = Date.now();
+      if (currentTime - lastMouseMoveTime > 1000) {
+        hideHeaders();
+      }
+    }
+
+    animationFrame = requestAnimationFrame(checkMouseMovement);
+  };
+
+  // Mouse movement handler
+  const handleMouseMove = () => {
+    lastMouseMoveTime = Date.now();
+    isMouseMoving = true;
+  };
+
+  // Video play event listener
+  video.addEventListener("play", () => {
+    isVideoPlaying = true;
+    hideHeaders();
+    document.addEventListener("mousemove", handleMouseMove);
+    animationFrame = requestAnimationFrame(checkMouseMovement);
+  });
+
+  // Video pause event listener
+  video.addEventListener("pause", () => {
+    isVideoPlaying = false;
+    showHeaders();
+    document.removeEventListener("mousemove", handleMouseMove);
+    cancelAnimationFrame(animationFrame);
+  });
+
+  // Initial state when the page loads
+  showHeaders();
+
+  episodeSelect.addEventListener("change", (e) => {
+    const selectedEpisode = episodeData[e.target.value];
+    subTitle.innerText = selectedEpisode.episodeSubtitle;
+    title.innerText = selectedEpisode.episodeTitle;
+    video.src = selectedEpisode.episodeVideo;
+    video.poster = selectedEpisode.thumbnail;
+    video.load();
+  });
+
+  // logic for custom select (dropdown) element
+  document.addEventListener("DOMContentLoaded", function () {
+    const customSelectWrapper = document.querySelector(
+      ".custom-select-wrapper"
+    );
+    const customSelectDisplay = customSelectWrapper.querySelector(
+      ".custom-select-display"
+    );
+    const customSelectOptions = customSelectWrapper.querySelector(
+      ".custom-select-options"
+    );
+    const customSelect = customSelectWrapper.querySelector(".select-hidden");
+
+    customSelectDisplay.addEventListener("click", function () {
+      isRotated = !isRotated;
+      caret.style.transform = isRotated ? "scaleY(-1)" : "scaleY(1)";
+      customSelectOptions.style.display =
+        customSelectOptions.style.display === "block" ? "none" : "block";
+    });
+
+    customSelectOptions.addEventListener("click", function (event) {
+      if (event.target.tagName === "LI") {
+        const value = event.target.getAttribute("data-value");
+        customSelect.value = value;
+        // const text = event.target.textContent;
+        // customSelectDisplay.textContent = text;
+        customSelectOptions.style.display = "none";
+        isRotated = false; // Reset rotation state when an option is selected
+        caret.style.transform = "scaleY(1)";
+        customSelect.dispatchEvent(new Event("change")); // Trigger change event
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!customSelectWrapper.contains(event.target)) {
+        customSelectOptions.style.display = "none";
+      }
+    });
+  });
+</script>
+
+<style>
+  #episodeHeader {
+    transition: 0.5s all ease;
+  }
+  .video-player {
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 4rem;
+  }
+  .video-container {
+    position: relative;
+    aspect-ratio: 16/9;
+  }
+  .video-container video {
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .title {
+    position: absolute;
+    top: 4rem;
+    left: 4rem;
+    color: var(--white);
+  }
+  .custom-select-wrapper {
+    position: absolute;
+    top: 4rem;
+    right: 4rem;
+  }
+  .select-hidden {
+    display: none;
+  }
+  .custom-select-display {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 270px;
+    border-radius: 6px;
+    background: rgba(var(--rgb-black), 0.5);
+    backdrop-filter: blur(20px);
+    color: var(--white);
+    border: 2px solid var(--white);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+
+    & svg {
+      transition: 0.25s all ease;
+    }
+    & p {
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  .custom-select-options {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    max-height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    left: 0;
+    right: 0;
+    border-radius: 6px;
+    background: rgba(var(--rgb-black), 0.5);
+    backdrop-filter: blur(20px);
+    color: var(--white);
+    border: 2px solid var(--white);
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+  }
+  .custom-select-options::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .custom-select-options li {
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+
+    & small,
+    p {
+      user-select: none;
+      pointer-events: none;
+    }
+  }
+
+  .custom-select-image {
+    position: relative;
+    width: calc(100% - 1rem * 2);
+    border-radius: 4px;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    height: auto;
+    transition: filter 0.5s ease;
+    margin-bottom: 0.5rem;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .custom-select-options li:hover {
+    & .custom-select-image {
+      filter: brightness(0.5);
+    }
+  }
+</style>

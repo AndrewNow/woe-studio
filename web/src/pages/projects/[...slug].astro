@@ -1,8 +1,16 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getProjectPageData } from "../../sanity/api";
-// import { PortableText } from "astro-portabletext";
-import PortableText from "../../components/portableText.astro";
+import { getProjectPageData, getNextProject } from "../../sanity/api";
+import PortableText from "../../components/utils/portableText.astro";
+import { Image } from "astro:assets";
+import EpisodePlayer from "../../components/projects/episodePlayer.astro";
+import ProjectMedia from "../../components/projects/projectMedia.astro";
+import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
+import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
+import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
+import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
+import Footer from "../../components/footer.astro";
+import NextProject from "../../components/projects/nextProject.astro";
 
 const pages = await getProjectPageData();
 
@@ -13,21 +21,30 @@ if (!page) return Astro.redirect("/404");
 const {
   title,
   awardArray,
+  awardImageArray,
   clientArray,
   creditsArray,
   servicesArray,
-  awardImageArray,
   description,
   secondaryDescription,
   thumbnail,
   video,
   episodeArray,
-  imageArray,
+  mediaArray,
 } = page;
+
+const currentProjectTitle = title;
+const nextProjectData = await getNextProject(currentProjectTitle);
+
+if (nextProjectData) {
+  console.log("Next project data:", nextProjectData);
+} else {
+  console.log("No next project found.");
+}
 ---
 
 <Layout>
-  <div class="main-video__wrapper">
+  <section class="main-video__wrapper">
     <video
       class="main-video"
       preload="metadata"
@@ -39,47 +56,127 @@ const {
       <source src={video} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-  </div>
-  <div class="project-details__wrapper">
+  </section>
+  <section class="project-details__wrapper">
     <div class="project-details__flex">
       <div class="project-details-left">
-        <h1>{title}</h1>
-      </div>
-      <div>
-        {
-          clientArray.map((client) => {
-            return <p>{client}</p>;
-          })
-        }
+        <div>
+          <h1>{title}</h1>
+          {
+            clientArray != null && (
+              <div class="project-details-item clients-item">
+                <p class="item-title">Clients</p>
+                {clientArray.map((client) => {
+                  return <p>{client}</p>;
+                })}
+              </div>
+            )
+          }
+        </div>
+        <div class="project-details-left-bottom">
+          {
+            awardArray != null && (
+              <>
+                <p class="item-title">Clients</p>
+                <div class="project-details-item item-two-col">
+                  {awardArray.map((award) => {
+                    return <p>{award}</p>;
+                  })}
+                </div>
+              </>
+            )
+          }
+          {
+            awardImageArray != null && (
+              <div class="project-details-awards-images">
+                {awardImageArray.map((award) => {
+                  return (
+                    <Image
+                      quality={25}
+                      inferSize
+                      src={award.imageSrc}
+                      alt="Image of an award badge"
+                      class="award-image"
+                    />
+                  );
+                })}
+              </div>
+            )
+          }
+        </div>
       </div>
       <div class="project-details-right">
-        <div class="project-details-overview">
-          <h5>Project Overview</h5>
-          <p>
-            <PortableText data={description} />
-          </p>
-        </div>
+        {
+          description != null && (
+            <div class="project-details-overview">
+              <h5>Project Overview</h5>
+              <p>
+                <PortableText data={description} />
+              </p>
+            </div>
+          )
+        }
         <div class="project-details-credits">
-          <div class="project-details-credits-item">
-            <p class="item-title">Services</p>
-            {
-              servicesArray.map((service) => {
-                return <p>{service}</p>;
-              })
-            }
-          </div>
-          <div class="project-details-credits-item">
-            <p class="item-title">Credits</p>
-            {
-              creditsArray.map((credit) => {
-                return <p>{credit}</p>;
-              })
-            }
-          </div>
+          {
+            servicesArray != null && (
+              <div class="project-details-item">
+                <p class="item-title">Services</p>
+                {servicesArray.map((service) => {
+                  return <p>{service}</p>;
+                })}
+              </div>
+            )
+          }
+          {
+            creditsArray != null && (
+              <div class="project-details-item">
+                <p class="item-title">Credits</p>
+                {creditsArray.map((credit) => {
+                  return <p>{credit}</p>;
+                })}
+              </div>
+            )
+          }
         </div>
       </div>
     </div>
-  </div>
+  </section>
+  {
+    episodeArray != null && (
+      <section class="episode__wrapper">
+        <EpisodePlayer episodeData={episodeArray} />
+      </section>
+    )
+  }
+  {
+    secondaryDescription != null && (
+      <section class="project-overview__wrapper">
+        <div class="project-overview-text">
+          <PortableText data={secondaryDescription} />
+        </div>
+      </section>
+    )
+  }
+  {
+    mediaArray !== null && (
+      <section class="project-media__wrapper">
+        <CornerTopLeft />
+        <CornerTopRight />
+        <CornerBottomLeft />
+        <CornerBottomRight />
+        <ProjectMedia mediaArray={mediaArray} />
+      </section>
+    )
+  }
+  {
+    nextProjectData !== null && (
+      <section>
+        <div class="sticky-gradient" />
+        <NextProject nextProjectData={nextProjectData} />
+      </section>
+    )
+  }
+  <Footer />
 </Layout>
 
 <style>
@@ -90,7 +187,6 @@ const {
   }
   .main-video {
     aspect-ratio: 16/9;
-    background: grey;
     height: 100%;
     width: 100%;
   }
@@ -105,7 +201,34 @@ const {
   }
   .project-details-left {
     flex: 2;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
   }
+
+  .project-details-left-bottom {
+    margin-top: 4rem;
+  }
+
+  .item-two-col {
+    column-count: 2;
+    column-gap: 1.5rem;
+    width: 500px;
+  }
+
+  .project-details-awards-images {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    opacity: 0.5;
+    max-width: 40vw;
+  }
+  .award-image {
+    height: 100px;
+    width: auto;
+  }
+
   .project-details-right {
     color: var(--white);
     flex: 1;
@@ -125,10 +248,49 @@ const {
     align-items: flex-start;
     gap: 2rem;
   }
-  .project-details-credits-item {
+  .project-details-item {
     color: rgba(var(--rgb-white), 0.5);
+  }
+  .clients-item {
+    margin-top: 2rem;
   }
   .item-title {
     color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .episode__wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .project-overview__wrapper {
+    color: var(--white);
+    width: var(--inner-width);
+    margin: 4rem auto;
+  }
+  .project-overview-text {
+    margin-top: 2rem;
+    column-count: 3;
+    column-gap: 1.5rem;
+    width: 100%;
+  }
+  .project-media__wrapper {
+    position: relative;
+    width: calc(100% - 1rem * 2);
+    margin: 1rem;
+  }
+  .sticky-gradient {
+    z-index: 11;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 21.56%,
+      rgba(0, 0, 0, 0.25) 48.54%,
+      #000 100%
+    );
   }
 </style>

@@ -1,0 +1,41 @@
+---
+const { nextProjectData } = Astro.props;
+const data = nextProjectData.projects;
+---
+
+<a class="next-project-video__wrapper" href=`/projects/${data.slug}`>
+  <div class="next-project-title">
+    <p>Next Project</p>
+    <h3>{data.title}</h3>
+  </div>
+  <video
+    class="next-project-media"
+    preload="metadata"
+    loop="true"
+    muted="true"
+    autoplay="true"
+  >
+    <source src={data.video} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</a>
+
+<style>
+  .next-project-video__wrapper {
+    width: 100%;
+    position: relative;
+    margin: 4rem auto;
+    display: block;
+  }
+  .next-project-title {
+    position: absolute;
+    top: 4rem;
+    left: 4rem;
+    color: var(--white);
+  }
+  .next-project-media {
+    width: 100%;
+    max-height: 90vh;
+    object-fit: cover;
+  }
+</style>

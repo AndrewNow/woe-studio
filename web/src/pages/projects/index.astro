@@ -6,6 +6,7 @@ import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
 import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
+import Footer from "../../components/footer.astro";
 
 const allProjectData = await getProjectsInOrder();
 const data = allProjectData.projects;
@@ -15,7 +16,10 @@ const data = allProjectData.projects;
   <div class="project-grid__container">
     {
       data.map((data, i) => {
-        const className = i % 5 === 0 ? "double-column" : "project__wrapper";
+        const className =
+          i % 5 === 0
+            ? "project-entry__double-column"
+            : "project-entry__wrapper";
         return (
           <a
             class={className}
@@ -50,6 +54,7 @@ const data = allProjectData.projects;
     <CornerBottomLeft />
     <CornerBottomRight />
   </div>
+  <Footer />
 </Layout>
 
 <script>
@@ -75,7 +80,7 @@ const data = allProjectData.projects;
     margin: 1rem auto;
   }
 
-  .project__wrapper {
+  .project-entry__wrapper {
     border-radius: 20px;
     overflow: hidden;
     flex: 1;
@@ -86,7 +91,7 @@ const data = allProjectData.projects;
     position: relative;
   }
 
-  .double-column {
+  .project-entry__double-column {
     height: 90vh;
     flex: 1 1 100%;
     border-radius: 20px;
@@ -94,7 +99,7 @@ const data = allProjectData.projects;
     position: relative;
   }
 
-  .project__wrapper:hover {
+  .project-entry__wrapper:hover {
     transition: 1s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
@@ -121,5 +126,26 @@ const data = allProjectData.projects;
   }
   .project-titleset:last-child {
     padding-bottom: 0;
+  }
+
+  @media (max-width: 1280px) {
+    .project-grid__container {
+      gap: 0.5rem;
+      width: calc(100% - 1rem);
+    }
+  }
+
+  @media (max-width: 992px) {
+    .project-grid__container {
+      gap: 0.25rem;
+    }
+    .project-entry__wrapper {
+      height: 70vw;
+      border-radius: 6px;
+    }
+    .project-entry__double-column {
+      border-radius: 6px;
+      height: auto;
+    }
   }
 </style>

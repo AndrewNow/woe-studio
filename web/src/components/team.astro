@@ -86,6 +86,7 @@ const teamData = [
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    position: relative;
   }
   .team-expertise {
     width: 200px;
@@ -150,6 +151,31 @@ const teamData = [
     width: auto;
     height: 130px;
   }
-</style>
 
-<script></script>
+  @media (max-width: 1280px) {
+    .team__wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .team__container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .team-entry {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 0;
+      width: 80%;
+    }
+    .team-entry:before {
+      display: none;
+    }
+    .member-image__wrapper {
+      display: none;
+    }
+    .team-expertise {
+      padding-top: 4rem;
+    }
+  }
+</style>
