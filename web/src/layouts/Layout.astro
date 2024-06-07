@@ -28,6 +28,9 @@ import "../styles/global.css";
 </html>
 
 <style is:global>
+  body.nav-open {
+    overflow: hidden; /* Prevent scrolling of the body when nav is open */
+  }
   .cursor-follower {
     position: fixed;
     top: 0;
@@ -83,8 +86,25 @@ import "../styles/global.css";
   }
 
   .link {
+    position: relative;
     color: var(--white);
+    text-decoration: none;
     text-shadow: 0px 0px 2.3px #efeded;
+  }
+  .link:after {
+    text-shadow: 0px 0px 2.3px #efeded;
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    scale: 0;
+    transition: 0.3s all ease;
+    transform-origin: left;
+    border-bottom: 1px solid var(--white);
+  }
+  .link:hover:after {
+    scale: 1;
   }
 
   .corner {
@@ -117,6 +137,9 @@ import "../styles/global.css";
   @media (max-width: 576px) {
     .corner {
       width: 20px;
+    }
+    .link:after {
+      display: none;
     }
   }
 </style>

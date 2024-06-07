@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 // import Image from "astro/components/Image.astro";
 import clover from "../assets/woe-clover.png";
+const isHome = Astro.url.pathname == "/";
+console.log(isHome);
 ---
 
 <nav class="nav">
@@ -14,7 +16,102 @@ import clover from "../assets/woe-clover.png";
       loading="eager"
     />
   </a>
+  {
+    !isHome && (
+      <span class="page-link__wrapper">
+        <a href="/about" class="page-link link">
+          <p>About</p>
+        </a>
+        <a href="/projects" class="page-link link">
+          <p>Projects</p>
+        </a>
+      </span>
+    )
+  }
+  <div class="menu-button" id="menu-button" aria-label="Menu open button">
+    Menu
+  </div>
 </nav>
+<div id="mobileNav">
+  <div class="mobile-nav-content">
+    <span></span>
+    <ul class="page-link__wrapper-mobile">
+      <li>
+        <a
+          href="/"
+          class=`page-link link ${Astro.url.pathname == '/' && "page-active"}`
+          >Home
+        </a>
+        <br />
+        <br />
+      </li>
+      <li>
+        <a
+          href="/about"
+          class=`page-link link ${Astro.url.pathname == '/about' && "page-active"}`
+        >
+          About
+        </a>
+        <br />
+        <br />
+      </li>
+      <li>
+        <a
+          href="/projects"
+          class=`page-link link ${Astro.url.pathname == '/projects' && "page-active"}`
+        >
+          Projects
+        </a>
+        <br />
+        <br />
+      </li>
+    </ul>
+    <div class="mobile-nav-contact">
+      <div class="mobile-contact">
+        <div class="mobile-contact-email">
+          <h4>Work with WOE</h4>
+          <a><h4>info@woestudio.co</h4> </a>
+        </div>
+        <div class="mobile-contact-item">
+          <svg
+            width="19"
+            height="18"
+            viewBox="0 0 19 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
+            <path
+              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+              stroke="#EFEDED"></path>
+          </svg>
+
+          <a>
+            <h4>Instagram</h4>
+          </a>
+        </div>
+        <div class="mobile-contact-item">
+          <svg
+            width="19"
+            height="18"
+            viewBox="0 0 19 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
+            <path
+              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+              stroke="#EFEDED"></path>
+          </svg>
+
+          <a>
+            <h4>Tik Tok</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   .nav {
@@ -25,5 +122,128 @@ import clover from "../assets/woe-clover.png";
     width: var(--inner-width);
     margin: 0 auto;
     z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-link__wrapper {
+    display: flex;
+  }
+  .page-link {
+    margin: 0 2rem;
+    display: block;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .page-active {
+    border-bottom: 1px solid var(--white);
+  }
+  .page-link:last-child {
+    margin-right: 0;
+  }
+
+  .mobile-nav-content {
+    padding: 2rem;
+    height: calc(100% - 2rem * 2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .page-link__wrapper-mobile {
+  }
+  .menu-button {
+    display: none;
+    user-select: none;
+  }
+  .mobile-contact {
+    color: var(--white);
+  }
+  .mobile-contact-email {
+    margin-bottom: 2rem;
+    color: rgba(var(--rgb-white), 1);
+    & a {
+      text-decoration: underline;
+      color: rgba(var(--rgb-white), 0.5);
+    }
+  }
+  .mobile-contact-item {
+    margin-bottom: 1rem;
+    display: flex;
+    color: rgba(var(--rgb-white), 1);
+    & svg {
+      margin-right: 1rem;
+    }
+  }
+  @media (max-width: 992px) {
+    .page-link__wrapper {
+      display: none;
+    }
+    .nav {
+      top: 1rem;
+    }
+    .page-link {
+      margin: 0;
+    }
+    .menu-button {
+      display: block;
+      color: white;
+      z-index: 1001;
+    }
+    #mobileNav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    #mobileNav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100svw;
+      height: 100svh;
+      background-color: #1762e3cb;
+      backdrop-filter: blur(20px) saturate(110%) brightness(110%);
+      color: #fff;
+      display: none;
+      z-index: 1000;
+    }
+    #mobileNav.open {
+      display: block;
+    }
+
+    .page-link {
+      font-size: 48px;
+      display: inline;
+      font-family: "n27-light";
+    }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nav = document.getElementById("mobileNav");
+    const body = document.body;
+
+    // Function to toggle the navigation menu
+    function toggleNav() {
+      nav.classList.toggle("open");
+      body.classList.toggle("nav-open");
+    }
+
+    // Event listener for menu button click
+    document
+      .getElementById("menu-button")
+      .addEventListener("click", function () {
+        toggleNav();
+      });
+
+    // Close the navigation menu when clicking outside of it
+    document.addEventListener("click", function (event) {
+      if (
+        !nav.contains(event.target) &&
+        !document.getElementById("menu-button").contains(event.target) &&
+        nav.classList.contains("open")
+      ) {
+        toggleNav();
+      }
+    });
+  });
+</script>
