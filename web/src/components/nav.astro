@@ -3,7 +3,21 @@ import { Image } from "astro:assets";
 // import Image from "astro/components/Image.astro";
 import clover from "../assets/woe-clover.png";
 const isHome = Astro.url.pathname == "/";
-console.log(isHome);
+
+const pages = [
+  {
+    title: "Home",
+    route: "/",
+  },
+  {
+    title: "Projects",
+    route: "/projects",
+  },
+  {
+    title: "About",
+    route: "/about",
+  },
+];
 ---
 
 <nav class="nav">
@@ -36,35 +50,20 @@ console.log(isHome);
   <div class="mobile-nav-content">
     <span></span>
     <ul class="page-link__wrapper-mobile">
-      <li>
-        <a
-          href="/"
-          class=`page-link link ${Astro.url.pathname == '/' && "page-active"}`
-          >Home
-        </a>
-        <br />
-        <br />
-      </li>
-      <li>
-        <a
-          href="/about"
-          class=`page-link link ${Astro.url.pathname == '/about' && "page-active"}`
-        >
-          About
-        </a>
-        <br />
-        <br />
-      </li>
-      <li>
-        <a
-          href="/projects"
-          class=`page-link link ${Astro.url.pathname == '/projects' && "page-active"}`
-        >
-          Projects
-        </a>
-        <br />
-        <br />
-      </li>
+      {
+        pages.map((page) => (
+          <li>
+            <a
+              href={`${page.route}`}
+              class={`page-link link ${Astro.url.pathname == page.route && "page-active"}`}
+            >
+              {page.title}
+            </a>
+            <br />
+            <br />
+          </li>
+        ))
+      }
     </ul>
     <div class="mobile-nav-contact">
       <div class="mobile-contact">
@@ -173,6 +172,9 @@ console.log(isHome);
     & svg {
       margin-right: 1rem;
     }
+  }
+  #mobileNav {
+    display: none;
   }
   @media (max-width: 992px) {
     .page-link__wrapper {

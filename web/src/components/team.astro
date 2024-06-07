@@ -1,49 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import teamSample from "../assets/team-sample.png";
-const teamData = [
-  {
-    name: "Jerome Riel",
-    title: "Co-Founder | Executive Producer | Director",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Kevin Lien",
-    title: "Co-Founder | Executive Producer | Director",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Mel de Melo",
-    title: "Operations | Producer",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Chris Yue",
-    title: "Operations | Producer",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Alexander Medeiros",
-    title: "Project Manager",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Ashley Mach",
-    title: "Studio Coordinator",
-    imageSrc: { teamSample },
-  },
-  {
-    name: "Melissa Riel",
-    title: "Stills Photographer",
-    imageSrc: { teamSample },
-  },
-];
+const { data, expertiseData } = Astro.props;
 ---
 
 <div class="team__wrapper">
   <div class="team__container">
     {
-      teamData.map((member, i) => {
+      data.map((member, i) => {
         return (
           <div class="team-entry" id="team-entry" data-index={i}>
             <div class="member-name">
@@ -69,12 +33,7 @@ const teamData = [
   <div class="team-expertise">
     <p>Expertise</p>
     <ul>
-      <li>Creative Direction</li>
-      <li>Motion Production</li>
-      <li>Brand Development</li>
-      <li>Commercials</li>
-      <li>Branded Content</li>
-      <li>Documentary</li>
+      {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
 </div>

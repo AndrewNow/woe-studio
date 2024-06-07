@@ -6,6 +6,7 @@ import Team from "../components/team.astro";
 import Marquee from "../components/marquee.astro";
 import VideoTimer from "../components/videoTimer.astro";
 import Footer from "../components/footer.astro";
+import { getAboutData } from "../sanity/api";
 
 const videoData = [
   {
@@ -39,6 +40,7 @@ const videoData = [
     subtitle: "2024 Demo Reel",
   },
 ];
+const data = await getAboutData();
 ---
 
 <Layout>
@@ -69,15 +71,19 @@ const videoData = [
       </div>
     </div>
     <h2 class="about-bio">
-      WOE Studio [What on Earth], founded by Jerome Riel & Kevin Lien, is a
-      communication company. We craft stories, we challenge conventional notions
-      of taste across diverse domains. Our intentional ambiguity allows for
-      freedom to grow and experiment, setting us apart from creative norms that
-      often adhere to specific narratives and aesthetics.
+      {data.description}
     </h2>
   </div>
-  <Team />
-  <Marquee />
+  {
+    data.teamArray != null && data.expertiseArray != null && (
+      <Team data={data.teamArray} expertiseData={data.expertiseArray} />
+    )
+  }
+  {
+    data.clientLogoImageArray != null && (
+      <Marquee logoData={data.clientLogoImageArray} />
+    )
+  }
   <div class="sticky__container">
     <div class="sticky-gradient"></div>
     <div class="about-video__container">

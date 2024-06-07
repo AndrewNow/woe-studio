@@ -1,5 +1,25 @@
 import { sanityClient } from 'sanity:client'
 
+export async function getAboutData() {
+  const data = await sanityClient.fetch(
+    `*[_type == "about"][0]{
+        description,
+        clientLogoImageArray[]{
+          'imageSrc': asset->url,
+          alt
+        },
+        teamArray[]{
+          name, 
+          title, 
+          "portrait": portrait.asset->url,
+        },  
+        expertiseArray[]
+      }  
+    `  
+  )  
+  return data
+}  
+
 export async function getProjectsInOrder() {
   const data = await sanityClient.fetch(
     `*[_type == 'projectsInOrder'][0] {
