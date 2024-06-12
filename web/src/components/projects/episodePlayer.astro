@@ -13,6 +13,7 @@ import { Image } from "astro:assets";
       controls
       autoplay={episodeData.length < 2}
       muted={episodeData.length < 2}
+      playsinline
     >
       <source src={episodeData[0].episodeVideo} type="video/mp4" />
     </video>
