@@ -13,6 +13,16 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'description',
       title: 'Project description',
       description: "Enter project description here.",
@@ -89,9 +99,18 @@ export default defineType({
     }),
     defineField({
       name: 'previewUrl',
-      title: 'Preview-length clip (optional)',
-      description: "If entered, this field will add this project to the project preview timer (on homepage + about)",
+      title: 'Preview-length clip',
+      description: "Preview clips are shown on the homepage timer and on the 'All Projects' page",
       type: 'url',
+      validation: Rule => Rule.required()
+    }),
+    defineField({
+      name: 'previewOnHomepage',
+      title: 'Display preview clip on homepage & about?',
+      description: "If enabled, this field will add this project to the project preview timer component (on homepage + about)",
+      type: 'boolean',
+      initialValue: false,
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'thumbnail',
@@ -105,6 +124,7 @@ export default defineType({
       title: 'Full-length video file (optional)',
       description: "The primary video for this project.",
       type: 'url',
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: "episodeArray",
@@ -118,64 +138,96 @@ export default defineType({
         fields: [{
           name: 'episodeThumbnail',
           title: 'Episode thumbnail',
+          description: "Thumbnails should be in 16:9.",
           type: 'image',
+          options: {
+            hotspot: true
+          },
+          validation: Rule => Rule.required()
         },
         {
-        name: 'episodeTitle',
-        title: 'Episode title',
-        type: 'string',
+          name: 'episodeTitle',
+          title: 'Episode title',
+          type: 'string',
+          validation: Rule => Rule.required()
         },
         {
-        name: 'episodeSubtitle',
-        title: 'Episode subtitle',
-        type: 'string',
+          name: 'episodeSubtitle',
+          title: 'Episode subtitle',
+          type: 'string',
+          validation: Rule => Rule.required()
+        },
+        {
+          name: 'episodeVideo',
+          title: 'Episode video',
+          type: 'url',
+          validation: Rule => Rule.required()
         }],
       }]
     }),
     defineField({
-      title: "Images",
-      description: "Upload images relating to the project here.",
-      name: "imageArray",
+      title: "Media",
+      description: "Upload media relating to the project here.",
+      name: "mediaArray",
       type: "array",
       of: [{
         type: "object",
-        name: "imageEntry",
-        title: "Image",
+        name: "mediaEntry",
+        title: "Media entry",
         fields: [{
-          name: 'nestedImageArray',
-          title: 'Nested image array',
-          description: "Upload one image for a single-image presentation, or multiple images for a carousel.",
+          name: 'nestedMediaArray',
+          title: 'Nested media array',
+          description: "Upload one media item for a single-item media presentation, or multiple files for a carousel of media. If an item has both a video AND an image, the video will be displayed and the image will be discarded. Please only upload one media type per entry.",
           type: 'array',
-          of: [{
-            name: 'nestedImage',
-            title: 'Image upload',
-            type: 'image',
-          }],
-          preview: {
-            select: {
-              nestedImage: 'nestedImage',
+          of: [
+            {
+              name: "nestedMedia", 
+              title: "Media upload",
+              description: "IMPORTANT: Only enter EITHER a video, or an image.",
+              type: "object",
+              fields: [
+                {
+                  name: 'nestedImage',
+                  title: 'Image upload',
+                  type: 'image',
+                },
+                {
+                  name: "nestedVideo",
+                  title: "Video upload",
+                  type: "url",
+                },
+              ],
+              preview: {
+                select: {
+                  video: "nestedVideo",
+                  media: "nestedImage"
+                },
+                prepare(selection) {
+                  const { media, video } = selection
+                  const hasVideo = video ? "Video" : "Image"
+                  return {
+                    title: hasVideo,
+                    media: media
+                  }
+                }
+              },
             },
-            prepare(selection) {
-              const { nestedImage } = selection;
-              return {
-                media: nestedImage,
-              };
-            },
-          },
+          ],
         }],
         preview: {
           select: {
-            nestedImageArray: "nestedImageArray",
-            firstImage: "nestedImageArray.0.asset"
+            nestedMediaArray: "nestedMediaArray",
+            firstImage: "nestedMediaArray"
           },
           prepare(selection) {
-            const { nestedImageArray, firstImage } = selection;
-            const array = Object.values(nestedImageArray);
+            const { nestedMediaArray, firstImage } = selection;
+            const array = Object.values(nestedMediaArray);
             const length = array.length;
+            const image = firstImage[0].nestedImage.asset
             return {
-              title: `Image group`,
-              subtitle: `Contains ${length} ${length > 1 ? "images" : "image"}`,
-              media: firstImage
+              title: `Media group`,
+              subtitle: `Contains ${length} ${length > 1 ? "items" : "item"}`,
+              media: image
             };
           },
         },

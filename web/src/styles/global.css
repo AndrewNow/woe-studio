@@ -109,6 +109,9 @@ html,
   }
 
   @media (max-width: 576px) {
+    :root { 
+      --inner-width: 90%;
+    }
     h1 {
       font-size: 48px;
     }

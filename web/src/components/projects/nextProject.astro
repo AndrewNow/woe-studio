@@ -18,6 +18,8 @@ const data = nextProjectData.projects;
     <source src={data.video} type="video/mp4" />
     Your browser does not support the video tag.
   </video>
+  <div class="view-project-element">View project</div>
+  <div class="view-project-background"></div>
 </a>
 
 <style>
@@ -37,5 +39,86 @@ const data = nextProjectData.projects;
     width: 100%;
     max-height: 90vh;
     object-fit: cover;
+  }
+  .view-project-element {
+    display: none;
+  }
+  @media (max-width: 992px) {
+    .next-project-video__wrapper {
+      margin: 1rem auto;
+    }
+    .next-project-video__wrapper:after {
+      content: "";
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0) 21.56%,
+        rgba(0, 0, 0, 0.25) 48.54%,
+        #000 100%
+      );
+    }
+    .view-project-element {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      border: 1px solid white;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .view-project-background {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      position: absolute;
+      z-index: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      background: rgba(var(--rgb-white), .75);
+      mix-blend-mode: difference;
+      border-radius: 50%;
+    }
+    /* .view-project-element:after {
+      content: "test content";
+      color: black;
+      background: rgba(var(--rgb-white), 1);
+      border: 2px solid red;
+      mix-blend-mode: normal;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      position: absolute;
+      z-index: 10;
+      top: 0px;
+      left: 0px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    } */
+    .next-project-title {
+      top: 1rem;
+      left: 1rem;
+      z-index: 2;
+
+      p {
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    .next-project-media {
+      height: auto;
+    }
   }
 </style>

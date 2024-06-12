@@ -8,6 +8,10 @@ export async function getAboutData() {
           'imageSrc': asset->url,
           alt
         },
+        heroImageArray[]{
+          'imageSrc': asset->url,
+          alt
+        },
         teamArray[]{
           name, 
           title, 
