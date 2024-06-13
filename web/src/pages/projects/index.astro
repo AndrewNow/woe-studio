@@ -38,7 +38,7 @@ const data = allProjectData.projects;
             </video>
             <div class="project-text">
               <span class="project-titleset">
-                <p>{data.clientArray[0]}</p>
+                {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
                 <p>{data.title}</p>
               </span>
               <span class="project-titleset">

@@ -1,21 +1,43 @@
 ---
-const { imageArray } = Astro.props;
+const { mediaArray } = Astro.props;
 import { Image } from "astro:assets";
 ---
 
 <div>
   {
-    imageArray.map((arr) => {
-      if (arr.nestedImageArray.length > 1) {
+    mediaArray.map((entry) => {
+      if (entry.nestedMediaArray.length > 1) {
+        // if the entry has more than one item, render a carousel
         return (
           <section class="embla">
             <div class="embla__viewport">
               <div class="embla__container">
-                {arr.nestedImageArray.map((item) => {
+                {entry.nestedMediaArray.map((item) => {
                   return (
-                    <div class="project-media-image__wrapper embla__slide">
-                      <Image src={item.imageSrc} inferSize alt="" />
-                    </div>
+                    <>
+                      {(item.imageSrc || item.nestedVideo) !== null && (
+                        <div class="project-media-item__wrapper embla__slide">
+                          {item.imageSrc !== null ? (
+                            <Image
+                              class="project-media-image"
+                              src={item.imageSrc}
+                              height="1690"
+                              width="1055"
+                              quality="80"
+                              alt=""
+                            />
+                          ) : (
+                            <video autoplay muted loop playsinline>
+                              <source
+                                preload="metadata"
+                                type="video/mp4"
+                                src={item.nestedVideo}
+                              />
+                            </video>
+                          )}
+                        </div>
+                      )}
+                    </>
                   );
                 })}
               </div>
@@ -26,11 +48,34 @@ import { Image } from "astro:assets";
           </section>
         );
       } else {
-        return arr.nestedImageArray.map((item, i) => {
+        // else render a single image
+        return entry.nestedMediaArray.map((item, i) => {
+          console.log(item);
           return (
-            <div class="project-media-image__wrapper">
-              <Image src={item.imageSrc} inferSize alt="" />
-            </div>
+            <>
+              {(item.imageSrc || item.nestedVideo) !== null && (
+                <div class="project-media-item__wrapper">
+                  {item.imageSrc !== null ? (
+                    <Image
+                      class="project-media-image"
+                      src={item.imageSrc}
+                      height="1690"
+                      width="1055"
+                      quality="80"
+                      alt=""
+                    />
+                  ) : (
+                    <video autoplay muted loop playsinline>
+                      <source
+                        preload="metadata"
+                        type="video/mp4"
+                        src={item.nestedVideo}
+                      />
+                    </video>
+                  )}
+                </div>
+              )}
+            </>
           );
         });
       }
@@ -39,17 +84,31 @@ import { Image } from "astro:assets";
 </div>
 
 <style is:global>
-  .project-media-image__wrapper {
-    width: 100%;
-    height: 100%;
+  .project-media-item__wrapper {
     object-fit: cover;
+    height: 100%;
+    width: 100%;
     overflow-x: hidden;
     margin: 0rem auto;
     padding-bottom: 1rem;
     border-radius: 20px;
+    position: relative;
+
+    video {
+      border-radius: 20px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .project-media-image {
+      border-radius: 20px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
-  .project-media-image__wrapper:last-child {
+  .project-media-item__wrapper:last-child {
     padding-bottom: 0;
   }
 

@@ -36,11 +36,11 @@ const {
 const currentProjectTitle = title;
 const nextProjectData = await getNextProject(currentProjectTitle);
 
-if (nextProjectData) {
-  console.log("Next project data:", nextProjectData);
-} else {
-  console.log("No next project found.");
-}
+// if (nextProjectData) {
+//   console.log("Next project data:", nextProjectData);
+// } else {
+//   console.log("No next project found.");
+// }
 ---
 
 <Layout>
@@ -298,7 +298,8 @@ if (nextProjectData) {
     .project-details-left {
       display: none;
     }
-    .project-details__wrapper, .project-overview__wrapper {
+    .project-details__wrapper,
+    .project-overview__wrapper {
       margin: 1rem;
     }
     .project-overview-text {

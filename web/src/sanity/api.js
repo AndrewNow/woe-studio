@@ -72,7 +72,8 @@ export async function getProjectPageData() {
         },  
         mediaArray[]{
           nestedMediaArray[]{
-            "imageSrc": asset->url
+            "imageSrc": nestedImage.asset->url,
+            nestedVideo
           },  
         }  
       }  
