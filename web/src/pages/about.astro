@@ -54,23 +54,36 @@ const data = await getAboutData();
   </div>
   <div class="about-hero">
     <div class="about-images__wrapper">
-      <div class="about-images__col" id="about-col1">
+      <div class="mobile-about-marquee" id="aboutHeroMarquee">
         {
-          data.heroImageArray.slice(0, 3).map((img) => {
-            // let imgSrcLarge;
-            // let imgSrcMedium;
-            // let imgSrcSmall;
-
-            // imgSrcLarge = `${img.imageSrc}?w=553&fm=webp`;
-            // imgSrcMedium = `${img.imageSrc}?w=430&fm=webp`;
-            // imgSrcSmall = `${img.imageSrc}?w=300&fm=webp`;
-
+          data.heroImageArray.map((img) => {
             return (
               <Image
                 class="about-hero-image"
                 src={img.imageSrc}
                 widths={[300, 430, 553]}
-                sizes="(max-width: 525px) 300px, (max-width: 768px) 430px, (max-width: 1600px) 553px"
+                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
+                width="553"
+                height="287"
+                alt={
+                  img.alt != null
+                    ? img.alt
+                    : "No descriptive text was entered for this image, sorry!"
+                }
+              />
+            );
+          })
+        }
+      </div>
+      <div class="about-images__col" id="about-col1">
+        {
+          data.heroImageArray.slice(0, 3).map((img) => {
+            return (
+              <Image
+                class="about-hero-image"
+                src={img.imageSrc}
+                widths={[300, 430, 553]}
+                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                 width="553"
                 height="287"
                 alt={
@@ -86,20 +99,12 @@ const data = await getAboutData();
       <div class="about-images__col" id="about-col2">
         {
           data.heroImageArray.slice(3, 6).map((img) => {
-            let imgSrcLarge;
-            let imgSrcMedium;
-            let imgSrcSmall;
-
-            imgSrcLarge = `${img.imageSrc}?w=553&fm=webp`;
-            imgSrcMedium = `${img.imageSrc}?w=430&fm=webp`;
-            imgSrcSmall = `${img.imageSrc}?w=300&fm=webp`;
-
             return (
               <Image
                 class="about-hero-image"
-                src={imgSrcLarge}
-                srcset={`${imgSrcLarge} 553w, ${imgSrcMedium} 430w, ${imgSrcSmall} 300w`}
-                sizes="(max-width: 525px) 300px, (max-width: 768px) 430px, (max-width: 1600px) 553px"
+                src={img.imageSrc}
+                widths={[300, 430, 553]}
+                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                 width="553"
                 height="287"
                 alt={
@@ -115,20 +120,12 @@ const data = await getAboutData();
       <div class="about-images__col" id="about-col3">
         {
           data.heroImageArray.slice(6, 9).map((img) => {
-            let imgSrcLarge;
-            let imgSrcMedium;
-            let imgSrcSmall;
-
-            imgSrcLarge = `${img.imageSrc}?w=553&fm=webp`;
-            imgSrcMedium = `${img.imageSrc}?w=430&fm=webp`;
-            imgSrcSmall = `${img.imageSrc}?w=300&fm=webp`;
-
             return (
               <Image
                 class="about-hero-image"
-                src={imgSrcLarge}
-                srcset={`${imgSrcLarge} 553w, ${imgSrcMedium} 430w, ${imgSrcSmall} 300w`}
-                sizes="(max-width: 525px) 300px, (max-width: 768px) 430px, (max-width: 1600px) 553px"
+                src={img.imageSrc}
+                widths={[300, 430, 553]}
+                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                 width="553"
                 height="287"
                 alt={
@@ -196,7 +193,7 @@ const data = await getAboutData();
     position: relative;
     z-index: 10;
     margin: 0 auto;
-    margin-top: -25vh;
+    margin-top: -20vh;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -328,49 +325,83 @@ const data = await getAboutData();
     object-fit: cover;
   }
 
+  .mobile-about-marquee {
+    display: none;
+  }
   @media (max-width: 576px) {
+    .mobile-about-marquee {
+      display: block;
+    }
     .about-images__col {
       display: none;
+    }
+    .about-images__wrapper {
+      margin-top: 0;
+    }
+    .about-hero-image {
+      border-radius: 0;
+      aspect-ratio: 125/245;
+      height: 245px;
+      width: auto;
+      object-fit: cover;
+      margin-right: 0.25rem;
+    }
+    .about-bio {
+      margin-top: 2rem;
     }
   }
 </style>
 
 <script>
-  import { Gradient } from "../components/utils/gradient.js";
+  // import { Gradient } from "../components/utils/gradient.js";
 
   // Create your instance
-  const gradient = new Gradient();
+  // const gradient = new Gradient();
 
   // Call `initGradient` with the selector to your canvas
-  gradient.initGradient("#gradient-canvas");
+  // gradient.initGradient("#gradient-canvas");
 
   import { animate } from "motion";
+
   const col1 = document.getElementById("about-col1");
   const col2 = document.getElementById("about-col2");
   const col3 = document.getElementById("about-col3");
 
-  animate(
-    col1,
-    {
-      transform: "translateY(-7vh)",
-      opacity: 1,
-    },
-    { duration: 2.4, delay: 0.25, easing: [0.35, 0.5, 0, 1] }
-  );
-  animate(
-    col2,
-    {
-      transform: "translateY(0px)",
-      opacity: 1,
-    },
-    { duration: 2.5, delay: 0.5, easing: [0.35, 0.5, 0, 1] }
-  );
-  animate(
-    col3,
-    {
-      transform: "translateY(-5vh)",
-      opacity: 1,
-    },
-    { duration: 2.7, delay: 0.75, easing: [0.35, 0.5, 0, 1] }
-  );
+  if (window.innerWidth > 576) {
+    animate(
+      col1,
+      {
+        transform: "translateY(-7vh)",
+        opacity: 1,
+      },
+      { duration: 2.4, delay: 0.25, easing: [0.35, 0.5, 0, 1] }
+    );
+    animate(
+      col2,
+      {
+        transform: "translateY(0px)",
+        opacity: 1,
+      },
+      { duration: 2.5, delay: 0.5, easing: [0.35, 0.5, 0, 1] }
+    );
+    animate(
+      col3,
+      {
+        transform: "translateY(-5vh)",
+        opacity: 1,
+      },
+      { duration: 2.7, delay: 0.75, easing: [0.35, 0.5, 0, 1] }
+    );
+  }
+</script>
+
+<script>
+  import marquee from "https://cdn.jsdelivr.net/npm/vanilla-marquee/dist/vanilla-marquee.js";
+
+  new marquee(document.getElementById("aboutHeroMarquee"), {
+    gap: 16 * 0.25,
+    duplicated: true,
+    startVisible: true,
+    speed: 10,
+  });
 </script>

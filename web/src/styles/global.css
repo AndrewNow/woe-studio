@@ -141,6 +141,12 @@ html,
       line-height: 115%;
     }
   }
+
+  @media (max-width: 992px) {
+    h2 {
+      font-size: 28px;
+    }
+  }
   @media (max-width: 576px) {
     :root { 
       --inner-width: 90%;

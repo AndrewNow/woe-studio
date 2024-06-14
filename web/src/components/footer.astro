@@ -93,11 +93,16 @@
       </svg>
     </div>
   </div>
-
   <div class="footer-bg-video">
-    <video preload="metadata" autoplay="true" loop="true" muted="true">
+    <video
+      preload="metadata"
+      autoplay="true"
+      loop="true"
+      muted="true"
+      playsinline
+    >
       <source
-        src="https://s3-figma-videos-production-sig.figma.com/video/1322265666267064901/TEAM/9cf5/0e4f/-9002-4e52-baf8-e04685942e74?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hqcEfzRZl5GzkNXphqse7sZFJS7BFumhMR74vlvqSdat~LDS2wSDH2JoawjeNmMk6RtHRi-rLLst~6dB4MvN1Wz7GrxMc~6NEp334JChb-I3h6iaCoPQXyHyQc4kB18btS84XxMsVtxZbcsBpdhpGzxPpfgkoflQXpcxjx1YEPNijopjiw1H5wMqQYjRSmpnCNIjQyn4Aa0kX0xeZRaj3r~8fZok12Yhxb78Z4FYi8QqOqMeIlr2iOMfbz2zZ6FGNrpj9zIqw-0J1K54O6ObVS8aaYwVKaDfYD~358xw8tV4hl04Q1MaFRVrH17~3JRG0SNlAJZGbEAGaTUbwncNOg__"
+        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/30fps+-+Spinning+Clove+Icon+-Cropped.mp4"
         type="video/mp4"
       />
       Your browser does not support the video tag.
@@ -108,7 +113,7 @@
 <style>
   .footer__wrapper {
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .footer-content {
     position: relative;
@@ -160,11 +165,11 @@
   .footer-bg-video {
     z-index: 0;
     position: absolute;
-    bottom: 0;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    aspect-ratio: 1/1;
-    width: 50vw;
+    /* aspect-ratio: 1/1; */
+    width: 60vw;
     height: auto;
     overflow: hidden;
     & video {

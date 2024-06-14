@@ -36,9 +36,30 @@ const { data, expertiseData } = Astro.props;
       {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
+  <video
+    class="blend-video"
+    playsinline
+    muted
+    autoplay
+    loop
+    src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+Logo+Asset.mp4"
+  >
+  </video>
 </div>
 
 <style>
+  .blend-video {
+    z-index: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: lighten;
+    user-select: none;
+    pointer-events: none;
+    aspect-ratio: 800/544;
+    max-width: 80vw;
+  }
   .team__wrapper {
     width: var(--inner-width);
     margin: 0 auto;
@@ -59,6 +80,8 @@ const { data, expertiseData } = Astro.props;
   .team__container {
     flex: 1;
     display: block;
+    position: relative;
+    z-index: 2;
   }
   .team-entry {
     display: grid;
