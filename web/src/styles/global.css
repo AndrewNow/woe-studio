@@ -108,6 +108,39 @@ html,
     font-family: "n27-light";
   }
 
+  @media (max-width: 1280px) {
+    h1 {
+      font-size: 64px;
+    }
+    h2 {
+      font-size: 36px;
+      line-height: 135%;
+      letter-spacing: -0.03rem;
+    }
+    h3 {
+      font-size: 24px;
+      line-height: 115%;
+    }
+    h4 {
+      font-size: 20px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    p, li {
+      font-size: 16px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    a {
+      font-size: 14px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+    small {
+      font-size: 14px;
+      line-height: 115%;
+    }
+  }
   @media (max-width: 576px) {
     :root { 
       --inner-width: 90%;

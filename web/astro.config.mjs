@@ -8,6 +8,9 @@ export default defineConfig({
   adapter: netlify({
     imageCDN: false,
   }),
+  image: {
+    domains: ['cdn.sanity.io', 'astro.build']
+  },
   integrations: [
     sanity({
       projectId: "n8fc5ydg",
