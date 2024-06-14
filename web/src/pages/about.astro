@@ -56,16 +56,31 @@ const data = await getAboutData();
     <div class="about-images__wrapper">
       <div class="about-images__col" id="about-col1">
         {
-          data.heroImageArray
-            .slice(0, 3)
-            .map((img) => (
+          data.heroImageArray.slice(0, 3).map((img) => {
+            let imgSrcLarge;
+            let imgSrcMedium;
+            let imgSrcSmall;
+
+            imgSrcLarge = `${img.imageSrc}?w=553&fm=webp`;
+            imgSrcMedium = `${img.imageSrc}?w=430&fm=webp`;
+            imgSrcSmall = `${img.imageSrc}?w=300&fm=webp`;
+
+            return (
               <Image
-                src={img.imageSrc}
+                class="about-hero-image"
+                src={imgSrcLarge}
+                srcset={`${imgSrcLarge} 553w, ${imgSrcMedium} 430w, ${imgSrcSmall} 300w`}
+                sizes="(max-width: 525px) 300px, (max-width: 768px) 430px, (max-width: 1600px) 553px"
                 width="553"
                 height="287"
-                alt={img.alt}
+                alt={
+                  img.alt != null
+                    ? img.alt
+                    : "No descriptive text was entered for this image, sorry!"
+                }
               />
-            ))
+            );
+          })
         }
       </div>
       <div class="about-images__col" id="about-col2">
@@ -169,6 +184,7 @@ const data = await getAboutData();
       width: 100%;
       aspect-ratio: 553/287;
       height: auto;
+      min-height: 100px;
     }
   }
   .about-hero {
