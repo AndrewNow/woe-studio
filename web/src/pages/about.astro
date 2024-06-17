@@ -329,6 +329,9 @@ const data = await getAboutData();
     display: none;
   }
   @media (max-width: 576px) {
+    .sticky-gradient {
+      display: none;
+    }
     .mobile-about-marquee {
       display: block;
     }
@@ -345,6 +348,9 @@ const data = await getAboutData();
       width: auto;
       object-fit: cover;
       margin-right: 0.25rem;
+    }
+    .about-video__container {
+      aspect-ratio: 16/9;
     }
     .about-bio {
       margin-top: 2rem;

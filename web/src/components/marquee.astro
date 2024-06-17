@@ -11,6 +11,8 @@ const { logoData } = Astro.props;
         <Image
           src={logo.imageSrc}
           alt={`${logo.alt} logo`}
+          widths={[60, 100]}
+          sizes={`(max-width: 768px) 60px, 100px`}
           width="100"
           height="100"
           quality="10"
@@ -22,21 +24,33 @@ const { logoData } = Astro.props;
 
 <style>
   .marquee-item {
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    width: 100px;
-    height: auto;
     padding: 0 4rem;
+    img {
+      object-fit: cover;
+      aspect-ratio: 1/1;
+      width: 100px;
+      height: auto;
+    }
   }
-  
+
   .marquee-content {
     padding: 8rem 0;
     overflow-x: hidden;
     width: 100%;
   }
-  @media (max-width: 576px) {
+  @media (max-width: 1500px) {
     .marquee-item {
-      padding: 0 1rem;
+      padding: 0 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .marquee-item {
+      padding: 0rem 0.75rem;
+      img {
+        width: 60px;
+        padding: 0rem;
+      }
     }
   }
 </style>
@@ -44,10 +58,21 @@ const { logoData } = Astro.props;
 <script>
   import marquee from "https://cdn.jsdelivr.net/npm/vanilla-marquee/dist/vanilla-marquee.js";
 
-  new marquee(document.getElementById("marquee"), {
+  let options = {
     gap: 5,
     duplicated: true,
     startVisible: true,
     speed: 100,
-  });
+  };
+
+  if (window.innerWidth <= 768) {
+    options = {
+      gap: 1,
+      duplicated: true,
+      startVisible: true,
+      speed: 50,
+    };
+  }
+
+  new marquee(document.getElementById("marquee"), options);
 </script>
