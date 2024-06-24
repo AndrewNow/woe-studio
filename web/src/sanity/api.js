@@ -24,6 +24,17 @@ export async function getAboutData() {
   return data
 }  
 
+export async function getPreviewClips() {
+  const data = await sanityClient.fetch(`
+    *[_type == 'projects' && previewOnHomepage == true][] {
+      title, 
+      previewUrl,
+      clientArray[0]
+    }
+  `)
+  return data
+}
+
 export async function getProjectsInOrder() {
   const data = await sanityClient.fetch(
     `*[_type == 'projectsInOrder'][0] {

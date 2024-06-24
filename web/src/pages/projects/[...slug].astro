@@ -28,6 +28,7 @@ const {
   description,
   secondaryDescription,
   thumbnail,
+  previewUrl,
   video,
   episodeArray,
   mediaArray,
@@ -45,7 +46,15 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 
 <Layout>
   <section class="main-video__wrapper">
-    <video
+    <video class="main-video" id="shortVideo" autoplay muted loop playsinline>
+      <source src={previewUrl} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <video class="main-video" id="fullVideo" controls>
+      <source src={video} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <!-- <video
       class="main-video"
       preload="metadata"
       loop="true"
@@ -55,7 +64,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     >
       <source src={video} type="video/mp4" />
       Your browser does not support the video tag.
-    </video>
+    </video> -->
   </section>
   <section class="project-details__wrapper">
     <div class="project-details__flex">
@@ -179,16 +188,38 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   <Footer />
 </Layout>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const shortVideo = document.getElementById("shortVideo");
+    const fullVideo = document.getElementById("fullVideo");
+
+    shortVideo.addEventListener("click", () => {
+      // Hide the short video
+      shortVideo.style.display = "none";
+
+      // Show the full video
+      fullVideo.style.display = "block";
+
+      // Start playing the full video
+      fullVideo.play();
+    });
+  });
+</script>
+
 <style>
   .main-video__wrapper {
     position: relative;
     width: 100%;
-    height: 90vh;
+    height: auto;
+    height: 95vh;
   }
   .main-video {
-    aspect-ratio: 16/9;
-    height: 100%;
     width: 100%;
+    height: 100%;
+  }
+
+  #fullVideo {
+    display: none;
   }
 
   .project-details__wrapper {

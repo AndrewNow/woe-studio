@@ -12,8 +12,9 @@ const isIndexPage = Astro.url.pathname == "/";
         <Image
           src={logo}
           alt="WOE Studio logo"
-          width="511"
-          height="25"
+          width="575"
+          height="28"
+          quality="90"
           loading="eager"
           class="woe-logo"
         />
@@ -26,7 +27,7 @@ const isIndexPage = Astro.url.pathname == "/";
             return (
               <div class="timer-item">
                 <p>{video.title}</p>
-                <p>{video.subtitle}</p>
+                <p>{video.clientArray ? video.clientArray : "WOE Studio"}</p>
                 <div class="timer-countdown">
                   <div class="timer-countdown__progress" />
                 </div>
@@ -36,32 +37,39 @@ const isIndexPage = Astro.url.pathname == "/";
       }
     </div>
   </div>
-  <a
-    href="/projects"
-    class="link hero-projects-link"
-    data-value="View all projects"
-  >
-    <p>View all projects</p>
-  </a>
+  {
+    !isIndexPage && (
+      <a
+        href="/projects"
+        class="link hero-projects-link"
+        data-value="View all projects"
+      >
+        <p>View all projects</p>
+      </a>
+    )
+  }
 </div>
 
 <style>
   .woe-logo {
-    margin-left: 3vw;
+    margin-left: 3rem;
     margin-bottom: 1.5vw;
     aspect-ratio: 511/25;
+    max-width: 575px;
+    height: auto;
     /* width: 100%; */
-    /* height: auto; */
   }
   .timer__container {
     /* border: 1px solid red; */
     position: relative;
+    width: 100%;
+    max-width: 575px;
   }
   .timer__parent {
     z-index: 10;
     position: absolute;
     width: 100%;
-    bottom: 3vh;
+    bottom: 3rem;
     padding: 0rem;
     left: 0rem;
     display: inline-flex;
@@ -69,10 +77,10 @@ const isIndexPage = Astro.url.pathname == "/";
     align-items: end;
   }
   .hero-projects-link {
-    margin-right: 3vw;
+    margin-right: 3rem;
   }
   .timer__wrapper {
-    margin-left: 3vw;
+    margin-left: 3rem;
     color: var(--white);
     display: grid;
     gap: 1rem;
@@ -81,7 +89,7 @@ const isIndexPage = Astro.url.pathname == "/";
   }
 
   .timer-item {
-    width: 165px;
+    /* width: 165px; */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -93,7 +101,7 @@ const isIndexPage = Astro.url.pathname == "/";
   .timer-countdown {
     position: relative;
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     height: 1px;
     background-color: rgba(var(--rgb-white), 0.5);
   }

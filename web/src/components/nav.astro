@@ -30,18 +30,14 @@ const pages = [
       loading="eager"
     />
   </a>
-  {
-    !isHome && (
-      <span class="page-link__wrapper">
-        <a href="/about" class="page-link link">
-          <p>About</p>
-        </a>
-        <a href="/projects" class="page-link link">
-          <p>Projects</p>
-        </a>
-      </span>
-    )
-  }
+  <span class="page-link__wrapper">
+    <a href="/about" class="page-link link">
+      <p>About</p>
+    </a>
+    <a href="/projects" class="page-link link">
+      <p>Projects</p>
+    </a>
+  </span>
   <div class="menu-button" id="menu-button" aria-label="Menu open button">
     Menu
   </div>
@@ -125,7 +121,7 @@ const pages = [
 <style>
   .nav {
     position: fixed;
-    top: 2rem;
+    top: 3rem;
     left: 50%;
     transform: translateX(-50%);
     width: var(--inner-width);
@@ -137,9 +133,11 @@ const pages = [
   }
   .page-link__wrapper {
     display: flex;
+    justify-content: space-between;
+    width: 185px;
   }
   .page-link {
-    margin: 0 2rem;
+    margin: 0;
     display: block;
     color: var(--white);
     text-decoration: none;

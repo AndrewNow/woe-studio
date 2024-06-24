@@ -6,40 +6,9 @@ import Team from "../components/team.astro";
 import Marquee from "../components/marquee.astro";
 import VideoTimer from "../components/videoTimer.astro";
 import Footer from "../components/footer.astro";
-import { getAboutData } from "../sanity/api";
+import { getAboutData, getPreviewClips } from "../sanity/api";
 
-const videoData = [
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
-    title: "WOE Studio",
-    subtitle: "2024 Demo Reel",
-  },
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
-    title: "Anything",
-    subtitle: "Long title",
-  },
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
-    title: "WOE Studio",
-    subtitle: "2024 Demo Reel",
-  },
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
-    title: "WOE Studio",
-    subtitle: "2024 Demo Reel",
-  },
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-about.mp4",
-    title: "WOE Studio",
-    subtitle: "2024 Demo Reel",
-  },
-  {
-    src: "https://sys-video.s3.ca-central-1.amazonaws.com/sys-footer.mp4",
-    title: "WOE Studio",
-    subtitle: "2024 Demo Reel",
-  },
-];
+const previewClipData = await getPreviewClips();
 const data = await getAboutData();
 ---
 
@@ -157,7 +126,7 @@ const data = await getAboutData();
     <div class="sticky-gradient"></div>
     <div class="about-video__container">
       {
-        videoData.map((video, i) => {
+        previewClipData.map((video, i) => {
           return (
             <video
               class="hero-video hover-area"
@@ -167,13 +136,13 @@ const data = await getAboutData();
               muted="true"
               id={`timer-video`}
             >
-              <source src={video.src} type="video/mp4" />
+              <source src={video.previewUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           );
         })
       }
-      <VideoTimer data={videoData} />
+      <VideoTimer data={previewClipData} />
     </div>
   </div>
   <Footer />
