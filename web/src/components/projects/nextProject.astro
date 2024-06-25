@@ -12,13 +12,14 @@ const data = nextProjectData.projects;
     </div>
     <video
       class="next-project-media hover-area"
+      data-hover-text="View project"
       preload="metadata"
       loop="true"
       muted="true"
       autoplay="true"
       playsinline
     >
-      <source src={data.video} type="video/mp4" />
+      <source src={data.previewUrl} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
     <div class="view-project-element">View project</div>

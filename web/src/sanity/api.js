@@ -122,7 +122,7 @@ export async function getNextProject(currentProjectTitle) {
      *[_type == 'projectsInOrder'][0] {
       projects[${nextIndex}]->{
         title,
-        video,
+        previewUrl,
         "slug": slug.current,
       }
     }
