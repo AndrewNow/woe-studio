@@ -13,7 +13,6 @@ export default class Cursor {
     this.Cursor.style.opacity = 0;
     this.hoverAreas = document.querySelectorAll(".hover-area");
     this.cursorText = document.getElementById('cursor-text')
-    console.log(this.cursorText)
     this.bounds = this.Cursor.getBoundingClientRect();
     this.cursorConfigs = {
       x: { previous: 0, current: 0, amt: 0.2 },

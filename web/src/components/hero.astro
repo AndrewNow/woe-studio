@@ -37,11 +37,16 @@ const { data } = Astro.props;
         );
       })
     }
-    <VideoTimer data={data} />
+    <div id="animateTimerIn">
+      <VideoTimer data={data} />
+    </div>
   </div>
 </div>
 
 <style>
+  #animateTimerIn {
+    opacity: 0;
+  }
   .wrapper {
     position: fixed;
     top: 50%;
@@ -72,6 +77,7 @@ const { data } = Astro.props;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
+    clip-path: inset(100% 0% 0% 0%);
   }
   .about-container {
     position: relative;
@@ -130,24 +136,3 @@ const { data } = Astro.props;
     }
   }
 </style>
-
-<script>
-  // import { animate } from "motion";
-
-  // const videoContainer = document.getElementById("hero-video-container");
-  // const aboutContainer = document.getElementById("hero-about-container");
-
-  // document.querySelector("body").onload = () => {
-  //   animate(
-  //     videoContainer,
-  //     {
-  //       flex: 1.5,
-  //     },
-  //     {
-  //       duration: 3,
-  //       // delay: 2,
-  //       // duration: 0,
-  //     }
-  //   );
-  // };
-</script>

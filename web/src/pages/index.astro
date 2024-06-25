@@ -51,7 +51,8 @@ const previewData = await getPreviewClips();
 
   const loaderVideo = document.getElementById("loaderVideo");
   const loaderWrapper = document.getElementById("loaderWrapper");
-
+  const videoContainer = document.getElementById("hero-video-container");
+  const timerItems = document.getElementById("animateTimerIn");
   loaderVideo.addEventListener("ended", handleVideoEnd, false);
 
   function handleVideoEnd(e) {
@@ -59,6 +60,26 @@ const previewData = await getPreviewClips();
       opacity: 0,
     }).finished.then(() => {
       loaderWrapper.style.display = "none";
+      animate(
+        videoContainer,
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+        },
+        {
+          duration: 1.6,
+          easing: [0.85, 0, 0.15, 1],
+        }
+      );
+      animate(
+        timerItems,
+        {
+          opacity: 1,
+        },
+        {
+          delay: .5,
+          duration: 1.6,
+        }
+      );
     });
   }
 </script>
