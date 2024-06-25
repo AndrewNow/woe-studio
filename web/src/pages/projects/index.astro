@@ -33,7 +33,7 @@ const data = allProjectData.projects;
               muted="true"
               playsinline
             >
-              <source src={data.video} type="video/mp4" />
+              <source src={data.previewUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             <div class="project-text">
@@ -79,7 +79,7 @@ const data = allProjectData.projects;
     gap: 1rem;
     width: calc(100% - 2rem);
     margin: 1rem auto;
-    margin-bottom: 10rem;
+    margin-bottom: 11rem;
   }
 
   .project-entry__wrapper {

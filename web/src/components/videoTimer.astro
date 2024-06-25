@@ -2,6 +2,7 @@
 const { data } = Astro.props;
 import Image from "astro/components/Image.astro";
 import logo from "../assets/woe-full.png";
+
 const isIndexPage = Astro.url.pathname == "/";
 ---
 
@@ -27,7 +28,7 @@ const isIndexPage = Astro.url.pathname == "/";
             return (
               <div class="timer-item">
                 <p>{video.title}</p>
-                <p>{video.clientArray ? video.clientArray : "WOE Studio"}</p>
+                <p>{video.clientArray ? video.clientArray : ""}</p>
                 <div class="timer-countdown">
                   <div class="timer-countdown__progress" />
                 </div>
@@ -37,17 +38,6 @@ const isIndexPage = Astro.url.pathname == "/";
       }
     </div>
   </div>
-  {
-    !isIndexPage && (
-      <a
-        href="/projects"
-        class="link hero-projects-link"
-        data-value="View all projects"
-      >
-        <p>View all projects</p>
-      </a>
-    )
-  }
 </div>
 
 <style>
@@ -55,20 +45,13 @@ const isIndexPage = Astro.url.pathname == "/";
     margin-left: 3rem;
     margin-bottom: 1.5vw;
     aspect-ratio: 511/25;
-    max-width: 575px;
+    max-width: 527px;
     height: auto;
     /* width: 100%; */
-  }
-  .timer__container {
-    /* border: 1px solid red; */
-    position: relative;
-    width: 100%;
-    max-width: 575px;
   }
   .timer__parent {
     z-index: 10;
     position: absolute;
-    width: 100%;
     bottom: 3rem;
     padding: 0rem;
     left: 0rem;
@@ -76,8 +59,10 @@ const isIndexPage = Astro.url.pathname == "/";
     justify-content: space-between;
     align-items: end;
   }
-  .hero-projects-link {
-    margin-right: 3rem;
+  .timer__container {
+    position: relative;
+    width: 100%;
+    /* max-width: 575px; */
   }
   .timer__wrapper {
     margin-left: 3rem;
@@ -93,6 +78,7 @@ const isIndexPage = Astro.url.pathname == "/";
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     transition: 0.5s all ease;
     & p {
       transition: 0.35s all ease;
@@ -144,23 +130,39 @@ const isIndexPage = Astro.url.pathname == "/";
   const runTimer = () => {
     const timerItems = document.querySelectorAll(".timer-item");
     const timerVideoArr = document.querySelectorAll("#timer-video");
+    const timerVideoParentArr = document.querySelectorAll(
+      "#timer-video-parent"
+    );
+
     const duration = 5000; // Duration of each video in milliseconds (adjust as needed)
     let currentIndex = 0;
 
     const updateTimer = () => {
-      // Pause every video and fade out every video except the "current" one
-      timerVideoArr.forEach((video, i) => {
-        video.pause();
+      timerVideoParentArr.forEach((parent, i) => {
+        const childVideo = parent.querySelector("video");
+
+        childVideo.pause();
+
         if (i == currentIndex) {
-          video.style.transition = ".5s all ease";
-          video.style.opacity = "1";
-          video.currentTime = 0;
-          video.play();
+          // show the parent (anchor tag) which wraps the video
+          parent.style.display = "block";
+          parent.style.transition = ".5s all ease";
+          parent.style.opacity = "1";
+
+          // reset the current video's playback to the start and play it
+          childVideo.currentTime = 0;
+          childVideo.play();
         } else {
-          video.style.transition = ".5s all ease";
-          video.style.opacity = "0";
-          video.pause();
-          video.currentTime = 0;
+          // hide the parent
+          parent.style.transition = ".5s all ease";
+          parent.style.opacity = "0";
+          setTimeout(() => {
+            parent.style.display = "none";
+          }, 510);
+
+          // pause the video and restart it
+          childVideo.pause();
+          childVideo.currentTime = 0;
         }
       });
 

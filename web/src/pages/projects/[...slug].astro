@@ -45,7 +45,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 ---
 
 <Layout>
-  <section class="main-video__wrapper">
+  <section class="main-video__wrapper hover-area" data-hover-text="Play video">
     <video class="main-video" id="shortVideo" autoplay muted loop playsinline>
       <source src={previewUrl} type="video/mp4" />
       Your browser does not support the video tag.
@@ -54,17 +54,6 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       <source src={video} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-    <!-- <video
-      class="main-video"
-      preload="metadata"
-      loop="true"
-      controls
-      muted="true"
-      poster={thumbnail}
-    >
-      <source src={video} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video> -->
   </section>
   <section class="project-details__wrapper">
     <div class="project-details__flex">
@@ -177,10 +166,20 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       </section>
     )
   }
+  <div class="woe-monogram__wrapper">
+    <video
+      class="blend-video"
+      playsinline
+      muted
+      autoplay
+      loop
+      src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+Logo+Asset.mp4"
+    >
+    </video>
+  </div>
   {
     nextProjectData !== null && (
-      <section>
-        <div class="sticky-gradient" />
+      <section class="next-project">
         <NextProject nextProjectData={nextProjectData} />
       </section>
     )
@@ -207,15 +206,30 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 </script>
 
 <style>
+  .woe-monogram__wrapper {
+    width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .blend-video {
+    z-index: 0;
+    position: relative;
+    mix-blend-mode: lighten;
+    user-select: none;
+    pointer-events: none;
+    aspect-ratio: 800/544;
+    max-width: 80vw;
+    margin: 0 auto;
+  }
   .main-video__wrapper {
     position: relative;
     width: 100%;
-    height: auto;
-    height: 95vh;
+    height: 90vh;
   }
   .main-video {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   #fullVideo {
@@ -310,20 +324,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     width: calc(100% - 1rem * 2);
     margin: 1rem;
   }
-  .sticky-gradient {
-    z-index: 11;
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 200px;
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 21.56%,
-      rgba(0, 0, 0, 0.25) 48.54%,
-      #000 100%
-    );
-  }
+  .next-project {
+    position: relative;
+  } 
 
   @media (max-width: 992px) {
     .project-details-left {

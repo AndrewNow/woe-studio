@@ -4,34 +4,60 @@ const data = nextProjectData.projects;
 ---
 
 <a class="next-project-video__wrapper" href=`/projects/${data.slug}`>
-  <div class="next-project-title">
-    <p>Next Project</p>
-    <h3>{data.title}</h3>
+  <div class="sticky-gradient"></div>
+  <div class="project-video__inner">
+    <div class="next-project-title">
+      <p>Next Project</p>
+      <h3>{data.title}</h3>
+    </div>
+    <video
+      class="next-project-media"
+      preload="metadata"
+      loop="true"
+      muted="true"
+      autoplay="true"
+      playsinline
+    >
+      <source src={data.video} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="view-project-element">View project</div>
+    <div class="view-project-background"></div>
   </div>
-  <video
-    class="next-project-media"
-    preload="metadata"
-    loop="true"
-    muted="true"
-    autoplay="true"
-    playsinline
-  >
-    <source src={data.video} type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-  <div class="view-project-element">View project</div>
-  <div class="view-project-background"></div>
 </a>
 
 <style>
   .next-project-video__wrapper {
     width: 100%;
+    height: 100vh;
     position: relative;
     margin: 4rem auto;
     display: block;
   }
+  .sticky-gradient {
+    z-index: 2;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 10%,
+      rgba(0, 0, 0, 0.1) 30%,
+      #000 100%
+    );
+  }
+  .project-video__inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+  }
   .next-project-title {
     position: absolute;
+    z-index: 10;
     top: 4rem;
     left: 4rem;
     color: var(--white);

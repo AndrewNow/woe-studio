@@ -10,6 +10,8 @@ import { getAboutData, getPreviewClips } from "../sanity/api";
 
 const previewClipData = await getPreviewClips();
 const data = await getAboutData();
+
+const isIndexPage = Astro.url.pathname == "/";
 ---
 
 <Layout>
@@ -128,21 +130,37 @@ const data = await getAboutData();
       {
         previewClipData.map((video, i) => {
           return (
-            <video
+            <a
+              href={`/projects/${video.slug}`}
               class="hero-video hover-area"
-              preload="metadata"
-              autoplay="true"
-              loop="true"
-              muted="true"
-              id={`timer-video`}
+              id="timer-video-parent"
             >
-              <source src={video.previewUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+              <video
+                preload="metadata"
+                autoplay="true"
+                loop="true"
+                muted="true"
+                id="timer-video"
+              >
+                <source src={video.previewUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </a>
           );
         })
       }
       <VideoTimer data={previewClipData} />
+      {
+        !isIndexPage && (
+          <a
+            href="/projects"
+            class="link hero-projects-link"
+            data-value="View all projects"
+          >
+            <p>View all projects</p>
+          </a>
+        )
+      }
     </div>
   </div>
   <Footer />
@@ -281,6 +299,13 @@ const data = await getAboutData();
     overflow: hidden;
     position: relative;
   }
+  .hero-projects-link {
+    position: absolute;
+    bottom: 3rem;
+    right: 0rem;
+    z-index: 10;
+    margin-right: 3rem;
+  }
   .hover-area {
     overflow: hidden;
   }
@@ -292,6 +317,12 @@ const data = await getAboutData();
     height: 100%;
     width: 100%;
     object-fit: cover;
+    cursor: none;
+    video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
   }
 
   .mobile-about-marquee {

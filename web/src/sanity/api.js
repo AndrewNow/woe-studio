@@ -29,7 +29,8 @@ export async function getPreviewClips() {
     *[_type == 'projects' && previewOnHomepage == true][] {
       title, 
       previewUrl,
-      clientArray[0]
+      clientArray[0],
+      "slug": slug.current
     }
   `)
   return data

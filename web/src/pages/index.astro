@@ -7,6 +7,22 @@ const previewData = await getPreviewClips();
 ---
 
 <Layout title="Welcome to Astro.">
+  <div class="landing-loader" id="loaderWrapper">
+    <video
+      class="landing-loader-video"
+      id="loaderVideo"
+      preload="metadata"
+      autoplay
+      muted="true"
+      playsinline
+    >
+      <source
+        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/%5BCompressed%5D+W+Logo+-+Opening+Ani.mp4"
+        type="video/mp4"
+      />
+      Your browser does not support the video tag.
+    </video>
+  </div>
   <Hero data={previewData} />
 </Layout>
 
@@ -14,4 +30,35 @@ const previewData = await getPreviewClips();
   .hero {
     color: white;
   }
+  .landing-loader {
+    position: absolute;
+    z-index: 999999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .landing-loader-video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
 </style>
+
+<script>
+  import { animate } from "motion";
+
+  const loaderVideo = document.getElementById("loaderVideo");
+  const loaderWrapper = document.getElementById("loaderWrapper");
+
+  loaderVideo.addEventListener("ended", handleVideoEnd, false);
+
+  function handleVideoEnd(e) {
+    animate(loaderVideo, {
+      opacity: 0,
+    }).finished.then(() => {
+      loaderWrapper.style.display = "none";
+    });
+  }
+</script>

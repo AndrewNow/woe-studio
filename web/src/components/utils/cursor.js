@@ -12,6 +12,8 @@ export default class Cursor {
     this.Cursor = el;
     this.Cursor.style.opacity = 0;
     this.hoverAreas = document.querySelectorAll(".hover-area");
+    this.cursorText = document.getElementById('cursor-text')
+    console.log(this.cursorText)
     this.bounds = this.Cursor.getBoundingClientRect();
     this.cursorConfigs = {
       x: { previous: 0, current: 0, amt: 0.2 },
@@ -42,10 +44,12 @@ export default class Cursor {
     this.hoverAreas.forEach((hoverItem) => {
       // If I am hovering on the item for on page load I want to scale the cursor media
       if (hoverItem.matches(":hover")) {
+        this.setInnerText(hoverItem)
         this.ScaleCursor(this.Cursor.children[0], 1, true);
       }
       //On mouse enter scale the media-cursor to .8
       hoverItem.addEventListener("mouseenter", () => {
+        this.setInnerText(hoverItem)
         this.ScaleCursor(this.Cursor.children[0], 1, true);
       });
       //On mouse enter scale the media-cursor to 0
@@ -74,6 +78,14 @@ export default class Cursor {
       duration: .36
     })
   }
+
+  setInnerText(el) {
+    let innerText = el.getAttribute('data-hover-text');
+    if (innerText) {
+      this.cursorText.innerText = innerText  
+    }
+  }
+
   render() {
     this.cursorConfigs.x.current = mouse.x;
     this.cursorConfigs.y.current = mouse.y;
@@ -81,8 +93,6 @@ export default class Cursor {
     // lerp
     for (const key in this.cursorConfigs) {
       // key will be x & y
-      // WTF IS LERP?
-      // Lerp - A lerp returns the value between two numbers at a specified, decimal midpoint:
       this.cursorConfigs[key].previous = lerp(
         this.cursorConfigs[key].previous,
         this.cursorConfigs[key].current,

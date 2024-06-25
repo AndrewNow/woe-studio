@@ -17,18 +17,23 @@ const { data } = Astro.props;
     {
       data.map((video, i) => {
         return (
-          <video
+          <a
+            href={`/projects/${video.slug}`}
             class="hero-video hover-area"
-            preload="metadata"
-            autoplay="true"
-            loop="true"
-            muted="true"
-            id={`timer-video`}
-            playsinline
+            id="timer-video-parent"
           >
-            <source src={video.previewUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            <video
+              preload="metadata"
+              autoplay="true"
+              loop="true"
+              muted="true"
+              id="timer-video"
+              playsinline
+            >
+              <source src={video.previewUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </a>
         );
       })
     }
@@ -85,6 +90,12 @@ const { data } = Astro.props;
     height: 100%;
     width: 100%;
     object-fit: cover;
+    cursor: none;
+    video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
   }
   .about-video {
     position: relative;
