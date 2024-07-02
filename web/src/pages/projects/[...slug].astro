@@ -78,8 +78,19 @@ const nextProjectData = await getNextProject(currentProjectTitle);
               return <small>{client}</small>;
             })
         }
-        <!-- <small>{clientArray[0]}</small> -->
       </div>
+      <svg
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="25" cy="25" r="24" stroke="#EFEDED"></circle>
+        <path
+          d="M25 20V30.3333M25 30.3333L21 26.3333M25 30.3333L29 26.3333"
+          stroke="#EFEDED"></path>
+      </svg>
     </div>
   </section>
   <section class="project-details__wrapper">
@@ -366,13 +377,16 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   }
   .main-video__mobile-wrapper {
     display: none;
+    width: calc(100% - 2rem);
+    justify-content: space-between;
+    align-items: flex-end;
     position: absolute;
     bottom: 1.5rem;
-    left: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     color: var(--white);
   }
   .main-video__mobile-title {
-    width: 70%;
     display: flex;
     flex-direction: column-reverse;
     h1 {
@@ -380,6 +394,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     }
   }
   @media (max-width: 992px) {
+    .main-video__wrapper {
+      height: 100svh;
+    }
     .project-details-left {
       display: none;
     }
@@ -394,7 +411,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       display: none;
     }
     .main-video__mobile-wrapper {
-      display: block;
+      display: flex;
     }
   }
 </style>

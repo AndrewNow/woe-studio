@@ -105,20 +105,26 @@ const isIndexPage = Astro.url.pathname == "/";
     .woe-logo {
       display: none;
     }
+    .timer__parent {
+      bottom: 1rem;
+    }
     .timer__wrapper {
-      margin-left: 3vw;
+      width: 100%;
+      margin-left: 1rem;
       color: var(--white);
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      height: calc((50px + 0.5rem) * 3);
-      /* make this 3x the height of a .timer-item */
+      gap: 0rem;
+      height: calc(
+        (30px + 1.5rem) * 3
+      ); /* make this 3x the height of a .timer-item */
       overflow: hidden;
     }
     .timer-item {
+      width: 100%;
       will-change: transform;
-      height: 50px;
-      margin-bottom: 0.5rem;
+      min-height: 30px;
+      margin-bottom: 1.5rem;
     }
     .timer-countdown {
       margin-top: 0.5rem;
@@ -217,7 +223,7 @@ const isIndexPage = Astro.url.pathname == "/";
             const currentOffset = currentTranslation
               ? parseFloat(currentTranslation[1])
               : 0;
-            item.style.transform = `translateY(${currentOffset + (-50 - 0.5 * 16)}px)`; // 0.5rem = 0.5 * 16px
+            item.style.transform = `translateY(${currentOffset + -50}px)`; // 50px represents the height of the timer item
           });
         }
       };

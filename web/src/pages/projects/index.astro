@@ -27,7 +27,8 @@ const data = allProjectData.projects;
             href={`/projects/${data.slug}`}
           >
             <video
-              class="project-video-media"
+              class="project-video-media hover-area"
+              data-hover-text="View project"
               preload="metadata"
               loop="true"
               muted="true"
@@ -115,8 +116,8 @@ const data = allProjectData.projects;
   }
   .project-text {
     position: absolute;
-    bottom: 2.5vw;
-    left: 2.5vw;
+    bottom: 1.5vw;
+    left: 1.5vw;
   }
   .project-titleset {
     display: block;
