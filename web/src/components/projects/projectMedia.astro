@@ -185,6 +185,30 @@ import { Image } from "astro:assets";
   .embla__dot--selected {
     background: rgba(var(--rgb-white), 1);
   }
+
+  @media (max-width: 576px) {
+    .embla__controls {
+      width: 90vw;
+    } 
+    .project-media-item__wrapper {
+      border-radius: 5px;
+
+      video {
+        border-radius: 5px;
+      }
+      .project-media-image {
+        border-radius: 5px;
+        height: 50vh;
+      }
+    }
+    .embla__dots {
+      max-width: 60vw;
+      gap: .25rem;
+    }
+    .embla__dot {
+      
+    }
+  }
 </style>
 
 <script>

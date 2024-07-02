@@ -66,6 +66,7 @@ const data = nextProjectData.projects;
   .next-project-media {
     width: 100%;
     max-height: 90vh;
+    height: auto;
     object-fit: cover;
     cursor: none;
   }
@@ -75,7 +76,17 @@ const data = nextProjectData.projects;
   @media (max-width: 992px) {
     .next-project-video__wrapper {
       margin: 1rem auto;
+      margin-bottom: 4rem;
+      aspect-ratio: 16/10;
+      height: auto;
+      width: 100%;
     }
+    .sticky-gradient {
+      height: 100px;
+    }
+    .next-project-media {
+      margin-top: 3rem;
+    } 
     .next-project-video__wrapper:after {
       content: "";
       z-index: 1;

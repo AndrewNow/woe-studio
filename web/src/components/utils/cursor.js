@@ -48,13 +48,22 @@ export default class Cursor {
       }
       //On mouse enter scale the media-cursor to .8
       hoverItem.addEventListener("mouseenter", () => {
-        this.setInnerText(hoverItem)
-        this.ScaleCursor(this.Cursor.children[0], 1, true);
+        // re: episodePlayer, if the player is clicked, the hover-area class is removed to hide the cursor effect.
+        if (hoverItem.classList.contains('hover-area')) {
+          this.setInnerText(hoverItem)
+          this.ScaleCursor(this.Cursor.children[0], 1, true);
+        } else {
+          this.ScaleCursor(this.Cursor.children[0], 0, false);
+        }
       });
+      hoverItem.addEventListener('mousedown', () => {
+        this.ScaleCursor(this.Cursor.children[0], .8, true);
+      })
       //On mouse enter scale the media-cursor to 0
       hoverItem.addEventListener("mouseleave", () => {
         this.ScaleCursor(this.Cursor.children[0], 0, false);
       });
+
       // //Hover on a tag to expand to 1.2
       // hoverItem.children[1].addEventListener("mouseenter", () => {
       //   this.Cursor.classList.add("media-blend");
@@ -105,5 +114,6 @@ export default class Cursor {
   }
 }
 
-
-new Cursor(document.querySelector(".cursor-follower"));
+if (window.innerWidth > 992) {
+  new Cursor(document.querySelector(".cursor-follower"));
+}

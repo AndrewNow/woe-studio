@@ -45,15 +45,42 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 ---
 
 <Layout>
-  <section class="main-video__wrapper hover-area" data-hover-text="Play video">
-    <video class="main-video" id="shortVideo" autoplay muted loop playsinline>
+  <section class="main-video__wrapper">
+    <video
+      class=`main-video ${video && 'hover-area'}`
+      data-hover-text="Play video"
+      id="shortVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+      data-has-full-length-video=`${video != null}`
+    >
       <source src={previewUrl} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-    <video class="main-video" id="fullVideo" controls>
-      <source src={video} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    {
+      video && (
+        <video class="main-video" id="fullVideo" controls>
+          <source src={video} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )
+    }
+    <div class="main-video__mobile-wrapper">
+      <div class="main-video__mobile-title">
+        <h1>
+          {title}
+        </h1>
+        {
+          clientArray != null &&
+            clientArray.map((client) => {
+              return <small>{client}</small>;
+            })
+        }
+        <!-- <small>{clientArray[0]}</small> -->
+      </div>
+    </div>
   </section>
   <section class="project-details__wrapper">
     <div class="project-details__flex">
@@ -63,7 +90,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
           {
             clientArray != null && (
               <div class="project-details-item clients-item">
-                <p class="item-title">Clients</p>
+                <p class="item-title">
+                  {clientArray.length > 1 ? "Clients" : "Client"}
+                </p>
                 {clientArray.map((client) => {
                   return <p>{client}</p>;
                 })}
@@ -75,7 +104,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
           {
             awardArray != null && (
               <>
-                <p class="item-title">Clients</p>
+                <p class="item-title">
+                  {awardArray.length > 1 ? "Awards" : "Awards"}
+                </p>
                 <div class="project-details-item item-two-col">
                   {awardArray.map((award) => {
                     return <p>{award}</p>;
@@ -190,18 +221,24 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const shortVideo = document.getElementById("shortVideo");
-    const fullVideo = document.getElementById("fullVideo");
 
-    shortVideo.addEventListener("click", () => {
-      // Hide the short video
-      shortVideo.style.display = "none";
+    const fullVideoExists = shortVideo.getAttribute(
+      "data-has-full-length-video"
+    );
+    if (fullVideoExists != "false") {
+      const fullVideo = document.getElementById("fullVideo");
 
-      // Show the full video
-      fullVideo.style.display = "block";
+      shortVideo.addEventListener("click", () => {
+        // Hide the short video
+        shortVideo.style.display = "none";
 
-      // Start playing the full video
-      fullVideo.play();
-    });
+        // Show the full video
+        fullVideo.style.display = "block";
+
+        // Start playing the full video
+        fullVideo.play();
+      });
+    }
   });
 </script>
 
@@ -326,8 +363,22 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   }
   .next-project {
     position: relative;
-  } 
-
+  }
+  .main-video__mobile-wrapper {
+    display: none;
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1rem;
+    color: var(--white);
+  }
+  .main-video__mobile-title {
+    width: 70%;
+    display: flex;
+    flex-direction: column-reverse;
+    h1 {
+      margin-top: 0.75rem;
+    }
+  }
   @media (max-width: 992px) {
     .project-details-left {
       display: none;
@@ -341,6 +392,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     }
     .sticky-gradient {
       display: none;
+    }
+    .main-video__mobile-wrapper {
+      display: block;
     }
   }
 </style>

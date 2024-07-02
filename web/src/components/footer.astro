@@ -4,54 +4,56 @@
 
 <footer class="footer__wrapper">
   <div class="footer-content">
-    <div class="footer__flex">
-      <div class="footer-contact">
-        <div class="footer-contact-email">
-          <h4>Work with WOE</h4>
-          <a><h4>info@woestudio.co</h4> </a>
-        </div>
-        <div class="footer-contact-item">
-          <svg
-            width="19"
-            height="18"
-            viewBox="0 0 19 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-            <path
-              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-              stroke="#EFEDED"></path>
-          </svg>
+    <div class="footer-content-title">
+      <div class="footer__flex wrap-contact">
+        <div class="footer-contact">
+          <div class="footer-contact-email">
+            <h4>Work with WOE</h4>
+            <a><h4>info@woestudio.co</h4> </a>
+          </div>
+          <div class="footer-contact-item">
+            <svg
+              width="19"
+              height="18"
+              viewBox="0 0 19 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
+              <path
+                d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                stroke="#EFEDED"></path>
+            </svg>
 
-          <a>
-            <h4>Instagram</h4>
-          </a>
-        </div>
-        <div class="footer-contact-item">
-          <svg
-            width="19"
-            height="18"
-            viewBox="0 0 19 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-            <path
-              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-              stroke="#EFEDED"></path>
-          </svg>
+            <a>
+              <h4>Instagram</h4>
+            </a>
+          </div>
+          <div class="footer-contact-item">
+            <svg
+              width="19"
+              height="18"
+              viewBox="0 0 19 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
+              <path
+                d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                stroke="#EFEDED"></path>
+            </svg>
 
-          <a>
-            <h4>Tik Tok</h4>
-          </a>
+            <a>
+              <h4>Tik Tok</h4>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="footer__flex">
-      <div class="footer-contact location">
-        <h4>2O3 - 43 Towns Rd.<br /> Etobicoke, ON<br /> M8Z 1A2</h4>
-        <h4 class="legal">(c) 2O24 legal</h4>
+      <div class="footer__flex">
+        <div class="footer-contact location">
+          <h4>2O3 - 43 Towns Rd.<br /> Etobicoke, ON<br /> M8Z 1A2</h4>
+          <h4 class="legal">(c) 2O24 legal</h4>
+        </div>
       </div>
     </div>
     <div class="footer-logo">
@@ -178,6 +180,54 @@
       z-index: 0;
       width: 100%;
       height: 100%;
+    }
+  }
+  @media (max-width: 992px) {
+    .location {
+      padding: 0;
+    }
+    .footer-contact {
+      width: auto;
+    }
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      margin: 1rem;
+    }
+    .footer-content-title {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row-reverse;
+    }
+    .footer__flex {
+      justify-content: flex-start;
+    }
+    .footer-logo {
+      width: 100%;
+    }
+    .wrap-contact {
+      display: flex;
+      justify-content: flex-end;
+
+      h4 {
+        text-align: right;
+      }
+    }
+    .footer-contact-item {
+      justify-content: space-between;
+      margin-bottom: 0.5;
+
+      svg {
+        width: 14px;
+      }
+    }
+    .footer-contact-item:last-child {
+      margin-bottom: 0;
+    }
+    .location {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
     }
   }
 </style>
