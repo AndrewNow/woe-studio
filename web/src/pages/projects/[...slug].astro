@@ -74,7 +74,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         </h1>
         {
           clientArray != null &&
-            clientArray.reverse().map((client) => {
+            clientArray.map((client) => {
               return <small>{client}</small>;
             })
         }
@@ -103,7 +103,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
                 <p class="item-title">
                   {clientArray.length > 1 ? "Clients" : "Client"}
                 </p>
-                {clientArray.reverse().map((client) => {
+                {clientArray.map((client) => {
                   return <p>{client}</p>;
                 })}
               </div>
