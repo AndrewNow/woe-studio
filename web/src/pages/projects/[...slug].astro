@@ -74,7 +74,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         </h1>
         {
           clientArray != null &&
-            clientArray.map((client) => {
+            clientArray.reverse().map((client) => {
               return <small>{client}</small>;
             })
         }
@@ -231,20 +231,37 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const shortVideo = document.getElementById("shortVideo");
-
     const fullVideoExists = shortVideo.getAttribute(
       "data-has-full-length-video"
     );
-    if (fullVideoExists != "false") {
-      const fullVideo = document.getElementById("fullVideo");
 
+    // Function to toggle playsinline attribute
+    function togglePlaysinline() {
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+
+      if (isMobile) {
+        shortVideo.setAttribute("playsinline", "");
+      } else {
+        shortVideo.removeAttribute("playsinline");
+      }
+    }
+
+    // Call the function to set initial state
+    togglePlaysinline();
+
+    // Add resize listener to handle orientation changes
+    window.addEventListener("resize", togglePlaysinline);
+
+    if (fullVideoExists !== "false") {
+      const fullVideo = document.getElementById("fullVideo");
       shortVideo.addEventListener("click", () => {
         // Hide the short video
         shortVideo.style.display = "none";
-
         // Show the full video
         fullVideo.style.display = "block";
-
         // Start playing the full video
         fullVideo.play();
       });
@@ -406,6 +423,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     .project-details__wrapper,
     .project-overview__wrapper {
       margin: 1rem;
+    }
+    .project-details__wrapper {
+      margin-bottom: 4rem;
     }
     .project-overview-text {
       column-count: 1;
