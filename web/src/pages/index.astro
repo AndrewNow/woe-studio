@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/hero.astro";
 import { getPreviewClips } from "../sanity/api";
-
 const previewData = await getPreviewClips();
 ---
 
@@ -30,7 +29,6 @@ const previewData = await getPreviewClips();
   </div>
   <Hero data={previewData} />
 </Layout>
-
 <style>
   .hero {
     color: white;
@@ -50,15 +48,42 @@ const previewData = await getPreviewClips();
     object-fit: cover;
   }
 </style>
-
 <script>
   import { animate } from "motion";
-
   const loaderVideo = document.getElementById("loaderVideo");
   const loaderWrapper = document.getElementById("loaderWrapper");
   const videoContainer = document.getElementById("hero-video-container");
   const timerItems = document.getElementById("animateTimerIn");
-  loaderVideo.addEventListener("ended", handleVideoEnd, false);
+
+  const userHasVisited = sessionStorage.getItem("visited");
+
+  if (userHasVisited) {
+    loaderWrapper.style.display = "none";
+    animate(
+      videoContainer,
+      {
+        clipPath: "inset(0% 0% 0% 0%)",
+      },
+      {
+        duration: 1.6,
+        easing: [0.85, 0, 0.15, 1],
+      }
+    );
+    animate(
+      timerItems,
+      {
+        opacity: 1,
+      },
+      {
+        delay: 0.5,
+        duration: 1.6,
+      }
+    );
+  } else {
+    loaderVideo.addEventListener("ended", handleVideoEnd, false);
+  }
+
+  // loaderVideo.addEventListener("ended", handleVideoEnd, false);
 
   function handleVideoEnd(e) {
     animate(loaderVideo, {
@@ -86,5 +111,7 @@ const previewData = await getPreviewClips();
         }
       );
     });
+
+    sessionStorage.setItem("visited", "true");
   }
 </script>

@@ -26,13 +26,13 @@ const isIndexPage = Astro.url.pathname == "/";
         data &&
           data.map((video) => {
             return (
-              <div class="timer-item">
+              <a class="timer-item" href={`/projects/${video.slug}`}>
                 <p>{video.title}</p>
                 <p>{video.clientArray ? video.clientArray : ""}</p>
                 <div class="timer-countdown">
                   <div class="timer-countdown__progress" />
                 </div>
-              </div>
+              </a>
             );
           })
       }
@@ -42,7 +42,7 @@ const isIndexPage = Astro.url.pathname == "/";
 
 <style>
   .woe-logo {
-    margin-left: 3rem;
+    /* margin-left: 3rem; */
     margin-bottom: 1.5vw;
     aspect-ratio: 511/25;
     max-width: 527px;
@@ -58,6 +58,7 @@ const isIndexPage = Astro.url.pathname == "/";
     display: inline-flex;
     justify-content: space-between;
     align-items: end;
+    margin-left: 3rem;
   }
   .timer__container {
     position: relative;
@@ -65,7 +66,6 @@ const isIndexPage = Astro.url.pathname == "/";
     /* max-width: 575px; */
   }
   .timer__wrapper {
-    margin-left: 3rem;
     color: var(--white);
     display: grid;
     gap: 1rem;
@@ -74,6 +74,8 @@ const isIndexPage = Astro.url.pathname == "/";
   }
 
   .timer-item {
+    text-decoration: none;
+    color: var(--white);
     /* width: 165px; */
     position: relative;
     display: flex;
@@ -98,7 +100,7 @@ const isIndexPage = Astro.url.pathname == "/";
     background-color: rgba(var(--rgb-white), 1);
     height: 1px;
     width: 100%;
-    transform: scaleX(0);
+    transform: scaleX(0) translateY(0px);
   }
 
   @media (max-width: 992px) {
@@ -107,17 +109,17 @@ const isIndexPage = Astro.url.pathname == "/";
     }
     .timer__parent {
       bottom: 1rem;
+      margin-left: 1rem;
     }
     .timer__wrapper {
       width: 100%;
-      margin-left: 1rem;
       color: var(--white);
       display: flex;
       flex-direction: column;
       gap: 0rem;
       height: calc(
-        (30px + 1.5rem) * 3
-      ); /* make this 3x the height of a .timer-item */
+        (54px * 3) - 1rem
+      ); /* make this 3x the height of a .timer-item. 54px = 30px + 1.5rem. subtract 1.5rem because we want the last item (when the timer starts) to align to the bottom */
       overflow: hidden;
     }
     .timer-item {
@@ -177,7 +179,7 @@ const isIndexPage = Astro.url.pathname == "/";
         const currentProgress = timerItems[currentIndex].querySelector(
           ".timer-countdown__progress"
         );
-        currentProgress.style.transform = "scaleX(1)";
+        currentProgress.style.transform = "scaleX(1) translateY(0px)";
 
         // Update text element opacities
         timerItems.forEach((item, i) => {
@@ -223,7 +225,7 @@ const isIndexPage = Astro.url.pathname == "/";
             const currentOffset = currentTranslation
               ? parseFloat(currentTranslation[1])
               : 0;
-            item.style.transform = `translateY(${currentOffset + -50}px)`; // 50px represents the height of the timer item
+            item.style.transform = `translateY(${currentOffset + -54}px)`; // 54px = 30px + 1.5rem. represents the height of the timer item
           });
         }
       };
