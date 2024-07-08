@@ -82,13 +82,13 @@ const previewData = await getPreviewClips();
       }
     );
   } else {
+    loaderVideo.style.opacity = "1";
     loaderVideo.addEventListener("ended", handleVideoEnd, false);
   }
 
   // loaderVideo.addEventListener("ended", handleVideoEnd, false);
 
   function handleVideoEnd(e) {
-    loaderVideo.style.opacity = "1";
     animate(loaderVideo, {
       opacity: 0,
     }).finished.then(() => {
