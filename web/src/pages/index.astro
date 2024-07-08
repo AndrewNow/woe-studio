@@ -46,6 +46,8 @@ const previewData = await getPreviewClips();
     height: 100%;
     width: 100%;
     object-fit: cover;
+    opacity: 0;
+    transition: all 0.25s ease;
   }
 </style>
 <script>
@@ -86,6 +88,7 @@ const previewData = await getPreviewClips();
   // loaderVideo.addEventListener("ended", handleVideoEnd, false);
 
   function handleVideoEnd(e) {
+    loaderVideo.style.opacity = "1";
     animate(loaderVideo, {
       opacity: 0,
     }).finished.then(() => {
