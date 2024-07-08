@@ -30,6 +30,18 @@ const { data, expertiseData } = Astro.props;
         );
       })
     }
+    <a
+      href="mailto:info@woestudio.co"
+      class="team-entry mobile-team-entry"
+      id="team-entry"
+    >
+      <div class="member-name">
+        <p>Work with WOE</p>
+      </div>
+      <div class="member-title">
+        <p>info@woestudio.co</p>
+      </div>
+    </a>
   </div>
   <div class="team-expertise">
     <p>Expertise</p>
@@ -83,8 +95,10 @@ const { data, expertiseData } = Astro.props;
     display: block;
     position: relative;
     z-index: 2;
+    width: 100%;
   }
   .team-entry {
+    width: 100%;
     display: grid;
     position: relative;
     grid-template-columns: 1fr 2fr 1fr;
@@ -136,7 +150,26 @@ const { data, expertiseData } = Astro.props;
     height: 130px;
   }
 
+  .mobile-team-entry {
+    display: none;
+    text-decoration: none;
+  }
   @media (max-width: 1280px) {
+    .blend-video {
+      z-index: 0;
+      position: absolute;
+      top: -25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: lighten;
+      user-select: none;
+      pointer-events: none;
+      aspect-ratio: 800/544;
+      max-width: 80vw;
+    }
+    .mobile-team-entry {
+      display: block;
+    }
     .team__wrapper {
       flex-direction: column;
       align-items: flex-start;
@@ -145,12 +178,19 @@ const { data, expertiseData } = Astro.props;
       width: 100%;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      row-gap: 0.5rem;
     }
     .team-entry {
       display: flex;
       flex-direction: column;
       padding-bottom: 0;
-      width: 80%;
+      width: 90%;
+    }
+    .member-name {
+      min-width: unset;
+      p {
+        font-size: 15px;
+      }
     }
     .team-entry:before {
       display: none;

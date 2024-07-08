@@ -42,6 +42,7 @@ export async function getProjectsInOrder() {
       "projects": projects[]->{
         title,
         video,
+        "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
         clientArray[],        
         awardArray[],

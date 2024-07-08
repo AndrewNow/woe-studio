@@ -37,6 +37,12 @@ const data = allProjectData.projects;
               <source src={data.previewUrl} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+            <Image
+              src={data.thumbnail}
+              alt=""
+              inferSize
+              class="project-image-media__mobile"
+            />
             <div class="project-text">
               <span class="project-titleset">
                 {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
@@ -138,7 +144,19 @@ const data = allProjectData.projects;
     }
   }
 
+  .project-image-media__mobile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
   @media (max-width: 992px) {
+    .project-image-media__mobile {
+      display: block;
+    }
+    .project-video-media {
+      display: none;
+    }
     .project-grid__container {
       gap: 0.25rem;
     }

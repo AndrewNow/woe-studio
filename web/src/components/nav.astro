@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 // import Image from "astro/components/Image.astro";
 import clover from "../assets/woe-clover.png";
+import Logotype from "./logotype.astro";
+
 const isHome = Astro.url.pathname == "/";
 
 const pages = [
@@ -21,14 +23,22 @@ const pages = [
 ---
 
 <nav class="nav">
-  <a href="/">
+  <a href="/" class="logo__wrapper">
     <Image
       src={clover}
       alt="Clover logo"
       width="40"
       height="40"
       loading="eager"
+      class="clover"
     />
+    {
+      !isHome && (
+        <div class="logotype">
+          <Logotype />
+        </div>
+      )
+    }
   </a>
   <span class="page-link__wrapper">
     <a href="/about" class="page-link link">
@@ -119,6 +129,14 @@ const pages = [
 </div>
 
 <style>
+  .logo__wrapper {
+    display: flex;
+    align-items: center;
+  }
+  .logotype {
+    width: 220px;
+    margin-left: 1rem;
+  }
   .nav {
     position: fixed;
     top: 3rem;
@@ -210,6 +228,14 @@ const pages = [
       display: block;
       opacity: 1;
     }
+    .logotype {
+      width: 148px;
+    }
+    .clover {
+      width: 23px;
+      height: 23px;
+    }
+
     .page-link__wrapper {
       display: none;
     }
@@ -223,6 +249,8 @@ const pages = [
       display: block;
       color: white;
       z-index: 1001;
+      text-shadow: 0px 0px 2.3px #efeded;
+      text-decoration: underline;
     }
     #mobileNav ul {
       list-style-type: none;
