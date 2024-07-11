@@ -150,7 +150,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
           description != null && (
             <div class="project-details-overview">
               <h5>Project Overview</h5>
-              <p>
+              <p class="project-details-overview-text">
                 <PortableText data={description} />
               </p>
             </div>
@@ -173,6 +173,40 @@ const nextProjectData = await getNextProject(currentProjectTitle);
                 <p class="item-title">Credits</p>
                 {creditsArray.map((credit) => {
                   return <p>{credit}</p>;
+                })}
+              </div>
+            )
+          }
+        </div>
+        <div class="project-details-mobile-awards">
+          {
+            awardArray != null && (
+              <div class="project-details-mobile-awards-wrapper">
+                <p class="item-title">
+                  Awards & Recognitions
+                  {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
+                </p>
+                <div class="project-details-item item-two-col">
+                  {awardArray.map((award) => {
+                    return <p>{award}</p>;
+                  })}
+                </div>
+              </div>
+            )
+          }
+          {
+            awardImageArray != null && (
+              <div class="project-details-awards-images">
+                {awardImageArray.map((award) => {
+                  return (
+                    <Image
+                      quality={25}
+                      inferSize
+                      src={award.imageSrc}
+                      alt="Image of an award badge"
+                      class="award-image"
+                    />
+                  );
                 })}
               </div>
             )
@@ -336,6 +370,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     gap: 2rem;
     opacity: 0.5;
     max-width: 40vw;
+    border: 1px solid red;
   }
   .award-image {
     height: 100px;
@@ -417,6 +452,10 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       margin-top: 0.75rem;
     }
   }
+
+  .project-details-mobile-awards {
+    display: none;
+  }
   @media (max-width: 992px) {
     .main-video__wrapper {
       height: 100svh;
@@ -440,5 +479,36 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     .main-video__mobile-wrapper {
       display: flex;
     }
+  }
+  .project-details-mobile-awards {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+  .project-details-mobile-awards-wrapper {
+    width: 100%;
+    margin-top: 2rem;
+    position: relative;
+  }
+  .item-two-col {
+    width: 100%;
+    column-gap: 2rem; 
+    /* matches 2rem gap for .project-details-credits */
+  }
+  .project-details-item {
+    flex: 1;
+  }
+  .project-details-awards-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    opacity: 0.5;
+    width: 100%;
+    max-width: 95vw;
+  }
+  .award-image {
+    height: 60px;
+    width: auto;
   }
 </style>

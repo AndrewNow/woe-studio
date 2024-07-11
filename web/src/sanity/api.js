@@ -26,11 +26,13 @@ export async function getAboutData() {
 
 export async function getPreviewClips() {
   const data = await sanityClient.fetch(`
-    *[_type == 'projects' && previewOnHomepage == true][] {
-      title, 
-      previewUrl,
-      clientArray[0],
-      "slug": slug.current
+    *[_type == 'homepageInOrder'][0] {
+      "projects": projects[]-> { 
+        title, 
+        previewUrl,
+        clientArray[0],
+        "slug": slug.current
+      }
     }
   `)
   return data

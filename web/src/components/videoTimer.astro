@@ -24,7 +24,7 @@ const isIndexPage = Astro.url.pathname == "/";
     <div class="timer__wrapper">
       {
         data &&
-          data.map((video) => {
+          data.slice(0, 6).map((video) => {
             return (
               <a class="timer-item" href={`/projects/${video.slug}`}>
                 <p>{video.title}</p>
