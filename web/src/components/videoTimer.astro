@@ -142,46 +142,81 @@ const isIndexPage = Astro.url.pathname == "/";
       "#timer-video-parent"
     );
 
-    const duration = 5000; // Duration of each video in milliseconds (adjust as needed)
+    const duration = 5000; // Duration of each video in milliseconds
     let currentIndex = 0;
+    let timerInterval;
 
     const updateTimer = () => {
+      // console.log("Updating timer, currentIndex:", currentIndex);
+
+      const resetAllVideos = () => {
+        timerVideoParentArr.forEach((parent, i) => {
+          const childVideo = parent.querySelector("video");
+          childVideo.pause();
+          childVideo.currentTime = 0;
+          childVideo.load(); // Reload the video
+          parent.style.display = "none";
+          parent.style.opacity = "0";
+        });
+      };
+
+      if (currentIndex >= timerItems.length) {
+        resetAllVideos();
+        resetTimerPosition();
+        currentIndex = 0;
+
+        // Preload the first video
+        const firstVideo = timerVideoParentArr[0].querySelector("video");
+        firstVideo.load();
+
+        // Add a small delay before restarting the loop
+        setTimeout(() => {
+          updateTimer();
+        }, 100);
+        return;
+      }
+
       timerVideoParentArr.forEach((parent, i) => {
         const childVideo = parent.querySelector("video");
 
-        childVideo.pause();
-
         if (i == currentIndex) {
-          // show the parent (anchor tag) which wraps the video
           parent.style.display = "block";
-          parent.style.transition = ".5s all ease";
           parent.style.opacity = "1";
+          console.log(`Playing video ${i}`);
 
-          // reset the current video's playback to the start and play it
-          childVideo.currentTime = 0;
-          childVideo.play();
+          // Ensure video is ready before playing
+          if (childVideo.readyState >= 3) {
+            childVideo
+              .play()
+              .catch((e) => console.error("Error playing video:", e));
+          } else {
+            childVideo.addEventListener(
+              "canplay",
+              () => {
+                childVideo
+                  .play()
+                  .catch((e) => console.error("Error playing video:", e));
+              },
+              { once: true }
+            );
+          }
         } else {
-          // hide the parent
-          parent.style.transition = ".5s all ease";
           parent.style.opacity = "0";
           setTimeout(() => {
             parent.style.display = "none";
+            childVideo.pause();
+            childVideo.currentTime = 0;
           }, 510);
-
-          // pause the video and restart it
-          childVideo.pause();
-          childVideo.currentTime = 0;
         }
       });
 
+      // Reset the previous element's progress bar state
       if (currentIndex < timerItems.length) {
-        // Set the width of the current progress bar to 100%
         const currentProgress = timerItems[currentIndex].querySelector(
           ".timer-countdown__progress"
         );
         currentProgress.style.transform = "scaleX(1) translateY(0px)";
 
-        // Update text element opacities
         timerItems.forEach((item, i) => {
           const currentTextElements = item.querySelectorAll("p");
           if (i === currentIndex) {
@@ -194,7 +229,6 @@ const isIndexPage = Astro.url.pathname == "/";
           }
         });
 
-        // Undo the progress bar state for the previous element (the one that just played)
         const prevIndex =
           currentIndex === 0 ? timerItems.length - 1 : currentIndex - 1;
         const prevProgress = timerItems[prevIndex].querySelector(
@@ -202,54 +236,75 @@ const isIndexPage = Astro.url.pathname == "/";
         );
         prevProgress.style.transform = "scaleX(0)";
         prevProgress.style.transitionDuration = "0s";
-        prevProgress.offsetHeight; // Trigger a reflow to ensure the transition takes effect
+        prevProgress.offsetHeight;
         prevProgress.style.transitionDuration = "5s";
       }
 
-      const resetTimerPosition = () => {
-        if (window.innerWidth < 992) {
-          timerItems.forEach((item) => {
-            item.style.transform = `translateY(0)`; // Reset translation
-          });
-        }
-      };
-
-      const translateTimerUpwards = () => {
-        // For mobile screens, move the items upward by 1 item height
-        if (window.innerWidth < 992) {
-          timerItems.forEach((item) => {
-            // Get the current translation value and add 1 item height to it
-            const currentTranslation = item.style.transform.match(
-              /translateY\(([^)]+)\)/
-            );
-            const currentOffset = currentTranslation
-              ? parseFloat(currentTranslation[1])
-              : 0;
-            item.style.transform = `translateY(${currentOffset + -54}px)`; // 54px = 30px + 1.5rem. represents the height of the timer item
-          });
-        }
-      };
+      if (currentIndex > 0) {
+        translateTimerUpwards();
+      }
 
       currentIndex++;
-      if (currentIndex <= timerItems.length) {
-        if (currentIndex > 1) {
-          translateTimerUpwards();
-        }
-      } else if (currentIndex === timerItems.length + 1) {
-        // If we're at the end of the loop, reset it to 0 and translate items downward
-        resetTimerPosition();
-        currentIndex = 0;
-        updateTimer();
+    };
+
+    const resetTimerPosition = () => {
+      if (window.innerWidth < 992) {
+        timerItems.forEach((item) => {
+          item.style.transform = `translateY(0)`;
+        });
       }
     };
 
-    // Run the timer immediately
-    updateTimer();
+    const translateTimerUpwards = () => {
+      if (window.innerWidth < 992) {
+        timerItems.forEach((item) => {
+          const currentTranslation = item.style.transform.match(
+            /translateY\(([^)]+)\)/
+          );
+          const currentOffset = currentTranslation
+            ? parseFloat(currentTranslation[1])
+            : 0;
+          item.style.transform = `translateY(${currentOffset + -54}px)`;
+        });
+      }
+    };
 
-    // Set the interval to run the timer every 'duration' milliseconds
-    setInterval(updateTimer, duration);
+    const startTimer = () => {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 5000); // Changed from 2500 to 5000
+      updateTimer(); // Run the timer immediately
+    };
+
+    // Check if we're on the homepage
+    const isHomepage =
+      window.location.pathname === "/" ||
+      window.location.pathname === "/index.html";
+
+    if (isHomepage) {
+      const loaderWrapper = document.getElementById("loaderWrapper");
+      const userHasVisited = sessionStorage.getItem("visited");
+
+      if (userHasVisited || !loaderWrapper) {
+        // If user has visited before or there's no loader, start the timer immediately
+        startTimer();
+      } else {
+        // If it's the user's first visit and there's a loader, wait for the loader to finish
+        const loaderVideo = document.getElementById("loaderVideo");
+        loaderVideo.addEventListener(
+          "ended",
+          () => {
+            // Start the timer when the loader video ends
+            startTimer()
+          },
+          { once: true }
+        );
+      }
+    } else {
+      // If not on homepage, start the timer immediately
+      startTimer();
+    }
   };
 
-  // Call the function to start the timer after 5 seconds
-  setTimeout(runTimer, 5000);
+  // Call the function to initialize the timer setup
+  runTimer();
 </script>
