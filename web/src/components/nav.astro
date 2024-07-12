@@ -24,7 +24,7 @@ const pages = [
 ];
 ---
 
-<nav class="nav">
+<nav class="nav" id="navWrapper">
   <a href="/" class="logo__wrapper">
     <Image
       src={clover}
@@ -312,6 +312,8 @@ const pages = [
 </style>
 
 <script>
+  import { animate, inView } from "motion";
+
   document.addEventListener("DOMContentLoaded", function () {
     const nav = document.getElementById("mobileNav");
     const body = document.body;
@@ -335,5 +337,26 @@ const pages = [
     };
 
     document.getElementById("menu-button").addEventListener("click", toggleNav);
+
+    const navWrapper = document.getElementById("navWrapper");
+    const episodePlayer = document.getElementById("episodePlayer");
+
+    inView(
+      episodePlayer,
+      () => {
+        animate(navWrapper, {
+          opacity: 0,
+        });
+
+        return () => {
+          animate(navWrapper, {
+            opacity: 1,
+          });
+        };
+      },
+      {
+        amount: 0.8,
+      }
+    );
   });
 </script>

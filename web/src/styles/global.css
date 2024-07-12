@@ -30,6 +30,15 @@ html,
     text-rendering: geometricPrecision;
   }
 
+    @keyframes rotate360 {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
   @font-face {
     font-family: "n27-light";
     src: url("../fonts/n27-light.woff2") format("woff2");
@@ -164,7 +173,7 @@ html,
       line-height: 115%;
     }
     h4 {
-      font-size: 15px;
+      font-size: 14px;
       line-height: 115%;
       letter-spacing: -0.03rem;
     }

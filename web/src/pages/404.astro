@@ -1,11 +1,144 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+import { getSiteSettings } from "../sanity/api";
+
+const settingsData = await getSiteSettings();
 ---
 
-<Layout>
-  <h1>404</h1>
-  <h3>What on earth? Page not found</h3>
+<Layout data={settingsData}>
+  <div class="wrapper">
+    <div class="gradient__wrapper">
+      <h1 class="title">4O4</h1>
+    </div>
+    <div class="text-container">
+      <div class="text-column">
+        <h2>
+          The Page you are looking for doesn’t exist or an other error occurred
+        </h2>
+        <h3>What on earth? Page not found</h3>
+      </div>
+      <h3 class="text-link">
+        Go back to <a href="/">Home</a>, and please try this page again
+      </h3>
+    </div>
+  </div>
 </Layout>
 
 <style>
+  .wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--white);
+  }
+
+  .gradient__wrapper {
+    position: relative;
+  }
+  .text-column {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    h2 {
+      margin-top: 1rem;
+    }
+  }
+  .text-link {
+    color: rgba(var(--rgb-white), 0.5);
+    a {
+      font-size: unset;
+      transition: 0.3s all ease;
+      color: rgba(var(--rgb-white), 1);
+    }
+    a:hover {
+      color: rgba(var(--rgb-white), 0.75);
+    }
+  }
+  .text-container {
+    h3 {
+      margin-top: 2rem;
+    }
+  }
+
+  .title {
+    user-select: none;
+    font-size: 27vw;
+    font-family: "N27-light";
+    background-image: linear-gradient(
+        13deg,
+        #155e89 10%,
+        rgba(21, 94, 137, 0) 57.59%
+      ),
+      linear-gradient(120deg, #ba00a7 9.57%, rgba(21, 94, 137, 0) 57.59%),
+      linear-gradient(130deg, #9aeadd 8.23%, rgba(120, 124, 123, 0) 64.05%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    position: relative;
+    z-index: 2;
+
+    /* Set large background-size to create smooth rotation */
+    background-size:
+      400% 400%,
+      400% 400%,
+      400% 400%;
+
+    /* Animate background-position */
+    animation:
+      moveGradient1 4s linear infinite alternate,
+      moveGradient2 3.5s linear infinite reverse,
+      moveGradient3 6s linear infinite alternate;
+  }
+
+  @keyframes moveGradient1 {
+    0% {
+      background-position:
+        10% 20%,
+        100% 60%,
+        20% 100%;
+    }
+    100% {
+      background-position:
+        50% 20%,
+        100% 20%,
+        20% 100%;
+    }
+  }
+
+  @keyframes moveGradient2 {
+    0% {
+      background-position:
+        20% 50%,
+        10% 20%,
+        20% 100%;
+    }
+    100% {
+      background-position:
+        10% 50%,
+        100% 70%,
+        40% 100%;
+    }
+  }
+
+  @keyframes moveGradient3 {
+    0% {
+      background-position:
+        20% 80%,
+        20% 100%,
+        10% 20%;
+    }
+    100% {
+      background-position:
+        20% 10%,
+        20% 100%,
+        100% 20%;
+    }
+  }
 </style>

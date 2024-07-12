@@ -380,7 +380,6 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     gap: 2rem;
     opacity: 0.5;
     max-width: 40vw;
-    border: 1px solid red;
   }
   .award-image {
     height: 100px;
@@ -467,6 +466,13 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     display: none;
   }
   @media (max-width: 992px) {
+    .project-details-overview {
+      & h5 {
+        margin-top: 2.5rem;
+        margin-bottom: 5rem;
+        font-size: 15px;
+      }
+    }
     .main-video__wrapper {
       height: 100svh;
     }
@@ -489,36 +495,36 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     .main-video__mobile-wrapper {
       display: flex;
     }
-  }
-  .project-details-mobile-awards {
-    display: block;
-    position: relative;
-    width: 100%;
-  }
-  .project-details-mobile-awards-wrapper {
-    width: 100%;
-    margin-top: 2rem;
-    position: relative;
-  }
-  .item-two-col {
-    width: 100%;
-    column-gap: 2rem;
-    /* matches 2rem gap for .project-details-credits */
-  }
-  .project-details-item {
-    flex: 1;
-  }
-  .project-details-awards-images {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem;
-    opacity: 0.5;
-    width: 100%;
-    max-width: 95vw;
-  }
-  .award-image {
-    height: 60px;
-    width: auto;
+    .project-details-mobile-awards {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+    .project-details-mobile-awards-wrapper {
+      width: 100%;
+      margin-top: 2rem;
+      position: relative;
+    }
+    .item-two-col {
+      width: 100%;
+      column-gap: 2rem;
+      /* matches 2rem gap for .project-details-credits */
+    }
+    .project-details-item {
+      flex: 1;
+    }
+    .project-details-awards-images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+      opacity: 0.5;
+      width: 100%;
+      max-width: 95vw;
+    }
+    .award-image {
+      height: 60px;
+      width: auto;
+    }
   }
 </style>
