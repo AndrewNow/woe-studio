@@ -74,6 +74,30 @@ export default class Cursor {
       //   this.Cursor.classList.remove("media-blend");
       //   this.ScaleCursor(this.Cursor.children[0], 0.8);
       // });
+      const nextButton = document.querySelector('.embla__button--next');
+      const prevButton = document.querySelector('.embla__button--prev');
+
+      if (nextButton) {
+        nextButton.addEventListener("mouseenter", () => {
+          this.setSvg();
+          this.ScaleCursor(this.Cursor.children[0], 1, true);
+        });
+        nextButton.addEventListener("mouseleave", () => {
+          this.cursorText.innerHTML = ''; // Clear the SVG
+          this.ScaleCursor(this.Cursor.children[0], 0, false);
+        });
+      }
+
+      if (prevButton) {
+        prevButton.addEventListener("mouseenter", () => {
+          this.setPrevSvg();
+          this.ScaleCursor(this.Cursor.children[0], 1, true);
+        });
+        prevButton.addEventListener("mouseleave", () => {
+          this.cursorText.innerHTML = ''; // Clear the SVG
+          this.ScaleCursor(this.Cursor.children[0], 0, false);
+        });
+      }
     });
   }
 
@@ -92,6 +116,20 @@ export default class Cursor {
     if (innerText) {
       this.cursorText.innerText = innerText  
     }
+  }
+
+  setSvg() {
+    const svg = `<svg viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M-2.34919e-07 8.41833L18.1319 8.41833M18.1319 8.41833L11.9506 15.4238M18.1319 8.41833L11.9505 1.00075" stroke="#EFEDED" stroke-width="2"/>
+    </svg>`;
+    this.cursorText.innerHTML = svg;
+  }
+
+  setPrevSvg() {
+    const svg = `<svg viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 8.58167L1.86814 8.58167M1.86814 8.58167L8.04944 1.57624M1.86814 8.58167L8.04951 15.9993" stroke="#EFEDED" stroke-width="2"/>
+    </svg>`;
+    this.cursorText.innerHTML = svg;
   }
 
   render() {

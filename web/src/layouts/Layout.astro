@@ -1,6 +1,6 @@
 ---
 import Nav from "../components/nav.astro";
-const { title } = Astro.props;
+const { title, data } = Astro.props;
 import "../styles/global.css";
 ---
 
@@ -16,7 +16,7 @@ import "../styles/global.css";
   </head>
   <body>
     <main>
-      <Nav />
+      <Nav data={data}/>
       <slot />
       <div class="cursor-follower" id="cursor-follower">
         <div class="cursor-inner">
@@ -132,6 +132,28 @@ import "../styles/global.css";
     transform: rotate(-180deg);
     bottom: -1px;
     right: -1px;
+  }
+
+  #cursor-text {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  #cursor-text svg {
+    position: absolute;
+    width: 20px;
+    height: 17px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease;
+  }
+
+  #cursor-text.rotate-svg svg {
+    transform: translate(-50%, -50%) rotate(180deg);
   }
 
   @media (max-width: 576px) {

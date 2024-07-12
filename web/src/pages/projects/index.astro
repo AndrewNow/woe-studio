@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import { getProjectsInOrder } from "../../sanity/api";
+import { getProjectsInOrder, getSiteSettings } from "../../sanity/api";
 import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
@@ -9,10 +9,12 @@ import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.a
 import Footer from "../../components/footer.astro";
 
 const allProjectData = await getProjectsInOrder();
+const settingsData = await getSiteSettings();
+
 const data = allProjectData.projects;
 ---
 
-<Layout>
+<Layout data={settingsData}>
   <div class="project-grid__container">
     {
       data.map((data, i) => {
@@ -34,7 +36,24 @@ const data = allProjectData.projects;
               muted="true"
               playsinline
             >
-              <source src={data.previewUrl} type="video/mp4" />
+              <source
+                src={data.previewUrl}
+                type="video/mp4"
+                media="(min-width: 992px)"
+              />
+              {/* <source
+                src={data.previewUrl}
+                type="video/mp4"
+                media="(min-width: 992px)"
+              /> */}
+              {/* <source
+                src={
+                  data.previewUrlMobile
+                    ? data.previewUrlMobile
+                    : data.previewUrl
+                }
+                type="video/mp4"
+              /> */}
               Your browser does not support the video tag.
             </video>
             <Image
@@ -62,7 +81,7 @@ const data = allProjectData.projects;
     <CornerBottomLeft />
     <CornerBottomRight />
   </div>
-  <Footer />
+  <Footer data={settingsData} />
 </Layout>
 
 <script>

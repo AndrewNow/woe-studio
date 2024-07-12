@@ -6,15 +6,16 @@ import Team from "../components/team.astro";
 import Marquee from "../components/marquee.astro";
 import VideoTimer from "../components/videoTimer.astro";
 import Footer from "../components/footer.astro";
-import { getAboutData, getPreviewClips } from "../sanity/api";
+import { getAboutData, getPreviewClips, getSiteSettings } from "../sanity/api";
 
 const previewClipData = await getPreviewClips();
 const data = await getAboutData();
+const settingsData = await getSiteSettings();
 
 const isIndexPage = Astro.url.pathname == "/";
 ---
 
-<Layout>
+<Layout data={settingsData}>
   <div class="canvas__wrapper">
     <div class="blur">
       <div class="circle circle-1"></div>
@@ -116,7 +117,12 @@ const isIndexPage = Astro.url.pathname == "/";
   </div>
   {
     data.teamArray != null && data.expertiseArray != null && (
-      <Team data={data.teamArray} expertiseData={data.expertiseArray} />
+      <Team
+        data={data.teamArray}
+        expertiseData={data.expertiseArray}
+        logoVideo={settingsData.logoVideo}
+        email={settingsData.email}
+      />
     )
   }
   {
@@ -163,7 +169,7 @@ const isIndexPage = Astro.url.pathname == "/";
       }
     </div>
   </div>
-  <Footer />
+  <Footer data={settingsData} />
 </Layout>
 
 <style>
@@ -335,7 +341,7 @@ const isIndexPage = Astro.url.pathname == "/";
     .hero-projects-link {
       bottom: 1rem;
       margin-right: 1rem;
-    } 
+    }
     .sticky-gradient {
       display: none;
     }

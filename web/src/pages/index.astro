@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/hero.astro";
-import { getPreviewClips } from "../sanity/api";
+import { getPreviewClips, getSiteSettings } from "../sanity/api";
+
 const previewData = await getPreviewClips();
+const settingsData = await getSiteSettings();
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="Welcome to Astro." data={settingsData}>
   <div class="landing-loader" id="loaderWrapper">
     <video
       class="landing-loader-video"
@@ -16,7 +18,7 @@ const previewData = await getPreviewClips();
       playsinline
     >
       <source
-        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/%5BCompressed%5D+W+Logo+-+Opening+Ani.mp4"
+        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4"
         type="video/mp4"
         media="(min-width: 992px)"
       />
@@ -29,6 +31,7 @@ const previewData = await getPreviewClips();
   </div>
   <Hero data={previewData.projects} />
 </Layout>
+
 <style>
   .hero {
     color: white;

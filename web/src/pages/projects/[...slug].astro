@@ -1,6 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getProjectPageData, getNextProject } from "../../sanity/api";
+import {
+  getProjectPageData,
+  getNextProject,
+  getSiteSettings,
+} from "../../sanity/api";
 import PortableText from "../../components/utils/portableText.astro";
 import { Image } from "astro:assets";
 import EpisodePlayer from "../../components/projects/episodePlayer.astro";
@@ -13,6 +17,7 @@ import Footer from "../../components/footer.astro";
 import NextProject from "../../components/projects/nextProject.astro";
 
 const pages = await getProjectPageData();
+const settingsData = await getSiteSettings();
 
 const { slug } = Astro.params;
 const page = pages.find((page) => page.slug === slug);
@@ -29,6 +34,7 @@ const {
   secondaryDescription,
   thumbnail,
   previewUrl,
+  previewUrlMobile,
   video,
   episodeArray,
   mediaArray,
@@ -44,7 +50,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 // }
 ---
 
-<Layout>
+<Layout data={settingsData}>
   <section class="main-video__wrapper">
     <video
       class=`main-video ${video && 'hover-area'}`
@@ -56,7 +62,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       playsinline
       data-has-full-length-video=`${video != null}`
     >
-      <source src={previewUrl} type="video/mp4" />
+      <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
+      <source
+        src={previewUrlMobile ? previewUrlMobile : previewUrl}
+        type="video/mp4"
+      />
       Your browser does not support the video tag.
     </video>
     {
@@ -249,7 +259,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       muted
       autoplay
       loop
-      src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+Logo+Asset.mp4"
+      src={settingsData.logoVideo}
     >
     </video>
   </div>
@@ -260,7 +270,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       </section>
     )
   }
-  <Footer />
+  <Footer data={settingsData} />
 </Layout>
 
 <script>
@@ -492,7 +502,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   }
   .item-two-col {
     width: 100%;
-    column-gap: 2rem; 
+    column-gap: 2rem;
     /* matches 2rem gap for .project-details-credits */
   }
   .project-details-item {

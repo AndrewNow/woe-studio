@@ -54,6 +54,7 @@ export async function getProjectsInOrder() {
         servicesArray[],
         creditsArray[],
         previewUrl,
+        previewUrlMobile
       }
     }
     `
@@ -77,6 +78,7 @@ export async function getProjectPageData() {
         servicesArray[],
         creditsArray[],
         previewUrl,
+        previewUrlMobile,
         "thumbnail": thumbnail.asset->url,
         video,
         episodeArray[]{
@@ -138,3 +140,18 @@ export async function getNextProject(currentProjectTitle) {
     return null;
   }
 }
+
+
+export async function getSiteSettings() {
+  const data = await sanityClient.fetch(
+    `*[_type == "generalSettings"][0]{
+        logoVideo,
+        address,
+        instagram,
+        tiktok,
+        email,
+      }  
+    `  
+  )  
+  return data
+}  

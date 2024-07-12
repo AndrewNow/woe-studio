@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import teamSample from "../assets/team-sample.png";
-const { data, expertiseData } = Astro.props;
+const { data, expertiseData, logoVideo, email } = Astro.props;
 ---
 
 <div class="team__wrapper">
@@ -31,7 +31,7 @@ const { data, expertiseData } = Astro.props;
       })
     }
     <a
-      href="mailto:info@woestudio.co"
+      href=`mailto:${email}`
       class="team-entry mobile-team-entry"
       id="team-entry"
     >
@@ -39,7 +39,7 @@ const { data, expertiseData } = Astro.props;
         <p>Work with WOE</p>
       </div>
       <div class="member-title">
-        <p>info@woestudio.co</p>
+        <p>{email}</p>
       </div>
     </a>
   </div>
@@ -49,14 +49,7 @@ const { data, expertiseData } = Astro.props;
       {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
-  <video
-    class="blend-video"
-    playsinline
-    muted
-    autoplay
-    loop
-    src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+Logo+Asset.mp4"
-  >
+  <video class="blend-video" playsinline muted autoplay loop src={logoVideo}>
   </video>
 </div>
 

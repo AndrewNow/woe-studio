@@ -4,6 +4,8 @@ import { Image } from "astro:assets";
 import clover from "../assets/woe-clover.png";
 import Logotype from "./logotype.astro";
 
+const { data } = Astro.props;
+
 const isHome = Astro.url.pathname == "/";
 
 const pages = [
@@ -84,45 +86,69 @@ const pages = [
     <div class="mobile-nav-contact">
       <div class="mobile-contact">
         <div class="mobile-contact-email">
-          <h4>Work with WOE</h4>
-          <a><h4>info@woestudio.co</h4> </a>
+          {
+            data.email ? (
+              <>
+                <h4>Work with WOE</h4>
+                <a href={`mailto:${data.email}`}>
+                  <h4>{data.email}</h4>
+                </a>
+              </>
+            ) : (
+              <>
+                <h4>Work with WOE</h4>
+                <a href="mailto:info@woestudio.co">
+                  <h4>info@woestudio.co</h4>{" "}
+                </a>
+              </>
+            )
+          }
         </div>
-        <div class="mobile-contact-item">
-          <svg
-            width="19"
-            height="18"
-            viewBox="0 0 19 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-            <path
-              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-              stroke="#EFEDED"></path>
-          </svg>
+        {
+          data.instagram && (
+            <div class="mobile-contact-item">
+              <svg
+                width="19"
+                height="18"
+                viewBox="0 0 19 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M1 0V13.2191H18" stroke="#EFEDED" />
+                <path
+                  d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                  stroke="#EFEDED"
+                />
+              </svg>
+              <a href={data.instagram} rel="noreferrer" target="_blank">
+                <h4>Instagram</h4>
+              </a>
+            </div>
+          )
+        }
+        {
+          data.tiktok && (
+            <div class="mobile-contact-item">
+              <svg
+                width="19"
+                height="18"
+                viewBox="0 0 19 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M1 0V13.2191H18" stroke="#EFEDED" />
+                <path
+                  d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                  stroke="#EFEDED"
+                />
+              </svg>
 
-          <a>
-            <h4>Instagram</h4>
-          </a>
-        </div>
-        <div class="mobile-contact-item">
-          <svg
-            width="19"
-            height="18"
-            viewBox="0 0 19 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-            <path
-              d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-              stroke="#EFEDED"></path>
-          </svg>
-
-          <a>
-            <h4>Tik Tok</h4>
-          </a>
-        </div>
+              <a href={data.tiktok} rel="noreferrer" target="_blank">
+                <h4>Tik Tok</h4>
+              </a>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>
@@ -164,7 +190,7 @@ const pages = [
     border-bottom: 1px solid var(--white);
   }
   .page-link:last-child {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 
   .mobile-nav-content {
@@ -198,9 +224,13 @@ const pages = [
   .mobile-contact-item {
     margin-bottom: 1rem;
     display: flex;
-    color: rgba(var(--rgb-white), 1);
+    a {
+      text-decoration: none;
+      color: rgba(var(--rgb-white), 1);
+    }
     & svg {
       margin-right: 1rem;
+      margin-top: -0.25rem;
     }
   }
   .mobile-nav-video {
@@ -235,7 +265,7 @@ const pages = [
       width: 23px;
       height: 23px;
     }
-    
+
     .page-link__wrapper {
       display: none;
     }

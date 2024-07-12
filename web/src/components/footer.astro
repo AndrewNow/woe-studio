@@ -1,5 +1,8 @@
 ---
 import Logotype from "./logotype.astro";
+import PortableText from "./utils/portableText.astro";
+
+const { data } = Astro.props;
 ---
 
 <footer class="footer__wrapper">
@@ -7,52 +10,72 @@ import Logotype from "./logotype.astro";
     <div class="footer-content-title">
       <div class="footer__flex wrap-contact">
         <div class="footer-contact">
-          <div class="footer-contact-email">
-            <h4>Work with WOE</h4>
-            <a><h4>info@woestudio.co</h4> </a>
-          </div>
-          <div class="footer-contact-item">
-            <svg
-              width="19"
-              height="18"
-              viewBox="0 0 19 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-              <path
-                d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-                stroke="#EFEDED"></path>
-            </svg>
+          {
+            data.email && (
+              <div class="footer-contact-email">
+                <h4>Work with WOE</h4>
+                <a href={`mailto:${data.email}`}>
+                  <h4>{data.email}</h4>
+                </a>
+              </div>
+            )
+          }
+          {
+            data.instagram && (
+              <div class="footer-contact-item">
+                <svg
+                  width="19"
+                  height="18"
+                  viewBox="0 0 19 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M1 0V13.2191H18" stroke="#EFEDED" />
+                  <path
+                    d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                    stroke="#EFEDED"
+                  />
+                </svg>
 
-            <a>
-              <h4>Instagram</h4>
-            </a>
-          </div>
-          <div class="footer-contact-item">
-            <svg
-              width="19"
-              height="18"
-              viewBox="0 0 19 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M1 0V13.2191H18" stroke="#EFEDED"></path>
-              <path
-                d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
-                stroke="#EFEDED"></path>
-            </svg>
-
-            <a>
-              <h4>Tik Tok</h4>
-            </a>
-          </div>
+                <a href={data.instagram} target="_blank" rel="noreferrer">
+                  <h4>Instagram</h4>
+                </a>
+              </div>
+            )
+          }
+          {data.tiktok && (
+              <div class="footer-contact-item">
+                <svg
+                  width="19"
+                  height="18"
+                  viewBox="0 0 19 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M1 0V13.2191H18" stroke="#EFEDED" />
+                  <path
+                    d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
+                    stroke="#EFEDED"
+                  />
+                </svg>
+                <a href={data.tikok} target="_blank" rel="noreferrer">
+                  <h4>TikTok</h4>
+                </a>
+              </div>
+            )
+          }
         </div>
       </div>
       <div class="footer__flex">
         <div class="footer-contact location">
-          <h4>2O3 - 43 Towns Rd.<br /> Etobicoke, ON<br /> M8Z 1A2</h4>
-          <h4 class="legal">(c) 2O24 legal</h4>
+          {
+            data.address && (
+              <>
+                <PortableText data={data.address} />
+                <h4 class="legal">© 2O24 legal</h4>
+              </>
+            )
+          }
         </div>
       </div>
     </div>
@@ -113,7 +136,10 @@ import Logotype from "./logotype.astro";
   .footer-contact-item {
     margin-bottom: 1rem;
     display: flex;
-    color: rgba(var(--rgb-white), 1);
+    a {
+      text-decoration: none;
+      color: rgba(var(--rgb-white), 1);
+    }
     & svg {
       margin-right: 1rem;
     }
@@ -156,6 +182,10 @@ import Logotype from "./logotype.astro";
     }
     .footer-contact {
       width: auto;
+      height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .footer-content {
       display: flex;
@@ -183,11 +213,16 @@ import Logotype from "./logotype.astro";
       }
     }
     .footer-contact-item {
-      justify-content: space-between;
+      /* justify-content: flex-end; */
       margin-bottom: 0.5;
-
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-self: flex-end;
       svg {
         width: 14px;
+        margin-top: -0.25rem;
+        /* margin-right: 0; */
       }
     }
     .footer-contact-item:last-child {
@@ -200,6 +235,12 @@ import Logotype from "./logotype.astro";
     }
     .footer-bg-video {
       width: 100%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .footer-contact {
+      height: 120px;
     }
   }
 </style>
