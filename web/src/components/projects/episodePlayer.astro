@@ -273,6 +273,7 @@ import { Image } from "astro:assets";
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: border .4s ease;
 
     & svg {
       transition: 0.25s all ease;
@@ -281,6 +282,10 @@ import { Image } from "astro:assets";
       pointer-events: none;
       user-select: none;
     }
+  }
+
+  .custom-select-display:hover {
+    border: 2px solid rgba(var(--rgb-white), 0.7);
   }
 
   .custom-select-options {

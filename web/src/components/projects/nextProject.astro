@@ -20,7 +20,7 @@ const data = nextProjectData.projects;
           <path
             d="M14.9082 9.44238L17.9991 13.2212L14.9082 17.0001"
             stroke="#EFEDED"></path>
-          <h3>{data.title}</h3>
+          <h3 class="title-text">{data.title}</h3>
         </svg>
       </div>
     </div>
@@ -57,7 +57,14 @@ const data = nextProjectData.projects;
     margin: 4rem auto;
     display: block;
   }
-  .sticky-gradient {
+  .title-text {
+    transition: .3s all ease;
+  }
+  .next-project-video__wrapper:hover {
+    .title-text {
+      transform: translateX(.25rem);
+    }
+  } .sticky-gradient {
     z-index: 2;
     position: sticky;
     top: 0;
@@ -139,11 +146,11 @@ const data = nextProjectData.projects;
 
   @media (max-width: 768px) {
     .project-title {
-      margin-top: .5rem;
+      margin-top: 0.5rem;
       align-items: flex-start;
       svg {
-        margin-right: .5rem;
-        margin-top: -.25rem;
+        margin-right: 0.5rem;
+        margin-top: -0.25rem;
         width: 14px;
       }
     }
