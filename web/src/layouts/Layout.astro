@@ -16,7 +16,7 @@ import "../styles/global.css";
   </head>
   <body>
     <main>
-      <Nav data={data}/>
+      <Nav data={data} />
       <slot />
       <div class="cursor-follower" id="cursor-follower">
         <div class="cursor-inner">
@@ -31,13 +31,34 @@ import "../styles/global.css";
   body.nav-open {
     overflow: hidden; /* Prevent scrolling of the body when nav is open */
   }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
   .cursor-follower {
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
     z-index: 9999;
-    contain: layout style size;
+      will-change: transform;
+  contain: layout style size
     display: flex;
     opacity: 0;
     /* transform: scale(0); */
@@ -61,6 +82,7 @@ import "../styles/global.css";
       justify-content: center;
       align-items: center;
       text-align: center;
+      will-change: transform;
     }
 
     & p {
@@ -166,51 +188,31 @@ import "../styles/global.css";
   }
 </style>
 
-<script src="../components/utils/cursor.js"></script>
+<!-- <script src="../components/utils/cursor.js"></script> -->
 
 <script>
-  // import ScrambleText from "scramble-text";
-  // const scrambleItems = document.querySelectorAll("#scramble");
+  import Cursor from "../components/utils/cursor";
+  import Lenis from "lenis";
 
-  // scrambleItems.forEach((item) => {
-  //   item.addEventListener("mouseenter", () => {
-  //     console.log("firing");
-  //     const scramble = new ScrambleText(item);
-  //     scramble.play().start();
-  //   });
-  // });
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const scrambleItems = document.querySelectorAll("#scramble");
-
-    scrambleItems.forEach((item) => {
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-      let interval = null;
-      item.onmouseover = (event) => {
-        let iteration = 0;
-
-        clearInterval(interval);
-
-        interval = setInterval(() => {
-          event.target.innerText = event.target.innerText
-            .split("")
-            .map((letter, index) => {
-              if (index < iteration) {
-                return event.target.dataset.value[index];
-              }
-
-              return letters[Math.floor(Math.random() * 26)];
-            })
-            .join("");
-
-          if (iteration >= event.target.dataset.value.length) {
-            clearInterval(interval);
-          }
-
-          iteration += 1 / 3;
-        }, 30);
-      };
+  let lenis 
+  
+  if (window.innerWidth > 992) {
+    lenis = new Lenis({
+      lerp: 0.1,
+      wheelMultiplier: 0.8,
+      smoothWheel: true,
     });
-  });
+    new Cursor(document.querySelector(".cursor-follower"));
+  }
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
+
+  // lenis.on("scroll", (e) => {
+  //   // Handle scroll events if needed
+  // });
 </script>

@@ -152,6 +152,6 @@ export default class Cursor {
   }
 }
 
-if (window.innerWidth > 992) {
-  new Cursor(document.querySelector(".cursor-follower"));
-}
+// if (window.innerWidth > 992) {
+//   new Cursor(document.querySelector(".cursor-follower"));
+// }
