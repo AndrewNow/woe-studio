@@ -51,225 +51,228 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 ---
 
 <Layout data={settingsData}>
-  <section class="main-video__wrapper">
-    <video
-      class=`main-video ${video && 'hover-area'}`
-      data-hover-text="Play video"
-      id="shortVideo"
-      autoplay
-      muted
-      loop
-      playsinline
-      data-has-full-length-video=`${video != null}`
-    >
-      <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
-      <source
-        src={previewUrlMobile ? previewUrlMobile : previewUrl}
-        type="video/mp4"
-      />
-      Your browser does not support the video tag.
-    </video>
+  <article class="page__wrapper">
+    <section class="main-video__wrapper">
+      <video
+        class=`main-video ${video && 'hover-area'}`
+        data-hover-text="Play video"
+        id="shortVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        data-has-full-length-video=`${video != null}`
+      >
+        <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
+        <source
+          src={previewUrlMobile ? previewUrlMobile : previewUrl}
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+      {
+        video && (
+          <video class="main-video" id="fullVideo" controls>
+            <source src={video} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )
+      }
+      <div class="main-video__mobile-wrapper">
+        <div class="main-video__mobile-title">
+          <h1>
+            {title}
+          </h1>
+          {
+            clientArray != null &&
+              clientArray.map((client) => {
+                return <small>{client}</small>;
+              })
+          }
+        </div>
+        <svg
+          class="arrow-svg"
+          viewBox="0 0 50 50"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="25" cy="25" r="24" stroke="#EFEDED"></circle>
+          <path
+            d="M25 20V30.3333M25 30.3333L21 26.3333M25 30.3333L29 26.3333"
+            stroke="#EFEDED"></path>
+        </svg>
+      </div>
+    </section>
+    <section class="project-details__wrapper">
+      <div class="project-details__flex">
+        <div class="project-details-left">
+          <div>
+            <h1>{title}</h1>
+            {
+              clientArray != null && (
+                <div class="project-details-item clients-item">
+                  <p class="item-title">
+                    {clientArray.length > 1 ? "Clients" : "Client"}
+                  </p>
+                  {clientArray.map((client) => {
+                    return <p>{client}</p>;
+                  })}
+                </div>
+              )
+            }
+          </div>
+          <div class="project-details-left-bottom">
+            {
+              awardArray != null && (
+                <>
+                  <p class="item-title">
+                    Awards & Recognitions
+                    {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
+                  </p>
+                  <div class="project-details-item item-two-col">
+                    {awardArray.map((award) => {
+                      return <p>{award}</p>;
+                    })}
+                  </div>
+                </>
+              )
+            }
+            {
+              awardImageArray != null && (
+                <div class="project-details-awards-images">
+                  {awardImageArray.map((award) => {
+                    return (
+                      <Image
+                        quality={25}
+                        inferSize
+                        src={award.imageSrc}
+                        alt="Image of an award badge"
+                        class="award-image"
+                      />
+                    );
+                  })}
+                </div>
+              )
+            }
+          </div>
+        </div>
+        <div class="project-details-right">
+          {
+            description != null && (
+              <div class="project-details-overview">
+                <h5>Project Overview</h5>
+                <p class="project-details-overview-text">
+                  <PortableText data={description} />
+                </p>
+              </div>
+            )
+          }
+          <div class="project-details-credits">
+            {
+              servicesArray != null && (
+                <div class="project-details-item">
+                  <p class="item-title">Services</p>
+                  {servicesArray.map((service) => {
+                    return <p>{service}</p>;
+                  })}
+                </div>
+              )
+            }
+            {
+              creditsArray != null && (
+                <div class="project-details-item">
+                  <p class="item-title">Credits</p>
+                  {creditsArray.map((credit) => {
+                    return <p>{credit}</p>;
+                  })}
+                </div>
+              )
+            }
+          </div>
+          <div class="project-details-mobile-awards">
+            {
+              awardArray != null && (
+                <div class="project-details-mobile-awards-wrapper">
+                  <p class="item-title">
+                    Awards & Recognitions
+                    {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
+                  </p>
+                  <div class="project-details-item item-two-col">
+                    {awardArray.map((award) => {
+                      return <p>{award}</p>;
+                    })}
+                  </div>
+                </div>
+              )
+            }
+            {
+              awardImageArray != null && (
+                <div class="project-details-awards-images">
+                  {awardImageArray.map((award) => {
+                    return (
+                      <Image
+                        quality={25}
+                        inferSize
+                        src={award.imageSrc}
+                        alt="Image of an award badge"
+                        class="award-image"
+                      />
+                    );
+                  })}
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </section>
     {
-      video && (
-        <video class="main-video" id="fullVideo" controls>
-          <source src={video} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      episodeArray != null && (
+        <section class="episode__wrapper">
+          <EpisodePlayer episodeData={episodeArray} />
+        </section>
       )
     }
-    <div class="main-video__mobile-wrapper">
-      <div class="main-video__mobile-title">
-        <h1>
-          {title}
-        </h1>
-        {
-          clientArray != null &&
-            clientArray.map((client) => {
-              return <small>{client}</small>;
-            })
-        }
-      </div>
-      <svg
-        class="arrow-svg"
-        viewBox="0 0 50 50"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+    {
+      secondaryDescription != null && (
+        <section class="project-overview__wrapper">
+          <div class="project-overview-text">
+            <PortableText data={secondaryDescription} />
+          </div>
+        </section>
+      )
+    }
+    {
+      mediaArray !== null && (
+        <section class="project-media__wrapper">
+          <CornerTopLeft />
+          <CornerTopRight />
+          <CornerBottomLeft />
+          <CornerBottomRight />
+          <ProjectMedia mediaArray={mediaArray} />
+        </section>
+      )
+    }
+    <div class="woe-monogram__wrapper">
+      <video
+        class="blend-video"
+        playsinline
+        muted
+        autoplay
+        loop
+        src={settingsData.logoVideo}
       >
-        <circle cx="25" cy="25" r="24" stroke="#EFEDED"></circle>
-        <path
-          d="M25 20V30.3333M25 30.3333L21 26.3333M25 30.3333L29 26.3333"
-          stroke="#EFEDED"></path>
-      </svg>
+      </video>
     </div>
-  </section>
-  <section class="project-details__wrapper">
-    <div class="project-details__flex">
-      <div class="project-details-left">
-        <div>
-          <h1>{title}</h1>
-          {
-            clientArray != null && (
-              <div class="project-details-item clients-item">
-                <p class="item-title">
-                  {clientArray.length > 1 ? "Clients" : "Client"}
-                </p>
-                {clientArray.map((client) => {
-                  return <p>{client}</p>;
-                })}
-              </div>
-            )
-          }
-        </div>
-        <div class="project-details-left-bottom">
-          {
-            awardArray != null && (
-              <>
-                <p class="item-title">
-                  Awards & Recognitions
-                  {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
-                </p>
-                <div class="project-details-item item-two-col">
-                  {awardArray.map((award) => {
-                    return <p>{award}</p>;
-                  })}
-                </div>
-              </>
-            )
-          }
-          {
-            awardImageArray != null && (
-              <div class="project-details-awards-images">
-                {awardImageArray.map((award) => {
-                  return (
-                    <Image
-                      quality={25}
-                      inferSize
-                      src={award.imageSrc}
-                      alt="Image of an award badge"
-                      class="award-image"
-                    />
-                  );
-                })}
-              </div>
-            )
-          }
-        </div>
-      </div>
-      <div class="project-details-right">
-        {
-          description != null && (
-            <div class="project-details-overview">
-              <h5>Project Overview</h5>
-              <p class="project-details-overview-text">
-                <PortableText data={description} />
-              </p>
-            </div>
-          )
-        }
-        <div class="project-details-credits">
-          {
-            servicesArray != null && (
-              <div class="project-details-item">
-                <p class="item-title">Services</p>
-                {servicesArray.map((service) => {
-                  return <p>{service}</p>;
-                })}
-              </div>
-            )
-          }
-          {
-            creditsArray != null && (
-              <div class="project-details-item">
-                <p class="item-title">Credits</p>
-                {creditsArray.map((credit) => {
-                  return <p>{credit}</p>;
-                })}
-              </div>
-            )
-          }
-        </div>
-        <div class="project-details-mobile-awards">
-          {
-            awardArray != null && (
-              <div class="project-details-mobile-awards-wrapper">
-                <p class="item-title">
-                  Awards & Recognitions
-                  {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
-                </p>
-                <div class="project-details-item item-two-col">
-                  {awardArray.map((award) => {
-                    return <p>{award}</p>;
-                  })}
-                </div>
-              </div>
-            )
-          }
-          {
-            awardImageArray != null && (
-              <div class="project-details-awards-images">
-                {awardImageArray.map((award) => {
-                  return (
-                    <Image
-                      quality={25}
-                      inferSize
-                      src={award.imageSrc}
-                      alt="Image of an award badge"
-                      class="award-image"
-                    />
-                  );
-                })}
-              </div>
-            )
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-  {
-    episodeArray != null && (
-      <section class="episode__wrapper">
-        <EpisodePlayer episodeData={episodeArray} />
-      </section>
-    )
-  }
-  {
-    secondaryDescription != null && (
-      <section class="project-overview__wrapper">
-        <div class="project-overview-text">
-          <PortableText data={secondaryDescription} />
-        </div>
-      </section>
-    )
-  }
-  {
-    mediaArray !== null && (
-      <section class="project-media__wrapper">
-        <CornerTopLeft />
-        <CornerTopRight />
-        <CornerBottomLeft />
-        <CornerBottomRight />
-        <ProjectMedia mediaArray={mediaArray} />
-      </section>
-    )
-  }
-  <div class="woe-monogram__wrapper">
-    <video
-      class="blend-video"
-      playsinline
-      muted
-      autoplay
-      loop
-      src={settingsData.logoVideo}
-    >
-    </video>
-  </div>
-  {
-    nextProjectData !== null && (
-      <section class="next-project">
-        <NextProject nextProjectData={nextProjectData} />
-      </section>
-    )
-  }
+    {
+      nextProjectData !== null && (
+        <section class="next-project">
+          <NextProject nextProjectData={nextProjectData} />
+        </section>
+      )
+    }
+  </article>
+
   <Footer data={settingsData} />
 </Layout>
 
@@ -315,6 +318,10 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 </script>
 
 <style>
+  .page__wrapper {
+    position: relative;
+    width: 100%;
+  }
   .woe-monogram__wrapper {
     width: 100%;
     display: grid;
@@ -346,8 +353,10 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   }
 
   .project-details__wrapper {
+    position: relative;
+    width: var(--inner-width);
     color: var(--white);
-    margin: 4rem;
+    margin: 4rem auto;
   }
   .project-details__flex {
     display: flex;
@@ -365,6 +374,8 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 
   .project-details-left-bottom {
     margin-top: 4rem;
+    position: relative;
+    width: 80%;
   }
 
   .item-two-col {
@@ -375,15 +386,19 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 
   .project-details-awards-images {
     margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+    gap: 1rem;
     opacity: 0.5;
-    max-width: 40vw;
+    width: 100%;
+    max-width: 950px;
+    position: relative;
   }
   .award-image {
     height: 100px;
     width: auto;
+    max-width: 200px;
+    object-fit: contain;
   }
 
   .project-details-right {
@@ -392,8 +407,12 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    position: relative;
+    width: 100%;
   }
   .project-details-overview {
+    width: 100%;
+    position: relative;
     & h5 {
       margin-bottom: 2rem;
     }
@@ -465,6 +484,18 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   .project-details-mobile-awards {
     display: none;
   }
+
+  @media (max-width: 1280px) {
+    .project-details-awards-images {
+      grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+    }
+    .award-image {
+      height: 100px;
+      width: auto;
+      max-width: 100px;
+      object-fit: contain;
+    }
+  }
   @media (max-width: 992px) {
     .project-details-overview {
       & h5 {
@@ -484,6 +515,8 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       margin: 1rem;
     }
     .project-details__wrapper {
+      margin: 0 auto;
+      width: 90%;
       margin-bottom: 4rem;
     }
     .project-overview-text {
@@ -516,14 +549,26 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     .project-details-awards-images {
       display: grid;
       grid-template-columns: repeat(4, auto);
-      gap: 2rem;
+      row-gap: 1rem;
       opacity: 0.5;
       width: 100%;
       max-width: 95vw;
     }
     .award-image {
+      height: auto;
+      width: 100px;
+    }
+  }
+  @media (max-width: 576px) {
+    .project-details-awards-images {
+      grid-template-columns: repeat(4, minmax(60px, auto));
+      gap: 0.25rem;
+    }
+    .award-image {
       height: 60px;
       width: auto;
+      max-width: 80px;
+      object-fit: contain;
     }
   }
 </style>
