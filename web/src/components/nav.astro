@@ -43,12 +43,20 @@ const pages = [
     }
   </a>
   <span class="page-link__wrapper">
-    <a href="/about" class="page-link link">
-      <p>About</p>
-    </a>
-    <a href="/projects" class="page-link link">
-      <p>Projects</p>
-    </a>
+    {
+      pages
+        .slice(1)
+        .reverse()
+        .map((page) => (
+          <a
+            href={`${page.route}`}
+            class="page-link link"
+            data-content={page.title}
+          >
+            <p>{page.title}</p>
+          </a>
+        ))
+    }
   </span>
   <div class="menu-button" id="menu-button" aria-label="Menu open button">
     Menu
@@ -154,7 +162,7 @@ const pages = [
   </div>
 </div>
 
-<style>
+<style is:global>
   .logo__wrapper {
     display: flex;
     align-items: center;
@@ -163,6 +171,7 @@ const pages = [
     width: 220px;
     margin-left: 1rem;
   }
+
   .nav {
     position: fixed;
     top: 3rem;

@@ -98,7 +98,7 @@ html,
     letter-spacing: -0.03rem;
     font-family: "n27-regular";
   }
-  p, li {
+  p, li, link {
     font-size: 16px;
     line-height: 135%;
     letter-spacing: -0.03rem;
@@ -135,7 +135,7 @@ html,
       line-height: 115%;
       letter-spacing: -0.03rem;
     }
-    p, li {
+    p, li, link {
       font-size: 16px;
       line-height: 115%;
       letter-spacing: -0.03rem;
@@ -189,7 +189,7 @@ html,
       letter-spacing: -0.03rem;
       font-family: "n27-regular";
     }
-    p, li {
+    p, li, link {
       font-size: 12px;
       line-height: 115%;
       letter-spacing: -0.03rem;

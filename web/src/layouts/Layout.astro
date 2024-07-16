@@ -57,8 +57,8 @@ import "../styles/global.css";
     left: 0;
     pointer-events: none;
     z-index: 9999;
-      will-change: transform;
-  contain: layout style size
+    will-change: transform;
+    contain: layout style size
     display: flex;
     opacity: 0;
     /* transform: scale(0); */
@@ -111,21 +111,66 @@ import "../styles/global.css";
     position: relative;
     color: var(--white);
     text-decoration: none;
+    display: grid;
+    place-items: center;
     text-shadow: 0px 0px 2.3px #efeded;
+    overflow: hidden;
+    p {
+      padding-bottom: 5px;
+      transition: all .4s cubic-bezier(.33,1,.68,1);
+      opacity: 1;
+    }
   }
   .link:after {
+    padding-bottom: 5px;
+    content: attr(data-content);
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--white);
+    font-size: 16px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    transform: translateY(100%);
+    transition: all .9s cubic-bezier(.33,1,.68,1);
+    font-family: 'n27-regular';
+    transform-origin: center;
+    opacity: 0;
+  }
+  .link:hover {
+    &:after {
+      opacity: 1;
+      transform: translateY(0%);
+      transition: all .3s cubic-bezier(.33,1,.68,1);
+    }
+    & p {
+      transform: translateY(-100%);
+      transition: all .4s cubic-bezier(.33,1,.68,1);
+      opacity: 0;
+    }
+    &:before {
+      transition-delay: 0.3s;
+      transition: all .4s cubic-bezier(.33,1,.68,1);
+    }
+  }
+  .link:before {
     text-shadow: 0px 0px 2.3px #efeded;
     content: "";
     position: absolute;
-    bottom: -3px;
+    bottom: 0px;
     left: 0;
     width: 100%;
     scale: 0;
-    transition: 0.3s all ease;
+    transition:all .4s cubic-bezier(.33,1,.68,1);
+    transition-delay: 0.1s;
     transform-origin: left;
     border-bottom: 1px solid var(--white);
   }
-  .link:hover:after {
+
+  .link:hover:before {
     scale: 1;
   }
 
@@ -199,7 +244,7 @@ import "../styles/global.css";
   if (window.innerWidth > 992) {
     lenis = new Lenis({
       lerp: 0.1,
-      wheelMultiplier: 0.8,
+      wheelMultiplier: 0.98,
       smoothWheel: true,
     });
     new Cursor(document.querySelector(".cursor-follower"));

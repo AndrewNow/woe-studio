@@ -16,7 +16,6 @@ import { Image } from "astro:assets";
       poster={episodeData[0].thumbnail}
       autoplay={episodeData.length < 2}
       muted={episodeData.length < 2}
-      playsinline
     >
       <source src={episodeData[0].episodeVideo} type="video/mp4" />
     </video>
@@ -273,7 +272,7 @@ import { Image } from "astro:assets";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: border .4s ease;
+    transition: border 0.4s ease;
 
     & svg {
       transition: 0.25s all ease;
