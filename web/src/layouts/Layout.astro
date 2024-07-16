@@ -244,7 +244,7 @@ import "../styles/global.css";
 
   let lenis 
   
-  if (window.innerWidth > 992) {
+  if (window.innerWidth > 992 && !navigator.userAgent.includes('Macintosh')) {
     lenis = new Lenis({
       lerp: 0.15,
       wheelMultiplier: 1,
