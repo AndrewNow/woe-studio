@@ -16,66 +16,68 @@ const data = allProjectData.projects;
 
 <Layout data={settingsData}>
   <div class="project-grid__container">
-    {
-      data.map((data, i) => {
-        const className =
-          i % 5 === 0
-            ? "project-entry__double-column"
-            : "project-entry__wrapper";
-        return (
-          <a
-            class={className}
-            style={{ color: "white" }}
-            href={`/projects/${data.slug}`}
-          >
-            <video
-              class="project-video-media hover-area"
-              data-hover-text="View project"
-              preload="metadata"
-              loop="true"
-              muted="true"
-              playsinline
+    <div class="project-entries-container">
+      {
+        data.map((data, i) => {
+          const className =
+            i % 5 === 0
+              ? "project-entry__double-column"
+              : "project-entry__wrapper";
+          return (
+            <a
+              class={`project-entry ${className}`}
+              style={{ color: "white" }}
+              href={`/projects/${data.slug}`}
             >
-              <source
+              <video
+                class="project-video-media hover-area"
+                data-hover-text="View project"
+                preload="metadata"
+                loop="true"
+                muted="true"
+                playsinline
+              >
+                <source
+                  src={data.previewUrl}
+                  type="video/mp4"
+                  media="(min-width: 992px)"
+                />
+                {/* <source
                 src={data.previewUrl}
                 type="video/mp4"
                 media="(min-width: 992px)"
+              /> */}
+                <source
+                  src={
+                    data.previewUrlMobile
+                      ? data.previewUrlMobile
+                      : data.previewUrl
+                  }
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <Image
+                src={data.thumbnail}
+                alt=""
+                inferSize
+                class="project-image-media__mobile"
               />
-              {/* <source
-                src={data.previewUrl}
-                type="video/mp4"
-                media="(min-width: 992px)"
-              /> */}
-              {/* <source
-                src={
-                  data.previewUrlMobile
-                    ? data.previewUrlMobile
-                    : data.previewUrl
-                }
-                type="video/mp4"
-              /> */}
-              Your browser does not support the video tag.
-            </video>
-            <Image
-              src={data.thumbnail}
-              alt=""
-              inferSize
-              class="project-image-media__mobile"
-            />
-            <div class="project-text">
-              <span class="project-titleset">
-                {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
-                <p>{data.title}</p>
-              </span>
-              <span class="project-titleset">
-                <p>{data.creditsArray ? data.creditsArray[0] : null}</p>
-                <p>{data.servicesArray ? data.servicesArray[0] : null}</p>
-              </span>
-            </div>
-          </a>
-        );
-      })
-    }
+              <div class="project-text">
+                <span class="project-titleset">
+                  {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
+                  <p>{data.title}</p>
+                </span>
+                <span class="project-titleset">
+                  <p>{data.creditsArray ? data.creditsArray[0] : null}</p>
+                  <p>{data.servicesArray ? data.servicesArray[0] : null}</p>
+                </span>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
     <CornerTopLeft />
     <CornerTopRight />
     <CornerBottomLeft />
@@ -85,7 +87,24 @@ const data = allProjectData.projects;
 </Layout>
 
 <script>
+  const projectEntries = document.querySelectorAll(".project-entry");
   const videos = document.querySelectorAll(".project-video-media");
+
+  // projectEntries.forEach((entry) => {
+  //   entry.addEventListener("mouseenter", () => {
+  //     projectEntries.forEach((otherEntry) => {
+  //       if (otherEntry !== entry) {
+  //         otherEntry.style.opacity = "0.6";
+  //       }
+  //     });
+  //   });
+
+  //   entry.addEventListener("mouseleave", () => {
+  //     projectEntries.forEach((otherEntry) => {
+  //       otherEntry.style.opacity = "1";
+  //     });
+  //   });
+  // });
 
   videos.forEach((video) => {
     video.addEventListener("mouseenter", () => {
@@ -98,6 +117,19 @@ const data = allProjectData.projects;
 </script>
 
 <style>
+  .project-entries-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  /* 
+  .project-entry {
+    transition: all 0.23s ease;
+  } */
+
+  /* .project-entries-container:hover .project-entry:not(:hover) {
+      opacity: 0.8;
+  } */
   .project-grid__container {
     position: relative;
     display: flex;
@@ -115,7 +147,7 @@ const data = allProjectData.projects;
     box-sizing: border-box;
     flex-basis: 33.1%;
     height: 50vh;
-    transition: 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     position: relative;
   }
 
@@ -128,7 +160,7 @@ const data = allProjectData.projects;
   }
 
   .project-entry__wrapper:hover {
-    transition: 0.85s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
   }
