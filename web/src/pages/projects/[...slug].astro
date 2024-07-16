@@ -111,11 +111,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
             {
               clientArray != null && (
                 <div class="project-details-item clients-item">
-                  <p class="item-title">
+                  <p class="item-title item-small">
                     {clientArray.length > 1 ? "Clients" : "Client"}
                   </p>
                   {clientArray.map((client) => {
-                    return <p>{client}</p>;
+                    return <p class="item-small">{client}</p>;
                   })}
                 </div>
               )
@@ -125,13 +125,13 @@ const nextProjectData = await getNextProject(currentProjectTitle);
             {
               awardArray != null && (
                 <>
-                  <p class="item-title">
+                  <p class="item-title item-small">
                     Awards & Recognitions
                     {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
                   </p>
                   <div class="project-details-item item-two-col">
                     {awardArray.map((award) => {
-                      return <p>{award}</p>;
+                      return <p class="item-small">{award}</p>;
                     })}
                   </div>
                 </>
@@ -171,9 +171,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
             {
               servicesArray != null && (
                 <div class="project-details-item">
-                  <p class="item-title">Services</p>
+                  <p class="item-title item-small">Services</p>
                   {servicesArray.map((service) => {
-                    return <p>{service}</p>;
+                    return <p class="item-small">{service}</p>;
                   })}
                 </div>
               )
@@ -181,9 +181,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
             {
               creditsArray != null && (
                 <div class="project-details-item">
-                  <p class="item-title">Credits</p>
+                  <p class="item-title item-small">Credits</p>
                   {creditsArray.map((credit) => {
-                    return <p>{credit}</p>;
+                    return <p class="item-small">{credit}</p>;
                   })}
                 </div>
               )
@@ -193,13 +193,13 @@ const nextProjectData = await getNextProject(currentProjectTitle);
             {
               awardArray != null && (
                 <div class="project-details-mobile-awards-wrapper">
-                  <p class="item-title">
+                  <p class="item-title item-small">
                     Awards & Recognitions
                     {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
                   </p>
                   <div class="project-details-item item-two-col">
                     {awardArray.map((award) => {
-                      return <p>{award}</p>;
+                      return <p class="item-small">{award}</p>;
                     })}
                   </div>
                 </div>
@@ -560,6 +560,12 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     }
   }
   @media (max-width: 576px) {
+    .project-details-credits {
+      gap: 1rem;
+    }
+    .item-two-col {
+      column-gap: 1rem;
+    }
     .project-details-awards-images {
       grid-template-columns: repeat(4, minmax(60px, auto));
       gap: 0.25rem;
@@ -569,6 +575,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       width: auto;
       max-width: 80px;
       object-fit: contain;
+    }
+    .item-small {
+      font-size: 11px;
     }
   }
 </style>
