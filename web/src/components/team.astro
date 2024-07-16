@@ -45,7 +45,7 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
   </div>
   <div class="team-expertise">
     <p>Expertise</p>
-    <ul>
+    <ul class="expertise-list">
       {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
@@ -193,6 +193,12 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
     }
     .team-expertise {
       padding-top: 4rem;
+      width: 100%;
+    }
+    .expertise-list {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>

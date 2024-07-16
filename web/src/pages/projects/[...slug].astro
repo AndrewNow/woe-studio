@@ -514,9 +514,8 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       flex: 1;
     }
     .project-details-awards-images {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(4, auto);
       gap: 2rem;
       opacity: 0.5;
       width: 100%;

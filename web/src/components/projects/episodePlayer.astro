@@ -184,8 +184,6 @@ import { Image } from "astro:assets";
     customSelectDisplay.addEventListener("click", function () {
       isOpen = !isOpen;
       caret.style.transform = isOpen ? "scaleY(-1)" : "scaleY(1)";
-      // customSelectOptions.style.display =
-      //   customSelectOptions.style.display === "block" ? "none" : "block";
 
       if (isOpen) {
         // animate in
@@ -202,12 +200,8 @@ import { Image } from "astro:assets";
       if (event.target.tagName === "LI") {
         const value = event.target.getAttribute("data-value");
         customSelect.value = value;
-        // const text = event.target.textContent;
-        // customSelectDisplay.textContent = text;
-        // customSelectOptions.style.display = "none";
         customSelectOptions.style.clipPath = "inset(0% 0% 100% 0%)";
         customSelectOptions.style.opacity = "0";
-
 
         isOpen = false; // Reset rotation state when an option is selected
         caret.style.transform = "scaleY(1)";
@@ -218,7 +212,6 @@ import { Image } from "astro:assets";
     // hide the custom select when a user clicks anywhere else
     document.addEventListener("click", function (event) {
       if (!customSelectWrapper.contains(event.target)) {
-        // customSelectOptions.style.display = "none";
         customSelectOptions.style.clipPath = "inset(0% 0% 100% 0%)";
         customSelectOptions.style.opacity = "0";
       }
@@ -292,7 +285,7 @@ import { Image } from "astro:assets";
 
   .custom-select-options {
     position: absolute;
-    width: 100%;
+    width: 98.5%;
     top: 100%;
     max-height: 70vh;
     overflow-y: scroll;
@@ -373,6 +366,7 @@ import { Image } from "astro:assets";
       padding-right: 2rem;
       padding-left: 0rem;
       max-height: 40vh;
+      width: 100%;
     }
 
     .video-player {
