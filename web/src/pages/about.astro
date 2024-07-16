@@ -15,7 +15,7 @@ const settingsData = await getSiteSettings();
 const isIndexPage = Astro.url.pathname == "/";
 ---
 
-<Layout data={settingsData}>
+<Layout title="About | WOE Studio" data={settingsData}>
   <div class="canvas__wrapper">
     <div class="blur">
       <div class="circle circle-1"></div>
