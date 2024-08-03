@@ -27,12 +27,14 @@ import { Image } from "astro:assets";
                               alt=""
                             />
                           ) : (
-                            <video autoplay muted loop playsinline>
-                              <source
-                                preload="metadata"
-                                type="video/mp4"
-                                src={item.nestedVideo}
-                              />
+                            <video
+                              preload="metadata"
+                              autoplay="true"
+                              loop="true"
+                              muted="true"
+                              playsinline
+                            >
+                              <source type="video/mp4" src={item.nestedVideo} />
                             </video>
                           )}
                         </div>
@@ -66,12 +68,14 @@ import { Image } from "astro:assets";
                       alt=""
                     />
                   ) : (
-                    <video autoplay muted loop playsinline>
-                      <source
-                        preload="metadata"
-                        type="video/mp4"
-                        src={item.nestedVideo}
-                      />
+                    <video
+                      preload="metadata"
+                      autoplay="true"
+                      loop="true"
+                      muted="true"
+                      playsinline
+                    >
+                      <source type="video/mp4" src={item.nestedVideo} />
                     </video>
                   )}
                 </div>
@@ -208,7 +212,8 @@ import { Image } from "astro:assets";
   @media (max-width: 768px) {
     .embla__button {
       display: none;
-    } .embla__controls {
+    }
+    .embla__controls {
       bottom: 1.75rem;
     }
     .project-media-item__wrapper {
