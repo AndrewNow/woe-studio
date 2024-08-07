@@ -68,7 +68,7 @@ const data = allProjectData.projects;
                   {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
                   <p>{data.title}</p>
                 </span>
-                <span class="project-titleset">
+                <span class="project-titleset titleset-services">
                   {/* <p>{data.creditsArray ? data.creditsArray[0] : null}</p> */}
                   <p>{data.servicesArray ? data.servicesArray[0] : null}</p>
                 </span>
@@ -178,14 +178,12 @@ const data = allProjectData.projects;
   }
   .project-titleset {
     display: block;
-    color: rgba(var(--rgb-white), 0.5);
-    padding-bottom: 0.5rem;
-  }
-  .project-titleset p:first-child {
     color: rgba(var(--rgb-white), 1);
+    /* padding-bottom: 0.5rem; */
   }
-  .project-titleset:last-child {
-    padding-bottom: 0;
+  .titleset-services {
+    padding-top: 0.5rem;
+    color: rgba(var(--rgb-white), 0.5);
   }
 
   @media (max-width: 1280px) {

@@ -43,7 +43,8 @@ const { data } = Astro.props;
               </div>
             )
           }
-          {data.tiktok && (
+          {
+            data.tiktok && (
               <div class="footer-contact-item">
                 <svg
                   width="19"
@@ -107,6 +108,7 @@ const { data } = Astro.props;
   .footer__wrapper {
     position: relative;
     overflow: hidden;
+    /* min-height: 100vh; */
   }
   .footer-content {
     position: relative;
@@ -120,6 +122,7 @@ const { data } = Astro.props;
   }
   .footer-contact {
     width: 185px;
+    margin-top: 10vh;
     color: var(--white);
   }
   .location {

@@ -85,7 +85,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
           </h1>
           {
             clientArray != null &&
-              clientArray.map((client) => {
+              clientArray.reverse().map((client) => {
                 return <small>{client}</small>;
               })
           }
@@ -114,7 +114,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
                   <p class="item-title item-small">
                     {clientArray.length > 1 ? "Clients" : "Client"}
                   </p>
-                  {clientArray.map((client) => {
+                  {clientArray.reverse().map((client) => {
                     return <p class="item-small">{client}</p>;
                   })}
                 </div>
@@ -387,8 +387,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   .project-details-awards-images {
     margin-top: 2rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
-    gap: 1rem;
+    /* grid-template-columns: repeat(auto-fit, minmax(100px, auto)); */
+    grid-template-columns: repeat(4, min-content);
+    gap: 2rem;
     opacity: 0.5;
     width: 100%;
     max-width: 950px;
