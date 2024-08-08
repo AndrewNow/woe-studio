@@ -15,7 +15,11 @@ const settingsData = await getSiteSettings();
 const isIndexPage = Astro.url.pathname == "/";
 ---
 
-<Layout title="About | WOE Studio" data={settingsData}>
+<Layout
+  title="About | WOE Studio"
+  data={settingsData}
+  description="Welcome to WOE (What On Earth). Our collaborative approach ensures that every project is infused with innovation and creativity, turning bold ideas into unforgettable visual experiences. Get to know the people behind WOE and see how our collective expertise transforms the ordinary into the extraordinary. "
+>
   <div class="canvas__wrapper">
     <div class="blur">
       <div class="circle circle-1"></div>

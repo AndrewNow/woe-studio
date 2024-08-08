@@ -14,7 +14,11 @@ const settingsData = await getSiteSettings();
 const data = allProjectData.projects;
 ---
 
-<Layout title="Projects | WOE Studio" data={settingsData}>
+<Layout
+  title="Projects | WOE Studio"
+  data={settingsData}
+  description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
+>
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
