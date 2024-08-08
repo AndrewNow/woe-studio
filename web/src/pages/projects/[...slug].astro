@@ -53,6 +53,20 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 <Layout data={settingsData}>
   <article class="page__wrapper">
     <section class="main-video__wrapper">
+      <div class="mobile-play-btn-invert"></div>
+      <div class="mobile-play-btn">
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 26 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 20.8783V3.73703C6 2.13964 7.78029 1.18686 9.1094 2.07294L21.9654 10.6436C23.1529 11.4352 23.1529 13.1802 21.9654 13.9718L9.1094 22.5425C7.78029 23.4285 6 22.4757 6 20.8783Z"
+            fill="#EFEDED"></path>
+        </svg>
+      </div>
       <video
         class=`main-video ${video && 'hover-area'}`
         data-hover-text="Play video"
@@ -78,7 +92,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
           </video>
         )
       }
-      <div class="main-video__mobile-wrapper">
+      <div class="main-video__mobile-title-wrapper">
         <div class="main-video__mobile-title">
           <h1>
             {title}
@@ -342,6 +356,40 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     width: 100%;
     height: 80vh;
   }
+  .mobile-play-btn-invert {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    mix-blend-mode: difference;
+    background: rgba(var(--rgb-white), 1);
+
+    svg {
+      z-index: 1;
+      mix-blend-mode: color-dodge;
+    }
+  }
+  .mobile-play-btn {
+    display: none;
+    border-radius: 100%;
+    overflow: hidden;
+    border: 2px solid var(--white);
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    /* display: grid; */
+    place-items: center;
+    backdrop-filter: blur(1px);
+  }
+
   .main-video {
     width: 100%;
     height: 100%;
@@ -459,7 +507,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   .next-project {
     position: relative;
   }
-  .main-video__mobile-wrapper {
+  .main-video__mobile-title-wrapper {
     display: none;
     width: calc(100% - 2rem);
     justify-content: space-between;
@@ -498,6 +546,10 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     }
   }
   @media (max-width: 992px) {
+    .mobile-play-btn, .mobile-play-btn-invert {
+      display: grid;
+      pointer-events: none;
+    }
     .project-details-overview {
       & h5 {
         margin-top: 2.5rem;
@@ -526,7 +578,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     .sticky-gradient {
       display: none;
     }
-    .main-video__mobile-wrapper {
+    .main-video__mobile-title-wrapper {
       display: flex;
     }
     .project-details-mobile-awards {
