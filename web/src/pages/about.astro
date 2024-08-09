@@ -277,13 +277,15 @@ const isIndexPage = Astro.url.pathname == "/";
   }
 
   .sticky__container {
+    aspect-ratio: 16/6;
     position: relative;
     display: unset;
     overflow-x: hidden;
-    height: 100%;
+    width: 100%;
+    height: auto;
   }
   .sticky-gradient {
-    z-index: 11;
+    z-index: 4;
     position: sticky;
     top: -1px;
     left: 0;
@@ -297,10 +299,11 @@ const isIndexPage = Astro.url.pathname == "/";
     );
   }
   .about-video__container {
+    transform: translateY(-200px);
+    aspect-ratio: 16/6;
     /* transform: translateY(-200px); */
     margin-bottom: 4rem;
-    aspect-ratio: 16/6;
-    z-index: 10;
+    z-index: 3;
     width: 100%;
     height: auto;
     overflow: hidden;

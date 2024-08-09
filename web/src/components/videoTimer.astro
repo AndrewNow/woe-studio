@@ -65,7 +65,7 @@ const timerWrapperClass = isIndexPage
   .timer-item {
     text-decoration: none;
     color: var(--white);
-    /* width: 165px; */
+    width: 165px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -130,6 +130,7 @@ const timerWrapperClass = isIndexPage
     }
     .timer-item {
       /* width: 150px; */
+      width: unset;
       will-change: transform;
       min-height: 30px;
       margin-bottom: 1rem;
@@ -148,7 +149,7 @@ const timerWrapperClass = isIndexPage
   let mobileData = desktopData;
 
   // if on /about page, only render 3 projects
-  if (!isIndexPage) {
+  if (!isIndexPage && window.innerWidth < 992) {
     mobileData = data.slice(0, 3);
   }
 
