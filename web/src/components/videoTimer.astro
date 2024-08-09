@@ -4,6 +4,10 @@ import Image from "astro/components/Image.astro";
 import logo from "../assets/woe-full.png";
 
 const isIndexPage = Astro.url.pathname == "/";
+
+const timerWrapperClass = isIndexPage
+  ? "timer__wrapper"
+  : "timer__wrapper mobile-about";
 ---
 
 <div class="timer__parent">
@@ -15,33 +19,18 @@ const isIndexPage = Astro.url.pathname == "/";
           alt="WOE Studio logo"
           width="575"
           height="28"
-          quality="90"
+          quality="95"
           loading="eager"
-          class="woe-logo"
+          class="video-timer-woe-logo"
         />
       )
     }
-    <div class="timer__wrapper">
-      {
-        data &&
-          data.slice(0, 6).map((video) => {
-            return (
-              <a class="timer-item" href={`/projects/${video.slug}`}>
-                <p>{video.title}</p>
-                <p>{video.clientArray ? video.clientArray : ""}</p>
-                <div class="timer-countdown">
-                  <div class="timer-countdown__progress" />
-                </div>
-              </a>
-            );
-          })
-      }
-    </div>
+    {data && <div class={`${timerWrapperClass}`} />}
   </div>
 </div>
 
-<style>
-  .woe-logo {
+<style is:global>
+  .video-timer-woe-logo {
     /* margin-left: 3rem; */
     margin-bottom: 1.5vw;
     aspect-ratio: 511/25;
@@ -104,15 +93,17 @@ const isIndexPage = Astro.url.pathname == "/";
   }
 
   @media (max-width: 992px) {
-    .woe-logo {
+    .video-timer-woe-logo {
       /* display: none; */
+      aspect-ratio: 575/28;
+      height: auto;
       width: 94%;
       margin: 0 auto;
       margin-bottom: 1rem;
-      margin-left: .75rem;
+      margin-left: 0.75rem;
     }
     .timer__parent {
-      bottom: .5rem;
+      bottom: 0.5rem;
       width: 100%;
       margin-left: 0rem;
     }
@@ -126,6 +117,17 @@ const isIndexPage = Astro.url.pathname == "/";
       gap: 0.75rem;
       row-gap: 0;
     }
+    .mobile-about {
+      width: 40%;
+      color: var(--white);
+      margin: 0;
+      margin-left: 5%;
+      display: grid;
+      gap: 0.5rem;
+      row-gap: 0;
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: 1fr;
+    }
     .timer-item {
       /* width: 150px; */
       will-change: transform;
@@ -138,10 +140,48 @@ const isIndexPage = Astro.url.pathname == "/";
   }
 </style>
 
-<script>
+<script define:vars={{ isIndexPage, data }}>
+  const timerWrapper = document.querySelector(".timer__wrapper");
+
+  // only show 6 projects, generally
+  let desktopData = data.slice(0, 6);
+  let mobileData = desktopData;
+
+  // if on /about page, only render 3 projects
+  if (!isIndexPage) {
+    mobileData = data.slice(0, 3);
+  }
+
+  const timerData = isIndexPage ? desktopData : mobileData;
+
+  timerWrapper.innerHTML = timerData
+    .map(
+      (video) => `
+          <a class="timer-item" href="/projects/${video.slug}">
+            <p>${video.title}</p>
+            <p>${video.clientArray ? video.clientArray : ""}</p>
+            <div class="timer-countdown">
+              <div class="timer-countdown__progress"></div>
+            </div>
+          </a>`
+    )
+    .join("");
+
+  const resetProgressBars = () => {
+    const progressBars = document.querySelectorAll(
+      ".timer-countdown__progress"
+    );
+    progressBars.forEach((bar) => {
+      bar.style.transform = "scaleX(0)";
+      bar.style.transitionDuration = "0s"; // Ensure no transition during reset
+      bar.offsetHeight; // Trigger a reflow to apply the styles immediately
+      bar.style.transitionDuration = "5s"; // Reapply transition for the animation
+    });
+  };
+
+  // run the video timer
   const runTimer = () => {
     const timerItems = document.querySelectorAll(".timer-item");
-    const timerVideoArr = document.querySelectorAll("#timer-video");
     const timerVideoParentArr = document.querySelectorAll(
       "#timer-video-parent"
     );
@@ -244,17 +284,14 @@ const isIndexPage = Astro.url.pathname == "/";
     };
 
     const startTimer = () => {
+      resetProgressBars(); // Reset progress bars before starting the timer
       if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(updateTimer, 5000);
+      timerInterval = setInterval(updateTimer, duration);
       updateTimer(); // Run the timer immediately
     };
 
     // Check if we're on the homepage
-    const isHomepage =
-      window.location.pathname === "/" ||
-      window.location.pathname === "/index.html";
-
-    if (isHomepage) {
+    if (isIndexPage) {
       const loaderWrapper = document.getElementById("loaderWrapper");
       const userHasVisited = sessionStorage.getItem("visited");
 
