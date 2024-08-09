@@ -13,13 +13,19 @@ const SEOdescription = description ? description : "Innovative Creative Studio S
     <meta charset="UTF-8" />
     <meta name="description" content={SEOdescription} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta property="og:image" content="https://i.imgur.com/Ym1QvNA.png" />
     <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
-      href="favicon.svg"
+      href="favicon-light.svg"
       rel="icon"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      href="favicon-dark.svg"
+      rel="icon"
+      media="(prefers-color-scheme: dark)"
     />
   </head>
   <body>
