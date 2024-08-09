@@ -2,12 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/hero.astro";
 import { getPreviewClips, getSiteSettings } from "../sanity/api";
+import HomepageLayout from "../layouts/HomepageLayout.astro";
 
 const previewData = await getPreviewClips();
 const settingsData = await getSiteSettings();
 ---
 
-<Layout title="WOE Studio" data={settingsData} description="WOE (What On Earth) | Innovative Creative Studio Specializing in Video Production. We push the boundaries of conventional taste to deliver powerful, impactful visuals.">
+<HomepageLayout
+  homepageNav={true}
+  title="WOE Studio"
+  data={settingsData}
+  description="WOE (What On Earth) | Innovative Creative Studio Specializing in Video Production. We push the boundaries of conventional taste to deliver powerful, impactful visuals."
+>
   <div class="landing-loader" id="loaderWrapper">
     <video
       class="landing-loader-video"
@@ -30,7 +36,7 @@ const settingsData = await getSiteSettings();
     </video>
   </div>
   <Hero data={previewData.projects} />
-</Layout>
+</HomepageLayout>
 
 <style>
   .hero {
@@ -59,11 +65,21 @@ const settingsData = await getSiteSettings();
   const loaderWrapper = document.getElementById("loaderWrapper");
   const videoContainer = document.getElementById("hero-video-container");
   const timerItems = document.getElementById("animateTimerIn");
-
   const userHasVisited = sessionStorage.getItem("visited");
+  const navWrapper = document.querySelector(".wrap-homepage-nav");
 
+  // if user has been on this page before, don't display the loader and animate hero as usual
   if (userHasVisited) {
     loaderWrapper.style.display = "none";
+    animate(
+      navWrapper,
+      {
+        opacity: 1,
+      },
+      {
+        duration: 1,
+      }
+    );
     animate(
       videoContainer,
       {
@@ -85,17 +101,25 @@ const settingsData = await getSiteSettings();
       }
     );
   } else {
+    // else show the loader and wait for the video to end
     loaderVideo.style.opacity = "1";
     loaderVideo.addEventListener("ended", handleVideoEnd, false);
   }
-
-  // loaderVideo.addEventListener("ended", handleVideoEnd, false);
 
   function handleVideoEnd() {
     animate(loaderVideo, {
       opacity: 0,
     }).finished.then(() => {
       loaderWrapper.style.display = "none";
+      animate(
+        navWrapper,
+        {
+          opacity: 1,
+        },
+        {
+          duration: 1,
+        }
+      );
       animate(
         videoContainer,
         {

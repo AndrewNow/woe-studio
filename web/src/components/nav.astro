@@ -326,6 +326,8 @@ const pages = [
   document.addEventListener("DOMContentLoaded", function () {
     const nav = document.getElementById("mobileNav");
     const body = document.body;
+    const navWrapper = document.getElementById("navWrapper");
+    const episodePlayer = document.getElementById("episodePlayer");
 
     const toggleNav = () => {
       if (nav.classList.contains("open")) {
@@ -347,8 +349,6 @@ const pages = [
 
     document.getElementById("menu-button").addEventListener("click", toggleNav);
 
-    const navWrapper = document.getElementById("navWrapper");
-    const episodePlayer = document.getElementById("episodePlayer");
 
     inView(
       episodePlayer,

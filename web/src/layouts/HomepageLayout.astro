@@ -5,6 +5,14 @@ const { title, data, description } = Astro.props;
 ---
 
 <BaseLayout data={data} title={title} description={description}>
-  <Nav data={data} slot="nav"/>
+  <div class="wrap-homepage-nav" slot="nav">
+    <Nav data={data} />
+  </div>
   <slot />
 </BaseLayout>
+
+<style>
+  .wrap-homepage-nav {
+    opacity: 0;
+  }
+</style>
