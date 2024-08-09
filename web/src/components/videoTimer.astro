@@ -105,28 +105,32 @@ const isIndexPage = Astro.url.pathname == "/";
 
   @media (max-width: 992px) {
     .woe-logo {
-      display: none;
+      /* display: none; */
+      width: 94%;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+      margin-left: .75rem;
     }
     .timer__parent {
-      bottom: 1rem;
-      margin-left: 1rem;
+      bottom: .5rem;
+      width: 100%;
+      margin-left: 0rem;
     }
     .timer__wrapper {
-      width: 100%;
+      width: 95%;
+      margin: 0 auto;
       color: var(--white);
-      display: flex;
-      flex-direction: column;
-      gap: 0rem;
-      height: calc(
-        (54px * 3) - 1rem
-      ); /* make this 3x the height of a .timer-item. 54px = 30px + 1.5rem. subtract 1.5rem because we want the last item (when the timer starts) to align to the bottom */
-      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0.75rem;
+      row-gap: 0;
     }
     .timer-item {
-      width: 150px;
+      /* width: 150px; */
       will-change: transform;
       min-height: 30px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     .timer-countdown {
       margin-top: 0.5rem;
@@ -147,8 +151,6 @@ const isIndexPage = Astro.url.pathname == "/";
     let timerInterval;
 
     const updateTimer = () => {
-      // console.log("Updating timer, currentIndex:", currentIndex);
-
       const resetAllVideos = () => {
         timerVideoParentArr.forEach((parent, i) => {
           const childVideo = parent.querySelector("video");
@@ -162,7 +164,6 @@ const isIndexPage = Astro.url.pathname == "/";
 
       if (currentIndex >= timerItems.length) {
         resetAllVideos();
-        resetTimerPosition();
         currentIndex = 0;
 
         // Preload the first video
@@ -182,7 +183,6 @@ const isIndexPage = Astro.url.pathname == "/";
         if (i == currentIndex) {
           parent.style.display = "block";
           parent.style.opacity = "1";
-          // console.log(`Playing video ${i}`);
 
           // Ensure video is ready before playing
           if (childVideo.readyState >= 3) {
@@ -240,38 +240,12 @@ const isIndexPage = Astro.url.pathname == "/";
         prevProgress.style.transitionDuration = "5s";
       }
 
-      if (currentIndex > 0) {
-        translateTimerUpwards();
-      }
-
       currentIndex++;
-    };
-
-    const resetTimerPosition = () => {
-      if (window.innerWidth < 992) {
-        timerItems.forEach((item) => {
-          item.style.transform = `translateY(0)`;
-        });
-      }
-    };
-
-    const translateTimerUpwards = () => {
-      if (window.innerWidth < 992) {
-        timerItems.forEach((item) => {
-          const currentTranslation = item.style.transform.match(
-            /translateY\(([^)]+)\)/
-          );
-          const currentOffset = currentTranslation
-            ? parseFloat(currentTranslation[1])
-            : 0;
-          item.style.transform = `translateY(${currentOffset + -54}px)`;
-        });
-      }
     };
 
     const startTimer = () => {
       if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(updateTimer, 5000); // Changed from 2500 to 5000
+      timerInterval = setInterval(updateTimer, 5000);
       updateTimer(); // Run the timer immediately
     };
 
@@ -294,7 +268,7 @@ const isIndexPage = Astro.url.pathname == "/";
           "ended",
           () => {
             // Start the timer when the loader video ends
-            startTimer()
+            startTimer();
           },
           { once: true }
         );
