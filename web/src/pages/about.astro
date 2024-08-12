@@ -235,6 +235,7 @@ const isIndexPage = Astro.url.pathname == "/";
     height: 100%;
     overflow: hidden;
     filter: blur(250px);
+    -webkit-filter: blur(250px);
   }
 
   .circle {
@@ -244,7 +245,7 @@ const isIndexPage = Astro.url.pathname == "/";
     transform: translate(-50%, -50%) rotate(0);
     width: 90vw;
     height: 45vw;
-    border-radius: 999999px;
+    border-radius: 100%;
   }
   .circle-1 {
     animation: rotate360 12s linear infinite;
