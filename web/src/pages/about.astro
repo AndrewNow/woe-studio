@@ -119,7 +119,7 @@ const isIndexPage = Astro.url.pathname == "/";
       {data.description}
     </h2>
   </div>
-  {
+  <!-- {
     data.teamArray != null && data.expertiseArray != null && (
       <Team
         data={data.teamArray}
@@ -128,7 +128,18 @@ const isIndexPage = Astro.url.pathname == "/";
         email={settingsData.email}
       />
     )
-  }
+  } -->
+  <div class="blend-wrapper">
+    <video
+      class="blend-video"
+      playsinline
+      muted
+      autoplay
+      loop
+      src={settingsData.logoVideo}
+    >
+    </video>
+  </div>
   {
     data.clientLogoImageArray != null && (
       <Marquee logoData={data.clientLogoImageArray} />
@@ -180,6 +191,20 @@ const isIndexPage = Astro.url.pathname == "/";
 </Layout>
 
 <style lang="scss">
+  .blend-video {
+    z-index: 2;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: lighten;
+    -webkit-mix-blend-mode: lighten;
+    background-blend-mode: lighten;
+    user-select: none;
+    pointer-events: none;
+    aspect-ratio: 800/544;
+    max-width: 80vw;
+  }
   .about-images__wrapper {
     position: relative;
     z-index: 10;
