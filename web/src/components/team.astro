@@ -49,10 +49,10 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
       {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
-  <div class="blend-wrapper">
+  <!-- <div class="blend-wrapper">
     <video class="blend-video" playsinline muted autoplay loop src={logoVideo}>
     </video>
-  </div>
+  </div> -->
 </div>
 
 <style lang="scss" lang="scss">
@@ -75,9 +75,9 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
     height: 100%;
   }
   .team__wrapper {
-    z-index: 1;
-    mix-blend-mode: lighten;
-    -webkit-mix-blend-mode: lighten;
+    z-index: 2;
+    // mix-blend-mode: lighten;
+    // -webkit-mix-blend-mode: lighten;
     width: var(--inner-width);
     margin: 0 auto;
     display: flex;
@@ -104,6 +104,7 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
   .team-entry {
     width: 100%;
     display: grid;
+    z-index: 4;
     position: relative;
     grid-template-columns: 1fr 2fr 1fr;
     padding-bottom: 2rem;
@@ -141,6 +142,8 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
     color: rgba(var(--rgb-white), 0.5);
   }
   .member-image__wrapper {
+    position: relative;
+    z-index: 10;
   }
   .member-image {
     opacity: 0;
