@@ -49,12 +49,14 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
       {expertiseData.map((item) => <li>{item}</li>)}
     </ul>
   </div>
-  <video class="blend-video" playsinline muted autoplay loop src={logoVideo}>
-  </video>
+  <div class="blend-wrapper">
+    <video class="blend-video" playsinline muted autoplay loop src={logoVideo}>
+    </video>
+  </div>
 </div>
 
 <style lang="scss" lang="scss">
-  .blend-video {
+  .blend-wrapper {
     z-index: 2;
     position: absolute;
     top: 50%;
@@ -62,13 +64,19 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
     transform: translate(-50%, -50%);
     mix-blend-mode: lighten;
     -webkit-mix-blend-mode: lighten;
+    background-blend-mode: lighten;
     user-select: none;
     pointer-events: none;
     aspect-ratio: 800/544;
     max-width: 80vw;
   }
+  .blend-video {
+    width: 100%;
+    height: 100%;
+  }
   .team__wrapper {
-    z-index: 1;
+    z-index: 99;
+    mix-blend-mode: lighten;
     width: var(--inner-width);
     margin: 0 auto;
     display: flex;
