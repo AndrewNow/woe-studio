@@ -20,165 +20,171 @@ const isIndexPage = Astro.url.pathname == "/";
   data={settingsData}
   description="Welcome to WOE (What On Earth). Our collaborative approach ensures that every project is infused with innovation and creativity, turning bold ideas into unforgettable visual experiences. Get to know the people behind WOE and see how our collective expertise transforms the ordinary into the extraordinary. "
 >
-  <div class="canvas__wrapper">
-    <div class="blur">
-      <div class="circle circle-1"></div>
-      <div class="circle circle-2"></div>
-      <div class="circle circle-3"></div>
-      <!-- <canvas id="gradient-canvas" data-js-darken-top></canvas> -->
-    </div>
-  </div>
-  <div class="about-hero">
-    <div class="about-images__wrapper">
-      <div class="mobile-about-marquee" id="aboutHeroMarquee">
-        {
-          data.heroImageArray.map((img) => {
-            return (
-              <Image
-                class="about-hero-image"
-                src={img.imageSrc}
-                widths={[300, 430, 553]}
-                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
-                width="553"
-                height="287"
-                alt={
-                  img.alt != null
-                    ? img.alt
-                    : "No descriptive text was entered for this image, sorry!"
-                }
-              />
-            );
-          })
-        }
-      </div>
-      <div class="about-images__col" id="about-col1">
-        {
-          data.heroImageArray.slice(0, 3).map((img) => {
-            return (
-              <Image
-                class="about-hero-image"
-                src={img.imageSrc}
-                widths={[300, 430, 553]}
-                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
-                width="553"
-                height="287"
-                alt={
-                  img.alt != null
-                    ? img.alt
-                    : "No descriptive text was entered for this image, sorry!"
-                }
-              />
-            );
-          })
-        }
-      </div>
-      <div class="about-images__col" id="about-col2">
-        {
-          data.heroImageArray.slice(3, 6).map((img) => {
-            return (
-              <Image
-                class="about-hero-image"
-                src={img.imageSrc}
-                widths={[300, 430, 553]}
-                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
-                width="553"
-                height="287"
-                alt={
-                  img.alt != null
-                    ? img.alt
-                    : "No descriptive text was entered for this image, sorry!"
-                }
-              />
-            );
-          })
-        }
-      </div>
-      <div class="about-images__col" id="about-col3">
-        {
-          data.heroImageArray.slice(6, 9).map((img) => {
-            return (
-              <Image
-                class="about-hero-image"
-                src={img.imageSrc}
-                widths={[300, 430, 553]}
-                sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
-                width="553"
-                height="287"
-                alt={
-                  img.alt != null
-                    ? img.alt
-                    : "No descriptive text was entered for this image, sorry!"
-                }
-              />
-            );
-          })
-        }
+  <div class="red">
+    <div class="canvas__wrapper">
+      <div class="blur">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <!-- <canvas id="gradient-canvas" data-js-darken-top></canvas> -->
       </div>
     </div>
-    <h2 class="about-bio">
-      {data.description}
-    </h2>
-  </div>
-  {
-    data.teamArray != null && data.expertiseArray != null && (
-      <Team
-        data={data.teamArray}
-        expertiseData={data.expertiseArray}
-        logoVideo={settingsData.logoVideo}
-        email={settingsData.email}
-      />
-    )
-  }
-  {
-    data.clientLogoImageArray != null && (
-      <Marquee logoData={data.clientLogoImageArray} />
-    )
-  }
-  <div class="sticky__container">
-    <div class="sticky-gradient"></div>
-    <div class="about-video__container">
-      {
-        previewClipData.projects.map((video, i) => {
-          return (
-            <a
-              href={`/projects/${video.slug}`}
-              class="hero-video hover-area"
-              id="timer-video-parent"
-            >
-              <video
-                preload="metadata"
-                autoplay="true"
-                loop="true"
-                muted="true"
-                id="timer-video"
-                playsinline
+    <div class="about-hero">
+      <div class="about-images__wrapper">
+        <div class="mobile-about-marquee" id="aboutHeroMarquee">
+          {
+            data.heroImageArray.map((img) => {
+              return (
+                <Image
+                  class="about-hero-image"
+                  src={img.imageSrc}
+                  widths={[300, 430, 553]}
+                  sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
+                  width="553"
+                  height="287"
+                  alt={
+                    img.alt != null
+                      ? img.alt
+                      : "No descriptive text was entered for this image, sorry!"
+                  }
+                />
+              );
+            })
+          }
+        </div>
+        <div class="about-images__col" id="about-col1">
+          {
+            data.heroImageArray.slice(0, 3).map((img) => {
+              return (
+                <Image
+                  class="about-hero-image"
+                  src={img.imageSrc}
+                  widths={[300, 430, 553]}
+                  sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
+                  width="553"
+                  height="287"
+                  alt={
+                    img.alt != null
+                      ? img.alt
+                      : "No descriptive text was entered for this image, sorry!"
+                  }
+                />
+              );
+            })
+          }
+        </div>
+        <div class="about-images__col" id="about-col2">
+          {
+            data.heroImageArray.slice(3, 6).map((img) => {
+              return (
+                <Image
+                  class="about-hero-image"
+                  src={img.imageSrc}
+                  widths={[300, 430, 553]}
+                  sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
+                  width="553"
+                  height="287"
+                  alt={
+                    img.alt != null
+                      ? img.alt
+                      : "No descriptive text was entered for this image, sorry!"
+                  }
+                />
+              );
+            })
+          }
+        </div>
+        <div class="about-images__col" id="about-col3">
+          {
+            data.heroImageArray.slice(6, 9).map((img) => {
+              return (
+                <Image
+                  class="about-hero-image"
+                  src={img.imageSrc}
+                  widths={[300, 430, 553]}
+                  sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
+                  width="553"
+                  height="287"
+                  alt={
+                    img.alt != null
+                      ? img.alt
+                      : "No descriptive text was entered for this image, sorry!"
+                  }
+                />
+              );
+            })
+          }
+        </div>
+      </div>
+      <h2 class="about-bio">
+        {data.description}
+      </h2>
+    </div>
+    {
+      data.teamArray != null && data.expertiseArray != null && (
+        <Team
+          data={data.teamArray}
+          expertiseData={data.expertiseArray}
+          logoVideo={settingsData.logoVideo}
+          email={settingsData.email}
+        />
+      )
+    }
+    {
+      data.clientLogoImageArray != null && (
+        <Marquee logoData={data.clientLogoImageArray} />
+      )
+    }
+    <div class="sticky__container">
+      <div class="sticky-gradient"></div>
+      <div class="about-video__container">
+        {
+          previewClipData.projects.map((video, i) => {
+            return (
+              <a
+                href={`/projects/${video.slug}`}
+                class="hero-video hover-area"
+                id="timer-video-parent"
               >
-                <source src={video.previewUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+                <video
+                  preload="metadata"
+                  autoplay="true"
+                  loop="true"
+                  muted="true"
+                  id="timer-video"
+                  playsinline
+                >
+                  <source src={video.previewUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </a>
+            );
+          })
+        }
+        <VideoTimer data={previewClipData.projects} />
+        {
+          !isIndexPage && (
+            <a
+              href="/projects"
+              class="link hero-projects-link"
+              data-value="View all projects"
+              data-content="View all projects"
+            >
+              <p>View all projects</p>
             </a>
-          );
-        })
-      }
-      <VideoTimer data={previewClipData.projects} />
-      {
-        !isIndexPage && (
-          <a
-            href="/projects"
-            class="link hero-projects-link"
-            data-value="View all projects"
-            data-content="View all projects"
-          >
-            <p>View all projects</p>
-          </a>
-        )
-      }
+          )
+        }
+      </div>
     </div>
   </div>
+
   <Footer data={settingsData} />
 </Layout>
 
 <style lang="scss">
+  .red {
+    background: red;
+  }
   .about-images__wrapper {
     position: relative;
     z-index: 10;
