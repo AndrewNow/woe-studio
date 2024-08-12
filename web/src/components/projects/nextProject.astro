@@ -40,7 +40,7 @@ const data = nextProjectData.projects;
   </div>
 </a>
 
-<style>
+<style lang="scss">
   .project-title {
     display: inline-flex;
     margin-top: 1rem;
@@ -58,13 +58,14 @@ const data = nextProjectData.projects;
     display: block;
   }
   .title-text {
-    transition: .3s all ease;
+    transition: 0.3s all ease;
   }
   .next-project-video__wrapper:hover {
     .title-text {
-      transform: translateX(.25rem);
+      transform: translateX(0.25rem);
     }
-  } .sticky-gradient {
+  }
+  .sticky-gradient {
     z-index: 2;
     position: sticky;
     top: 0;

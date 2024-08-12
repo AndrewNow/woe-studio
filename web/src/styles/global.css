@@ -1,90 +1,185 @@
-  :root {
-    --black: rgb(0 0 0);
-    --white: rgb(239 237 237);
-    --rgb-white: 239, 237, 237;
-    --rgb-black: 0, 0, 0;
-    --inner-width: 94%;
-  }
-
+:root {
+  --black: rgb(0 0 0);
+  --white: rgb(239 237 237);
+  --rgb-white: 239, 237, 237;
+  --rgb-black: 0, 0, 0;
+  --inner-width: 94%;
+}
 
 html,
-  body {
-    font-family: system-ui, sans-serif;
-    background: var(--black);
-    margin: 0;
-    padding: 0;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  small,
-  a,
-  li {
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
-  }
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--black);
+  margin: 0;
+  padding: 0;
+}
 
-    @keyframes rotate360 {
-    from {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    to {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+small,
+a,
+li {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
 
-  @font-face {
-    font-family: "n27-light";
-    src: url("../fonts/n27-light.woff2") format("woff2");
-        font-weight: lighter;
-    font-style: normal;
-    font-display: swap;
+@keyframes rotate360 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
-  @font-face {
-    font-family: "n27-regular";
-    src: url("../fonts/n27-regular.woff2") format("woff2");
-        font-weight: lighter;
-    font-style: normal;
-    font-display: swap;
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
-  @font-face {
-    font-family: "n27-medium";
-    src: url("../fonts/n27-medium.woff2") format("woff2");
-        font-weight: lighter;
-    font-style: normal;
-    font-display: swap;
-  }
+}
 
+@font-face {
+  font-family: "n27-light";
+  src: url("../fonts/n27-light.woff2") format("woff2");
+  font-weight: lighter;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "n27-regular";
+  src: url("../fonts/n27-regular.woff2") format("woff2");
+  font-weight: lighter;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "n27-medium";
+  src: url("../fonts/n27-medium.woff2") format("woff2");
+  font-weight: lighter;
+  font-style: normal;
+  font-display: swap;
+}
+
+h1 {
+  font-size: 75px;
+  line-height: 100%;
+  letter-spacing: -0.03rem;
+  font-family: "n27-medium";
+}
+h2 {
+  font-size: 40px;
+  line-height: 135%;
+  letter-spacing: -0.09rem;
+  font-family: "n27-light";
+}
+h3 {
+  font-size: 28px;
+  line-height: 135%;
+  letter-spacing: -0.02rem;
+  font-family: "n27-regular";
+}
+h4 {
+  font-size: 21px;
+  line-height: 115%;
+  font-weight: lighter;
+  letter-spacing: -0.03rem;
+  font-family: "n27-regular";
+}
+h5 {
+  font-size: 20px;
+  line-height: 135%;
+  letter-spacing: -0.01rem;
+  font-family: "n27-regular";
+}
+h6 {
+  font-size: 20px;
+  line-height: 135%;
+  letter-spacing: -0.03rem;
+  font-family: "n27-regular";
+}
+p,
+li,
+link {
+  font-size: 16px;
+  line-height: 135%;
+  letter-spacing: -0.03rem;
+  font-family: "n27-regular";
+}
+a {
+  font-size: 14px;
+  line-height: 135%;
+  letter-spacing: -0.03rem;
+  font-family: "n27-medium";
+}
+small {
+  font-size: 14px;
+  line-height: 135%;
+  letter-spacing: -0.03rem;
+  font-family: "n27-light";
+}
+
+@media (max-width: 1280px) {
   h1 {
-    font-size: 75px;
-    line-height: 100%;
-    letter-spacing: -0.03rem;
-    font-family: "n27-medium";
+    font-size: 64px;
   }
   h2 {
-    font-size: 40px;
+    font-size: 36px;
     line-height: 135%;
-    letter-spacing: -0.09rem;
-    font-family: "n27-light";
+    letter-spacing: -0.03rem;
   }
   h3 {
-    font-size: 28px;
-    line-height: 135%;
-    letter-spacing: -0.02rem;
-    font-family: "n27-regular";
+    font-size: 24px;
+    line-height: 115%;
   }
   h4 {
-    font-size: 21px;
+    font-size: 20px;
     line-height: 115%;
-    font-weight: lighter;
     letter-spacing: -0.03rem;
-    font-family: "n27-regular";
+  }
+  p,
+  li,
+  link {
+    font-size: 16px;
+    line-height: 115%;
+    letter-spacing: -0.03rem;
+  }
+  a {
+    font-size: 14px;
+    line-height: 115%;
+    letter-spacing: -0.03rem;
+  }
+  small {
+    font-size: 14px;
+    line-height: 115%;
+  }
+}
+
+@media (max-width: 992px) {
+  h2 {
+    font-size: 28px;
+  }
+}
+@media (max-width: 576px) {
+  :root {
+    --inner-width: 87%;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  h2 {
+    font-size: 20px;
+    line-height: 135%;
+    letter-spacing: -0.05rem;
+  }
+  h3 {
+    font-size: 18px;
+    line-height: 115%;
+  }
+  h4 {
+    font-size: 14px;
+    line-height: 115%;
+    letter-spacing: -0.03rem;
   }
   h5 {
     font-size: 20px;
@@ -98,109 +193,20 @@ html,
     letter-spacing: -0.03rem;
     font-family: "n27-regular";
   }
-  p, li, link {
-    font-size: 16px;
+  p,
+  li,
+  link {
+    font-size: 12px;
     line-height: 135%;
     letter-spacing: -0.03rem;
-    font-family: "n27-regular";
   }
   a {
-    font-size: 14px;
-    line-height: 135%;
+    font-size: 12px;
+    line-height: 115%;
     letter-spacing: -0.03rem;
-    font-family: "n27-medium";
   }
   small {
-    font-size: 14px;
-    line-height: 135%;
-    letter-spacing: -0.03rem;
-    font-family: "n27-light";
+    font-size: 12px;
+    line-height: 115%;
   }
-
-  @media (max-width: 1280px) {
-    h1 {
-      font-size: 64px;
-    }
-    h2 {
-      font-size: 36px;
-      line-height: 135%;
-      letter-spacing: -0.03rem;
-    }
-    h3 {
-      font-size: 24px;
-      line-height: 115%;
-    }
-    h4 {
-      font-size: 20px;
-      line-height: 115%;
-      letter-spacing: -0.03rem;
-    }
-    p, li, link {
-      font-size: 16px;
-      line-height: 115%;
-      letter-spacing: -0.03rem;
-    }
-    a {
-      font-size: 14px;
-      line-height: 115%;
-      letter-spacing: -0.03rem;
-    }
-    small {
-      font-size: 14px;
-      line-height: 115%;
-    }
-  }
-
-  @media (max-width: 992px) {
-    h2 {
-      font-size: 28px;
-    }
-  }
-  @media (max-width: 576px) {
-    :root { 
-      --inner-width: 87%;
-    }
-    h1 {
-      font-size: 36px;
-    }
-    h2 {
-      font-size: 20px;
-      line-height: 135%;
-      letter-spacing: -0.05rem;
-    }
-    h3 {
-      font-size: 18px;
-      line-height: 115%;
-    }
-    h4 {
-      font-size: 14px;
-      line-height: 115%;
-      letter-spacing: -0.03rem;
-    }
-    h5 {
-      font-size: 20px;
-      line-height: 135%;
-      letter-spacing: -0.01rem;
-      font-family: "n27-regular";
-    }
-    h6 {
-      font-size: 20px;
-      line-height: 135%;
-      letter-spacing: -0.03rem;
-      font-family: "n27-regular";
-    }
-    p, li, link {
-      font-size: 12px;
-      line-height: 135%;
-      letter-spacing: -0.03rem;
-    }
-    a {
-      font-size: 12px;
-      line-height: 115%;
-      letter-spacing: -0.03rem;
-    }
-    small {
-      font-size: 12px;
-      line-height: 115%;
-    }
-  }
+}
