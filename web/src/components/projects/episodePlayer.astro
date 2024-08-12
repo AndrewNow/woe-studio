@@ -91,10 +91,16 @@ import { Image } from "astro:assets";
   let animationFrame;
   let isVideoPlaying = false;
 
-  video.addEventListener("click", () => {
-    video.classList.remove("hover-area");
+  video.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent default behavior
+    if (video.paused) {
+      video.play().catch((error) => console.error("Play failed:", error));
+      video.play();
+    } else {
+      video.pause();
+    }
     video.setAttribute("controls", "controls");
-    video.play();
+    video.classList.remove("hover-area");
   });
 
   // Function to show headers
