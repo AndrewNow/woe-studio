@@ -7,6 +7,7 @@ import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
 import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
 import Footer from "../../components/footer.astro";
+import PageTransition from "../../components/pageTransition.astro";
 
 const allProjectData = await getProjectsInOrder();
 const settingsData = await getSiteSettings();
@@ -19,6 +20,7 @@ const data = allProjectData.projects;
   data={settingsData}
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
+  <PageTransition />
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
@@ -94,6 +96,14 @@ const data = allProjectData.projects;
   const projectEntries = document.querySelectorAll(".project-entry");
   const videos = document.querySelectorAll(".project-video-media");
 
+  videos.forEach((video) => {
+    video.addEventListener("mouseenter", () => {
+      video.play();
+    });
+    video.addEventListener("mouseleave", () => {
+      video.pause();
+    });
+  });
   // projectEntries.forEach((entry) => {
   //   entry.addEventListener("mouseenter", () => {
   //     projectEntries.forEach((otherEntry) => {
@@ -109,15 +119,6 @@ const data = allProjectData.projects;
   //     });
   //   });
   // });
-
-  videos.forEach((video) => {
-    video.addEventListener("mouseenter", () => {
-      video.play();
-    });
-    video.addEventListener("mouseleave", () => {
-      video.pause();
-    });
-  });
 </script>
 
 <style lang="scss">

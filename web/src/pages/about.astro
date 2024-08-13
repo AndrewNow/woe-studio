@@ -7,6 +7,7 @@ import Marquee from "../components/marquee.astro";
 import VideoTimer from "../components/videoTimer.astro";
 import Footer from "../components/footer.astro";
 import { getAboutData, getPreviewClips, getSiteSettings } from "../sanity/api";
+import PageTransition from "../components/pageTransition.astro";
 
 const previewClipData = await getPreviewClips();
 const data = await getAboutData();
@@ -20,6 +21,7 @@ const isIndexPage = Astro.url.pathname == "/";
   data={settingsData}
   description="Welcome to WOE (What On Earth). Our collaborative approach ensures that every project is infused with innovation and creativity, turning bold ideas into unforgettable visual experiences. Get to know the people behind WOE and see how our collective expertise transforms the ordinary into the extraordinary. "
 >
+  <PageTransition />
   <div class="wrap-header">
     <div class="canvas__wrapper">
       <div class="blur">

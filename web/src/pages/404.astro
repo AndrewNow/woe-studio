@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
+import PageTransition from "../components/pageTransition.astro";
 import { getSiteSettings } from "../sanity/api";
 
 const settingsData = await getSiteSettings();
@@ -11,6 +11,7 @@ const settingsData = await getSiteSettings();
   data={settingsData}
   description="What on earth? Page not found"
 >
+  <PageTransition />
   <div class="wrapper">
     <div class="gradient__wrapper">
       <h1 class="title">4O4</h1>
