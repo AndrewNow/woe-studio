@@ -78,103 +78,103 @@ import { Image } from "astro:assets";
 </div>
 
 <script define:vars={{ episodeData }}>
-  const episodeSelect = document.getElementById("episode-select");
-  const video = document.getElementById("episodeVideo");
-  const subTitle = document.getElementById("episodeSubtitle");
-  const title = document.getElementById("episodeTitle");
-  const caret = document.getElementById("custom-select-caret");
-  const episodeHeaderElements = document.querySelectorAll("#episodeHeader");
+  document.addEventListener("astro:page-load", () => {
+    const episodeSelect = document.getElementById("episode-select");
+    const video = document.getElementById("episodeVideo");
+    const subTitle = document.getElementById("episodeSubtitle");
+    const title = document.getElementById("episodeTitle");
+    const caret = document.getElementById("custom-select-caret");
+    const episodeHeaderElements = document.querySelectorAll("#episodeHeader");
 
-  let isOpen = false;
-  let lastMouseMoveTime = 0;
-  let isMouseMoving = false;
-  let animationFrame;
-  let isVideoPlaying = false;
+    let isOpen = false;
+    let lastMouseMoveTime = 0;
+    let isMouseMoving = false;
+    let animationFrame;
+    let isVideoPlaying = false;
 
-  video.addEventListener("click", (event) => {
-    event.preventDefault(); // Prevent default behavior
-    if (video.paused) {
-      video.play().catch((error) => console.error("Play failed:", error));
-      video.play();
-    } else {
-      video.pause();
-    }
-    video.setAttribute("controls", "controls");
-    video.classList.remove("hover-area");
-  });
-
-  // Function to show headers
-  const showHeaders = () => {
-    episodeHeaderElements.forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transition = "opacity 0.5s ease";
-    });
-  };
-
-  // Function to hide headers
-  const hideHeaders = () => {
-    episodeHeaderElements.forEach((el) => {
-      el.style.opacity = "0";
-      el.style.transition = "opacity 0.5s ease";
-    });
-  };
-
-  // Function to check mouse movement and update headers' visibility
-  const checkMouseMovement = () => {
-    if (!isVideoPlaying) {
-      showHeaders();
-      return;
-    }
-
-    if (isMouseMoving) {
-      showHeaders();
-      isMouseMoving = false;
-    } else {
-      const currentTime = Date.now();
-      if (currentTime - lastMouseMoveTime > 1000) {
-        hideHeaders();
+    video.addEventListener("click", (event) => {
+      event.preventDefault(); // Prevent default behavior
+      if (video.paused) {
+        video.play().catch((error) => console.error("Play failed:", error));
+        video.play();
+      } else {
+        video.pause();
       }
-    }
+      video.setAttribute("controls", "controls");
+      video.classList.remove("hover-area");
+    });
 
-    animationFrame = requestAnimationFrame(checkMouseMovement);
-  };
+    // Function to show headers
+    const showHeaders = () => {
+      episodeHeaderElements.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transition = "opacity 0.5s ease";
+      });
+    };
 
-  // Mouse movement handler
-  const handleMouseMove = () => {
-    lastMouseMoveTime = Date.now();
-    isMouseMoving = true;
-  };
+    // Function to hide headers
+    const hideHeaders = () => {
+      episodeHeaderElements.forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transition = "opacity 0.5s ease";
+      });
+    };
 
-  // Video play event listener
-  video.addEventListener("play", () => {
-    isVideoPlaying = true;
-    hideHeaders();
-    document.addEventListener("mousemove", handleMouseMove);
-    animationFrame = requestAnimationFrame(checkMouseMovement);
-  });
+    // Function to check mouse movement and update headers' visibility
+    const checkMouseMovement = () => {
+      if (!isVideoPlaying) {
+        showHeaders();
+        return;
+      }
 
-  // Video pause event listener
-  video.addEventListener("pause", () => {
-    isVideoPlaying = false;
+      if (isMouseMoving) {
+        showHeaders();
+        isMouseMoving = false;
+      } else {
+        const currentTime = Date.now();
+        if (currentTime - lastMouseMoveTime > 1000) {
+          hideHeaders();
+        }
+      }
+
+      animationFrame = requestAnimationFrame(checkMouseMovement);
+    };
+
+    // Mouse movement handler
+    const handleMouseMove = () => {
+      lastMouseMoveTime = Date.now();
+      isMouseMoving = true;
+    };
+
+    // Video play event listener
+    video.addEventListener("play", () => {
+      isVideoPlaying = true;
+      hideHeaders();
+      document.addEventListener("mousemove", handleMouseMove);
+      animationFrame = requestAnimationFrame(checkMouseMovement);
+    });
+
+    // Video pause event listener
+    video.addEventListener("pause", () => {
+      isVideoPlaying = false;
+      showHeaders();
+      document.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(animationFrame);
+    });
+
+    // Initial state when the page loads
     showHeaders();
-    document.removeEventListener("mousemove", handleMouseMove);
-    cancelAnimationFrame(animationFrame);
-  });
 
-  // Initial state when the page loads
-  showHeaders();
+    episodeSelect.addEventListener("change", (e) => {
+      const selectedEpisode = episodeData[e.target.value];
+      subTitle.innerText = selectedEpisode.episodeSubtitle;
+      title.innerText = selectedEpisode.episodeTitle;
+      video.src = selectedEpisode.episodeVideo;
+      video.poster = selectedEpisode.thumbnail;
+      video.load();
+    });
 
-  episodeSelect.addEventListener("change", (e) => {
-    const selectedEpisode = episodeData[e.target.value];
-    subTitle.innerText = selectedEpisode.episodeSubtitle;
-    title.innerText = selectedEpisode.episodeTitle;
-    video.src = selectedEpisode.episodeVideo;
-    video.poster = selectedEpisode.thumbnail;
-    video.load();
-  });
-
-  // logic for custom select (dropdown) element
-  document.addEventListener("DOMContentLoaded", function () {
+    // logic for custom select (dropdown) element
     const customSelectWrapper = document.querySelector(
       ".custom-select-wrapper"
     );

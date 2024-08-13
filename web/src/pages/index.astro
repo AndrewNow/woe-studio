@@ -61,97 +61,109 @@ const settingsData = await getSiteSettings();
 </style>
 <script>
   import { animate } from "motion";
-  const loaderVideo = document.getElementById("loaderVideo");
-  const loaderWrapper = document.getElementById("loaderWrapper");
-  const videoContainer = document.getElementById("hero-video-container");
-  const timerItems = document.getElementById("animateTimerIn");
-  const userHasVisited = sessionStorage.getItem("visited");
-  const navWrapper = document.querySelector(".wrap-homepage-nav");
 
-  const screenWidth = window.innerWidth;
+  function setLoader() {
+    const loaderVideo = document.getElementById("loaderVideo");
+    const loaderWrapper = document.getElementById("loaderWrapper");
+    const videoContainer = document.getElementById("hero-video-container");
+    const timerItems = document.getElementById("animateTimerIn");
+    const navWrapper = document.querySelector(".wrap-homepage-nav");
 
-  if (screenWidth >= 992) {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4";
-  } else {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4";
+    if (loaderVideo) {
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth >= 992) {
+        loaderVideo.src =
+          "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4";
+      } else {
+        loaderVideo.src =
+          "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4";
+      }
+
+      // if user has been on this page before, don't display the loader and animate hero as usual
+      if (sessionStorage.getItem("visited")) {
+        loaderWrapper.style.display = "none";
+        animate(
+          navWrapper,
+          {
+            opacity: 1,
+          },
+          {
+            duration: 1,
+          }
+        );
+        animate(
+          videoContainer,
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+          },
+          {
+            duration: 1.6,
+            easing: [0.85, 0, 0.15, 1],
+          }
+        );
+        animate(
+          timerItems,
+          {
+            opacity: 1,
+          },
+          {
+            delay: 0.5,
+            duration: 1.6,
+          }
+        );
+      } else {
+        // else show the loader and wait for the video to end
+        loaderVideo.style.opacity = "1";
+        loaderVideo.addEventListener("ended", handleVideoEnd, false);
+      }
+
+      function handleVideoEnd() {
+        animate(loaderVideo, {
+          opacity: 0,
+        }).finished.then(() => {
+          loaderWrapper.style.display = "none";
+          animate(
+            navWrapper,
+            {
+              opacity: 1,
+            },
+            {
+              duration: 1,
+            }
+          );
+          animate(
+            videoContainer,
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+            },
+            {
+              duration: 1.6,
+              easing: [0.85, 0, 0.15, 1],
+            }
+          );
+          animate(
+            timerItems,
+            {
+              opacity: 1,
+            },
+            {
+              delay: 0.5,
+              duration: 1.6,
+            }
+          );
+        });
+
+        sessionStorage.setItem("visited", "true");
+      }
+    }
   }
 
-  // if user has been on this page before, don't display the loader and animate hero as usual
-  if (userHasVisited) {
-    loaderWrapper.style.display = "none";
-    animate(
-      navWrapper,
-      {
-        opacity: 1,
-      },
-      {
-        duration: 1,
-      }
-    );
-    animate(
-      videoContainer,
-      {
-        clipPath: "inset(0% 0% 0% 0%)",
-      },
-      {
-        duration: 1.6,
-        easing: [0.85, 0, 0.15, 1],
-      }
-    );
-    animate(
-      timerItems,
-      {
-        opacity: 1,
-      },
-      {
-        delay: 0.5,
-        duration: 1.6,
-      }
-    );
-  } else {
-    // else show the loader and wait for the video to end
-    loaderVideo.style.opacity = "1";
-    loaderVideo.addEventListener("ended", handleVideoEnd, false);
-  }
+  document.addEventListener("astro:page-load", () => {
+    setLoader();
+  });
 
-  function handleVideoEnd() {
-    animate(loaderVideo, {
-      opacity: 0,
-    }).finished.then(() => {
-      loaderWrapper.style.display = "none";
-      animate(
-        navWrapper,
-        {
-          opacity: 1,
-        },
-        {
-          duration: 1,
-        }
-      );
-      animate(
-        videoContainer,
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-        },
-        {
-          duration: 1.6,
-          easing: [0.85, 0, 0.15, 1],
-        }
-      );
-      animate(
-        timerItems,
-        {
-          opacity: 1,
-        },
-        {
-          delay: 0.5,
-          duration: 1.6,
-        }
-      );
-    });
-
-    sessionStorage.setItem("visited", "true");
-  }
+  document.addEventListener("astro:after-swap", () => {
+    setLoader();
+  });
 </script>

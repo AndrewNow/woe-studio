@@ -142,22 +142,24 @@ const timerWrapperClass = isIndexPage
 </style>
 
 <script define:vars={{ isIndexPage, data }}>
-  const timerWrapper = document.querySelector(".timer__wrapper");
+  document.addEventListener("astro:page-load", () => {
+    const timerWrapper = document.querySelector(".timer__wrapper");
 
-  // only show 6 projects, generally
-  let desktopData = data.slice(0, 6);
-  let mobileData = desktopData;
+    if (timerWrapper) {
+      // only show 6 projects, generally
+      let desktopData = data.slice(0, 6);
+      let mobileData = desktopData;
 
-  // if on /about page, only render 3 projects
-  if (!isIndexPage && window.innerWidth < 992) {
-    mobileData = data.slice(0, 3);
-  }
+      // if on /about page, only render 3 projects
+      if (!isIndexPage && window.innerWidth < 992) {
+        mobileData = data.slice(0, 3);
+      }
 
-  const timerData = isIndexPage ? desktopData : mobileData;
+      const timerData = isIndexPage ? desktopData : mobileData;
 
-  timerWrapper.innerHTML = timerData
-    .map(
-      (video) => `
+      timerWrapper.innerHTML = timerData
+        .map(
+          (video) => `
           <a class="timer-item" href="/projects/${video.slug}">
             <p>${video.title}</p>
             <p>${video.clientArray ? video.clientArray : ""}</p>
@@ -165,158 +167,159 @@ const timerWrapperClass = isIndexPage
               <div class="timer-countdown__progress"></div>
             </div>
           </a>`
-    )
-    .join("");
+        )
+        .join("");
 
-  const resetProgressBars = () => {
-    const progressBars = document.querySelectorAll(
-      ".timer-countdown__progress"
-    );
-    progressBars.forEach((bar) => {
-      bar.style.transform = "scaleX(0)";
-      bar.style.transitionDuration = "0s"; // Ensure no transition during reset
-      bar.offsetHeight; // Trigger a reflow to apply the styles immediately
-      bar.style.transitionDuration = "5s"; // Reapply transition for the animation
-    });
-  };
-
-  // run the video timer
-  const runTimer = () => {
-    const timerItems = document.querySelectorAll(".timer-item");
-    const timerVideoParentArr = document.querySelectorAll(
-      "#timer-video-parent"
-    );
-
-    const duration = 5000; // Duration of each video in milliseconds
-    let currentIndex = 0;
-    let timerInterval;
-
-    const updateTimer = () => {
-      const resetAllVideos = () => {
-        timerVideoParentArr.forEach((parent, i) => {
-          const childVideo = parent.querySelector("video");
-          childVideo.pause();
-          childVideo.currentTime = 0;
-          childVideo.load(); // Reload the video
-          parent.style.display = "none";
-          parent.style.opacity = "0";
+      const resetProgressBars = () => {
+        const progressBars = document.querySelectorAll(
+          ".timer-countdown__progress"
+        );
+        progressBars.forEach((bar) => {
+          bar.style.transform = "scaleX(0)";
+          bar.style.transitionDuration = "0s"; // Ensure no transition during reset
+          bar.offsetHeight; // Trigger a reflow to apply the styles immediately
+          bar.style.transitionDuration = "5s"; // Reapply transition for the animation
         });
       };
 
-      if (currentIndex >= timerItems.length) {
-        resetAllVideos();
-        currentIndex = 0;
+      // run the video timer
+      const runTimer = () => {
+        const timerItems = document.querySelectorAll(".timer-item");
+        const timerVideoParentArr = document.querySelectorAll(
+          "#timer-video-parent"
+        );
 
-        // Preload the first video
-        const firstVideo = timerVideoParentArr[0].querySelector("video");
-        firstVideo.load();
+        const duration = 5000; // Duration of each video in milliseconds
+        let currentIndex = 0;
+        let timerInterval;
 
-        // Add a small delay before restarting the loop
-        setTimeout(() => {
-          updateTimer();
-        }, 100);
-        return;
-      }
+        const updateTimer = () => {
+          const resetAllVideos = () => {
+            timerVideoParentArr.forEach((parent, i) => {
+              const childVideo = parent.querySelector("video");
+              childVideo.pause();
+              childVideo.currentTime = 0;
+              childVideo.load(); // Reload the video
+              parent.style.display = "none";
+              parent.style.opacity = "0";
+            });
+          };
 
-      timerVideoParentArr.forEach((parent, i) => {
-        const childVideo = parent.querySelector("video");
+          if (currentIndex >= timerItems.length) {
+            resetAllVideos();
+            currentIndex = 0;
 
-        if (i == currentIndex) {
-          parent.style.display = "block";
-          parent.style.opacity = "1";
+            // Preload the first video
+            const firstVideo = timerVideoParentArr[0].querySelector("video");
+            firstVideo.load();
 
-          // Ensure video is ready before playing
-          if (childVideo.readyState >= 3) {
-            childVideo
-              .play()
-              .catch((e) => console.error("Error playing video:", e));
-          } else {
-            childVideo.addEventListener(
-              "canplay",
-              () => {
+            // Add a small delay before restarting the loop
+            setTimeout(() => {
+              updateTimer();
+            }, 100);
+            return;
+          }
+
+          timerVideoParentArr.forEach((parent, i) => {
+            const childVideo = parent.querySelector("video");
+
+            if (i == currentIndex) {
+              parent.style.display = "block";
+              parent.style.opacity = "1";
+
+              // Ensure video is ready before playing
+              if (childVideo.readyState >= 3) {
                 childVideo
                   .play()
                   .catch((e) => console.error("Error playing video:", e));
+              } else {
+                childVideo.addEventListener(
+                  "canplay",
+                  () => {
+                    childVideo
+                      .play()
+                      .catch((e) => console.error("Error playing video:", e));
+                  },
+                  { once: true }
+                );
+              }
+            } else {
+              parent.style.opacity = "0";
+              setTimeout(() => {
+                parent.style.display = "none";
+                childVideo.pause();
+                childVideo.currentTime = 0;
+              }, 510);
+            }
+          });
+
+          // Reset the previous element's progress bar state
+          if (currentIndex < timerItems.length) {
+            const currentProgress = timerItems[currentIndex].querySelector(
+              ".timer-countdown__progress"
+            );
+            currentProgress.style.transform = "scaleX(1) translateY(0px)";
+
+            timerItems.forEach((item, i) => {
+              const currentTextElements = item.querySelectorAll("p");
+              if (i === currentIndex) {
+                currentTextElements[0].style.opacity = "1";
+                currentTextElements[1].style.opacity = ".75";
+              } else {
+                currentTextElements.forEach((el) => {
+                  el.style.opacity = "0.5";
+                });
+              }
+            });
+
+            const prevIndex =
+              currentIndex === 0 ? timerItems.length - 1 : currentIndex - 1;
+            const prevProgress = timerItems[prevIndex].querySelector(
+              ".timer-countdown__progress"
+            );
+            prevProgress.style.transform = "scaleX(0)";
+            prevProgress.style.transitionDuration = "0s";
+            prevProgress.offsetHeight;
+            prevProgress.style.transitionDuration = "5s";
+          }
+
+          currentIndex++;
+        };
+
+        const startTimer = () => {
+          resetProgressBars(); // Reset progress bars before starting the timer
+          if (timerInterval) clearInterval(timerInterval);
+          timerInterval = setInterval(updateTimer, duration);
+          updateTimer(); // Run the timer immediately
+        };
+
+        // Check if we're on the homepage
+        if (isIndexPage) {
+          const loaderWrapper = document.getElementById("loaderWrapper");
+
+          if (sessionStorage.getItem("visited") || !loaderWrapper) {
+            // If user has visited before or there's no loader, start the timer immediately
+            startTimer();
+          } else {
+            // If it's the user's first visit and there's a loader, wait for the loader to finish
+            const loaderVideo = document.getElementById("loaderVideo");
+            loaderVideo.addEventListener(
+              "ended",
+              () => {
+                // Start the timer when the loader video ends
+                startTimer();
               },
               { once: true }
             );
           }
         } else {
-          parent.style.opacity = "0";
-          setTimeout(() => {
-            parent.style.display = "none";
-            childVideo.pause();
-            childVideo.currentTime = 0;
-          }, 510);
+          // If not on homepage, start the timer immediately
+          startTimer();
         }
-      });
+      };
 
-      // Reset the previous element's progress bar state
-      if (currentIndex < timerItems.length) {
-        const currentProgress = timerItems[currentIndex].querySelector(
-          ".timer-countdown__progress"
-        );
-        currentProgress.style.transform = "scaleX(1) translateY(0px)";
-
-        timerItems.forEach((item, i) => {
-          const currentTextElements = item.querySelectorAll("p");
-          if (i === currentIndex) {
-            currentTextElements[0].style.opacity = "1";
-            currentTextElements[1].style.opacity = ".75";
-          } else {
-            currentTextElements.forEach((el) => {
-              el.style.opacity = "0.5";
-            });
-          }
-        });
-
-        const prevIndex =
-          currentIndex === 0 ? timerItems.length - 1 : currentIndex - 1;
-        const prevProgress = timerItems[prevIndex].querySelector(
-          ".timer-countdown__progress"
-        );
-        prevProgress.style.transform = "scaleX(0)";
-        prevProgress.style.transitionDuration = "0s";
-        prevProgress.offsetHeight;
-        prevProgress.style.transitionDuration = "5s";
-      }
-
-      currentIndex++;
-    };
-
-    const startTimer = () => {
-      resetProgressBars(); // Reset progress bars before starting the timer
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(updateTimer, duration);
-      updateTimer(); // Run the timer immediately
-    };
-
-    // Check if we're on the homepage
-    if (isIndexPage) {
-      const loaderWrapper = document.getElementById("loaderWrapper");
-      const userHasVisited = sessionStorage.getItem("visited");
-
-      if (userHasVisited || !loaderWrapper) {
-        // If user has visited before or there's no loader, start the timer immediately
-        startTimer();
-      } else {
-        // If it's the user's first visit and there's a loader, wait for the loader to finish
-        const loaderVideo = document.getElementById("loaderVideo");
-        loaderVideo.addEventListener(
-          "ended",
-          () => {
-            // Start the timer when the loader video ends
-            startTimer();
-          },
-          { once: true }
-        );
-      }
-    } else {
-      // If not on homepage, start the timer immediately
-      startTimer();
+      // Call the function to initialize the timer setup
+      runTimer();
     }
-  };
-
-  // Call the function to initialize the timer setup
-  runTimer();
+  });
 </script>

@@ -411,55 +411,46 @@ const isIndexPage = Astro.url.pathname == "/";
 </style>
 
 <script>
-  // import { Gradient } from "../components/utils/gradient.js";
-
-  // Create your instance
-  // const gradient = new Gradient();
-
-  // Call `initGradient` with the selector to your canvas
-  // gradient.initGradient("#gradient-canvas");
-
+  import marquee from "https://cdn.jsdelivr.net/npm/vanilla-marquee/dist/vanilla-marquee.js";
   import { animate } from "motion";
 
-  const col1 = document.getElementById("about-col1");
-  const col2 = document.getElementById("about-col2");
-  const col3 = document.getElementById("about-col3");
+  document.addEventListener("astro:page-load", () => {
+    const col1 = document.getElementById("about-col1");
+    const col2 = document.getElementById("about-col2");
+    const col3 = document.getElementById("about-col3");
 
-  if (window.innerWidth > 576) {
-    animate(
-      col1,
-      {
-        transform: "translateY(-7vh)",
-        opacity: 1,
-      },
-      { duration: 2.4, delay: 0.25, easing: [0.35, 0.5, 0, 1] }
-    );
-    animate(
-      col2,
-      {
-        transform: "translateY(0px)",
-        opacity: 1,
-      },
-      { duration: 2.5, delay: 0.5, easing: [0.35, 0.5, 0, 1] }
-    );
-    animate(
-      col3,
-      {
-        transform: "translateY(-5vh)",
-        opacity: 1,
-      },
-      { duration: 2.7, delay: 0.75, easing: [0.35, 0.5, 0, 1] }
-    );
-  }
-</script>
+    if (window.innerWidth > 576) {
+      animate(
+        col1,
+        {
+          transform: "translateY(-7vh)",
+          opacity: 1,
+        },
+        { duration: 2.4, delay: 0.25, easing: [0.35, 0.5, 0, 1] }
+      );
+      animate(
+        col2,
+        {
+          transform: "translateY(0px)",
+          opacity: 1,
+        },
+        { duration: 2.5, delay: 0.5, easing: [0.35, 0.5, 0, 1] }
+      );
+      animate(
+        col3,
+        {
+          transform: "translateY(-5vh)",
+          opacity: 1,
+        },
+        { duration: 2.7, delay: 0.75, easing: [0.35, 0.5, 0, 1] }
+      );
+    }
 
-<script>
-  import marquee from "https://cdn.jsdelivr.net/npm/vanilla-marquee/dist/vanilla-marquee.js";
-
-  new marquee(document.getElementById("aboutHeroMarquee"), {
-    gap: 16 * 0.25,
-    duplicated: true,
-    startVisible: true,
-    speed: 10,
+    new marquee(document.getElementById("aboutHeroMarquee"), {
+      gap: 16 * 0.25,
+      duplicated: true,
+      startVisible: true,
+      speed: 10,
+    });
   });
 </script>

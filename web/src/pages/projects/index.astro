@@ -91,31 +91,33 @@ const data = allProjectData.projects;
 </Layout>
 
 <script>
-  const projectEntries = document.querySelectorAll(".project-entry");
-  const videos = document.querySelectorAll(".project-video-media");
+  document.addEventListener("astro:page-load", () => {
+    const videos = document.querySelectorAll(".project-video-media");
 
-  // projectEntries.forEach((entry) => {
-  //   entry.addEventListener("mouseenter", () => {
-  //     projectEntries.forEach((otherEntry) => {
-  //       if (otherEntry !== entry) {
-  //         otherEntry.style.opacity = "0.6";
-  //       }
-  //     });
-  //   });
+    // const projectEntries = document.querySelectorAll(".project-entry");
+    // projectEntries.forEach((entry) => {
+    //   entry.addEventListener("mouseenter", () => {
+    //     projectEntries.forEach((otherEntry) => {
+    //       if (otherEntry !== entry) {
+    //         otherEntry.style.opacity = "0.6";
+    //       }
+    //     });
+    //   });
 
-  //   entry.addEventListener("mouseleave", () => {
-  //     projectEntries.forEach((otherEntry) => {
-  //       otherEntry.style.opacity = "1";
-  //     });
-  //   });
-  // });
+    //   entry.addEventListener("mouseleave", () => {
+    //     projectEntries.forEach((otherEntry) => {
+    //       otherEntry.style.opacity = "1";
+    //     });
+    //   });
+    // });
 
-  videos.forEach((video) => {
-    video.addEventListener("mouseenter", () => {
-      video.play();
-    });
-    video.addEventListener("mouseleave", () => {
-      video.pause();
+    videos.forEach((video) => {
+      video.addEventListener("mouseenter", () => {
+        video.play();
+      });
+      video.addEventListener("mouseleave", () => {
+        video.pause();
+      });
     });
   });
 </script>

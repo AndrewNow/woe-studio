@@ -1,5 +1,5 @@
 ---
-import Nav from "../components/nav.astro";
+import { ViewTransitions } from "astro:transitions";
 import "../styles/global.css";
 const { title, description } = Astro.props;
 
@@ -26,8 +26,10 @@ const SEOdescription = description
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href="/woe-favicon.svg" />
     <meta name="theme-color" content="#000000" />
+    <ViewTransitions />
   </head>
   <body>
+    <div id="transition-overlay" class="transition-overlay"></div>
     <main>
       <slot name="nav" />
       <slot />
@@ -41,6 +43,61 @@ const SEOdescription = description
 </html>
 
 <style is:global lang="scss">
+  .transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--black);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    z-index: 99999;
+    pointer-events: none;
+  }
+
+  @keyframes wipeUp {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes wipeDown {
+    from {
+      transform: scaleY(1);
+    }
+    to {
+      transform: scaleY(0);
+    }
+  }
+
+  .transition-overlay.wipe-up {
+    transform-origin: bottom;
+    animation: wipeUp .6s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+  }
+
+  .transition-overlay.wipe-down {
+    transform-origin: top;
+    animation: wipeDown 1.6s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+  }
+
+  // ::view-transition-old(root),
+  // ::view-transition-new(root) {
+  //   animation: none;
+  //   mix-blend-mode: normal;
+  // }
+
+  // ::view-transition-old(root) {
+  //   z-index: 1;
+  // }
+
+  // ::view-transition-new(root) {
+  //   z-index: 2;
+  // }
+
   body.nav-open {
     overflow: hidden; /* Prevent scrolling of the body when nav is open */
   }
@@ -254,27 +311,73 @@ const SEOdescription = description
   import Cursor from "../components/utils/cursor";
   import Lenis from "lenis";
 
-  let lenis;
+  // let lenis;
 
-  if (window.innerWidth > 992) {
-    if (!navigator.userAgent.includes("Macintosh")) {
-      lenis = new Lenis({
-        lerp: 0.15,
-        wheelMultiplier: 1,
-        smoothWheel: true,
-      });
-    }
-    new Cursor(document.querySelector(".cursor-follower"));
-  }
+  // if (window.innerWidth > 992) {
+  //   if (!navigator.userAgent.includes("Macintosh")) {
+  //     lenis = new Lenis({
+  //       lerp: 0.15,
+  //       wheelMultiplier: 1,
+  //       smoothWheel: true,
+  //     });
+  //   }
+  //   new Cursor(document.querySelector(".cursor-follower"));
+  // }
 
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
+  // function raf(time) {
+  //   lenis.raf(time);
+  //   requestAnimationFrame(raf);
+  // }
 
-  requestAnimationFrame(raf);
+  // requestAnimationFrame(raf);
 
   // lenis.on("scroll", (e) => {
   //   // Handle scroll events if needed
   // });
+
+  // page transitions
+  // let isTransitioning = false;
+
+  document.addEventListener("astro:before-preparation", () => {
+    // if (!isTransitioning) {
+    // isTransitioning = true;
+    const overlay = document.getElementById("transition-overlay");
+    overlay.classList.remove("wipe-down");
+    overlay.classList.add("wipe-up");
+    // }
+  });
+
+  document.addEventListener("astro:after-swap", () => {
+    const overlay = document.getElementById("transition-overlay");
+    overlay.classList.remove("wipe-up");
+    overlay.classList.add("wipe-down");
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    // isTransitioning = false;
+    // const overlay = document.getElementById("transition-overlay");
+    // overlay.classList.remove("wipe-down");
+
+    let lenis;
+
+    if (window.innerWidth > 992) {
+      if (!navigator.userAgent.includes("Macintosh")) {
+        lenis = new Lenis({
+          lerp: 0.15,
+          wheelMultiplier: 1,
+          smoothWheel: true,
+        });
+      }
+      new Cursor(document.querySelector(".cursor-follower"));
+
+      if (lenis) {
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+      }
+    }
+  });
 </script>

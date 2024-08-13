@@ -179,7 +179,7 @@ const pages = [
     transform: translateX(-50%);
     width: var(--inner-width);
     margin: 0 auto;
-    z-index: 99999;
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -323,7 +323,7 @@ const pages = [
 <script>
   import { animate, inView } from "motion";
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("astro:page-load", function () {
     const nav = document.getElementById("mobileNav");
     const body = document.body;
     const navWrapper = document.getElementById("navWrapper");

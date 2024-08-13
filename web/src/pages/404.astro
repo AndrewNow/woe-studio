@@ -31,7 +31,7 @@ const settingsData = await getSiteSettings();
 </Layout>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const cursorMask = document.querySelector(".cursor-mask");
     const wrapper = document.querySelector(".wrapper");
 

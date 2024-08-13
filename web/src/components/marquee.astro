@@ -62,21 +62,26 @@ const { logoData } = Astro.props;
 <script>
   import marquee from "https://cdn.jsdelivr.net/npm/vanilla-marquee/dist/vanilla-marquee.js";
 
-  let options = {
-    gap: 5,
-    duplicated: true,
-    startVisible: true,
-    speed: 100,
-  };
+  document.addEventListener("astro:page-load", () => {
+    const marqueeEl = document.getElementById("marquee");
+    if (marqueeEl) {
+      let options = {
+        gap: 5,
+        duplicated: true,
+        startVisible: true,
+        speed: 100,
+      };
 
-  if (window.innerWidth <= 768) {
-    options = {
-      gap: 1,
-      duplicated: true,
-      startVisible: true,
-      speed: 50,
-    };
-  }
+      if (window.innerWidth <= 768) {
+        options = {
+          gap: 1,
+          duplicated: true,
+          startVisible: true,
+          speed: 50,
+        };
+      }
 
-  new marquee(document.getElementById("marquee"), options);
+      new marquee(document.getElementById("marquee"), options);
+    }
+  });
 </script>
