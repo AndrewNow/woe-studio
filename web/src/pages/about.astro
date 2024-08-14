@@ -214,6 +214,9 @@ const isIndexPage = Astro.url.pathname == "/";
     aspect-ratio: 800/544;
     max-width: 80vw;
   }
+  .blend-video {
+    width: 100%;
+  }
   .about-images__wrapper {
     position: relative;
     z-index: 10;
@@ -376,6 +379,13 @@ const isIndexPage = Astro.url.pathname == "/";
     display: none;
   }
   @media (max-width: 576px) {
+    .blend-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .canvas__wrapper {
+      height: 100vh;
+    }
     .hero-projects-link {
       bottom: 1rem;
       margin-right: 1rem;
