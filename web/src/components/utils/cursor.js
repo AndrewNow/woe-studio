@@ -1,5 +1,4 @@
 import { animate } from 'motion'
-
 import { lerp, getMousePos } from "./utils";
 
 // Grab the mouse position and set it to mouse state

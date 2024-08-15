@@ -20,7 +20,7 @@ const settingsData = await getSiteSettings();
       id="loaderVideo"
       preload="metadata"
       autoplay
-      muted="true"
+      muted
       playsinline
     >
       <source
@@ -68,15 +68,15 @@ const settingsData = await getSiteSettings();
   const userHasVisited = sessionStorage.getItem("visited");
   const navWrapper = document.querySelector(".wrap-homepage-nav");
 
-  const screenWidth = window.innerWidth;
+  // const screenWidth = window.innerWidth;
 
-  if (screenWidth >= 992) {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4";
-  } else {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4";
-  }
+  // if (screenWidth >= 992) {
+  //   loaderVideo.src =
+  //     "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4";
+  // } else {
+  //   loaderVideo.src =
+  //     "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4";
+  // }
 
   // if user has been on this page before, don't display the loader and animate hero as usual
   if (userHasVisited) {

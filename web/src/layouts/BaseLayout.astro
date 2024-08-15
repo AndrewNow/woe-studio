@@ -265,16 +265,13 @@ const SEOdescription = description
       });
     }
     new Cursor(document.querySelector(".cursor-follower"));
-
-    if (lenis) {
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
-    }
   }
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
 
   // lenis.on("scroll", (e) => {
   //   // Handle scroll events if needed
