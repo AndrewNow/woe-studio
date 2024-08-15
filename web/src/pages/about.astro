@@ -122,6 +122,17 @@ const isIndexPage = Astro.url.pathname == "/";
         {data.description}
       </h2>
     </div>
+    <div class="blend-wrapper-mobile">
+      <video
+        class="blend-video"
+        playsinline
+        muted
+        autoplay
+        loop
+        src={settingsData.logoVideo}
+      >
+      </video>
+    </div>
     {
       data.teamArray != null && data.expertiseArray != null && (
         <Team
@@ -199,6 +210,24 @@ const isIndexPage = Astro.url.pathname == "/";
   .wrap-header {
     position: relative;
     z-index: 1;
+  }
+  .blend-wrapper .mobile-logo-video {
+    display: none;
+  }
+  .blend-wrapper-mobile {
+    display: none;
+    z-index: 999;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    mix-blend-mode: lighten;
+    -webkit-mix-blend-mode: lighten;
+    background-blend-mode: lighten;
+    user-select: none;
+    pointer-events: none;
+    aspect-ratio: 800/544;
+    max-width: 80vw;
   }
   .blend-wrapper {
     z-index: 999;
@@ -379,12 +408,20 @@ const isIndexPage = Astro.url.pathname == "/";
     display: none;
   }
   @media (max-width: 576px) {
-    .blend-wrapper {
-      position: relative;
-      display: inline-block;
-    }
     .canvas__wrapper {
-      height: 100vh;
+      height: 200vh;
+    }
+    .blur {
+      filter: blur(120px);
+      -webkit-filter: blur(120px);
+    }
+    .circle {
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(0);
+      width: 110vw;
+      height: 80vw;
+      border-radius: 100%;
     }
     .hero-projects-link {
       bottom: 1rem;
@@ -417,7 +454,16 @@ const isIndexPage = Astro.url.pathname == "/";
     }
     .about-bio {
       margin-top: 2rem;
-      margin-bottom: 14rem;
+      margin-bottom: 0rem;
+    }
+    .blend-wrapper {
+      display: none;
+    }
+    .blend-wrapper-mobile {
+      position: relative;
+      display: inline-block;
+      margin: 3rem auto;
+      margin-top: 2rem;
     }
   }
 </style>
