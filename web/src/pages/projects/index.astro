@@ -39,28 +39,19 @@ const data = allProjectData.projects;
                 class="project-video-media hover-area"
                 data-hover-text="View project"
                 preload="metadata"
-                loop="true"
-                muted="true"
+                autoplay
+                loop
+                muted
                 playsinline
               >
-                <source
-                  src={data.previewUrl}
-                  type="video/mp4"
-                  media="(min-width: 992px)"
-                />
-                {/* <source
-                src={data.previewUrl}
-                type="video/mp4"
-                media="(min-width: 992px)"
-              /> */}
-                <source
-                  src={
-                    data.previewUrlMobile
-                      ? data.previewUrlMobile
-                      : data.previewUrl
-                  }
-                  type="video/mp4"
-                />
+                {data.previewUrlMobile && (
+                  <source
+                    src={data.previewUrlMobile}
+                    type="video/mp4"
+                    media="(max-width: 992px)"
+                  />
+                )}
+                <source src={data.previewUrl} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <Image
@@ -175,10 +166,12 @@ const data = allProjectData.projects;
 
   .project-video-media {
     margin: 0 auto;
+    position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
     cursor: none;
+    border-radius: 20px;
   }
   .project-text {
     position: absolute;
@@ -229,6 +222,9 @@ const data = allProjectData.projects;
     .project-entry__double-column {
       border-radius: 6px;
       height: auto;
+    }
+    .project-video-media {
+      border-radius: 6px;
     }
   }
 </style>
