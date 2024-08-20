@@ -66,10 +66,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         data-has-full-length-video=`${video != null}`
       >
         <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
-        <source
-          src={previewUrlMobile || previewUrl}
-          type="video/mp4"
-        />
+        <source src={previewUrlMobile || previewUrl} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       {
@@ -299,7 +296,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   <Footer data={settingsData} />
 </Layout>
 
-<script>
+<script define:vars={{ previewUrl, previewUrlMobile }}>
   document.addEventListener("DOMContentLoaded", () => {
     const shortVideo = document.getElementById("shortVideo");
     const fullVideoExists = shortVideo.getAttribute(
@@ -326,6 +323,33 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     // Add resize listener to handle orientation changes
     window.addEventListener("resize", togglePlaysinline);
 
+    // Detect Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    // Function to set the correct video source
+    function updateVideoSource() {
+      if (isSafari) {
+        const isDesktop = window.innerWidth >= 992;
+        const source = document.createElement("source");
+        source.type = "video/mp4";
+        source.src = isDesktop ? previewUrl : previewUrlMobile || previewUrl;
+
+        // Remove existing sources
+        while (shortVideo.firstChild) {
+          shortVideo.removeChild(shortVideo.firstChild);
+        }
+
+        shortVideo.appendChild(source);
+        shortVideo.load();
+      }
+    }
+
+    // Call the function to set the initial source
+    updateVideoSource();
+
+    // Add resize listener to handle screen size changes
+    window.addEventListener("resize", updateVideoSource);
+
     if (fullVideoExists !== "false") {
       const fullVideo = document.getElementById("fullVideo");
       shortVideo.addEventListener("click", () => {
@@ -336,8 +360,8 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         // Start playing the full video
         fullVideo.play();
       });
-      const playBtn = document.querySelector(".wrap-mobile-play-btn");
 
+      const playBtn = document.querySelector(".wrap-mobile-play-btn");
       playBtn.addEventListener("click", () => {
         fullVideo.play();
       });
