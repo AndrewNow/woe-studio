@@ -66,13 +66,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         data-has-full-length-video=`${video != null}`
       >
         <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
-        {
-          previewUrlMobile ? (
-            <source src={previewUrlMobile} type="video/mp4" />
-          ) : (
-            <source src={previewUrl} type="video/mp4" />
-          )
-        }
+        <source
+          src={previewUrlMobile || previewUrl}
+          type="video/mp4"
+          media="(max-width: 991px)"
+        />
         Your browser does not support the video tag.
       </video>
       {

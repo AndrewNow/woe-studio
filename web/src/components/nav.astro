@@ -78,7 +78,7 @@ const pages = [
     <ul class="page-link__wrapper-mobile">
       {
         pages.map((page) => (
-          <li>
+          <li class="page-link-parent">
             <a
               href={`${page.route}`}
               class={`page-link link ${Astro.url.pathname == page.route && "page-active"}`}
@@ -311,10 +311,17 @@ const pages = [
         height: 100%;
       }
     }
-
+    .page-link__wrapper-mobile {
+      display: flex;
+      flex-direction: column;
+      row-gap: 1.5rem;
+    } 
+    .page-link-parent {
+      display: inline-flex;
+    }
     .page-link {
       font-size: 48px;
-      display: inline;
+      display: inline-block;
       font-family: "n27-light";
     }
   }
