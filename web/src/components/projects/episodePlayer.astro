@@ -94,14 +94,14 @@ import { Image } from "astro:assets";
   hoverAreaDiv.addEventListener("click", (event) => {
     event.preventDefault(); // Prevent default behavior
     if (video.paused) {
-      video.style.filter = "brightness(.5)"
+      video.style.filter = "brightness(.5)";
       video.focus();
       video.play().catch((error) => console.error("Play failed:", error));
       video.play();
     } else {
       video.pause();
     }
-    video.style.filter = "brightness(1)"
+    video.style.filter = "brightness(1)";
     video.setAttribute("controls", "controls");
     hoverAreaDiv.style.display = "none";
   });
@@ -175,6 +175,7 @@ import { Image } from "astro:assets";
     video.poster = selectedEpisode.thumbnail;
     video.load();
     video.focus();
+    video.play(c);
   });
 
   // logic for custom select (dropdown) element
@@ -437,7 +438,7 @@ import { Image } from "astro:assets";
     }
 
     .video-player {
-      margin-bottom: 5rem;
+      margin-bottom: 10rem;
       width: 100%;
       aspect-ratio: 16/10;
       height: auto;
