@@ -92,22 +92,27 @@ const nextProjectData = await getNextProject(currentProjectTitle);
               })
           }
         </div>
-        <div class="wrap-mobile-play-btn">
-          <div class="mobile-play-btn-invert"></div>
-          <div class="mobile-play-btn">
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 26 26"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 20.8783V3.73703C6 2.13964 7.78029 1.18686 9.1094 2.07294L21.9654 10.6436C23.1529 11.4352 23.1529 13.1802 21.9654 13.9718L9.1094 22.5425C7.78029 23.4285 6 22.4757 6 20.8783Z"
-                fill="#EFEDED"></path>
-            </svg>
-          </div>
-        </div>
+        {
+          video && (
+            <div class="wrap-mobile-play-btn">
+              <div class="mobile-play-btn-invert" />
+              <div class="mobile-play-btn">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 26 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 20.8783V3.73703C6 2.13964 7.78029 1.18686 9.1094 2.07294L21.9654 10.6436C23.1529 11.4352 23.1529 13.1802 21.9654 13.9718L9.1094 22.5425C7.78029 23.4285 6 22.4757 6 20.8783Z"
+                    fill="#EFEDED"
+                  />
+                </svg>
+              </div>
+            </div>
+          )
+        }
         <!-- <svg
           class="arrow-svg"
           viewBox="0 0 50 50"
@@ -331,6 +336,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         // Start playing the full video
         fullVideo.play();
       });
+      const playBtn = document.querySelector(".wrap-mobile-play-btn");
+
+      playBtn.addEventListener("click", () => {
+        fullVideo.play();
+      });
     }
   });
 </script>
@@ -364,9 +374,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
   .wrap-mobile-play-btn {
     position: relative;
     display: block;
+    margin-right: 0.5rem;
     width: 50px;
     height: 50px;
-    pointer-events: none;
     svg {
       width: 18px;
       height: 18px;
@@ -382,9 +392,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     width: 51px;
     height: 51px;
     border-radius: 100%;
-    }
-    .mobile-play-btn {
-    background: rgba(var(--rgb-white), .1);
+    pointer-events: none;
+  }
+  .mobile-play-btn {
+    pointer-events: none;
+    background: rgba(var(--rgb-white), 0.1);
     mix-blend-mode: exclusion;
     -webkit-mix-blend-mode: exclusion;
     display: none;

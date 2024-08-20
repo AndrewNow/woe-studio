@@ -63,16 +63,6 @@ export default class Cursor {
         this.ScaleCursor(this.Cursor.children[0], 0, false);
       });
 
-      // //Hover on a tag to expand to 1.2
-      // hoverItem.children[1].addEventListener("mouseenter", () => {
-      //   this.Cursor.classList.add("media-blend");
-      //   this.ScaleCursor(this.Cursor.children[0], 1.2);
-      // });
-      // // Bring scale back down .8
-      // hoverItem.children[1].addEventListener("mouseleave", () => {
-      //   this.Cursor.classList.remove("media-blend");
-      //   this.ScaleCursor(this.Cursor.children[0], 0.8);
-      // });
       const nextButton = document.querySelector('.embla__button--next');
       const prevButton = document.querySelector('.embla__button--prev');
 

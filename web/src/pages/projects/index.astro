@@ -44,14 +44,11 @@ const data = allProjectData.projects;
                 muted
                 playsinline
               >
-                {data.previewUrlMobile && (
-                  <source
-                    src={data.previewUrlMobile}
-                    type="video/mp4"
-                    media="(max-width: 992px)"
-                  />
-                )}
-                <source src={data.previewUrl} type="video/mp4" />
+                <source
+                  src={data.previewUrl}
+                  type="video/mp4"
+                  media="(min-width: 992px)"
+                />
                 Your browser does not support the video tag.
               </video>
               <Image
@@ -59,7 +56,7 @@ const data = allProjectData.projects;
                 alt=""
                 width={i % 5 === 0 ? 410 : 510}
                 height={i % 5 === 0 ? 234 : 297}
-                quality="90"
+                quality="75"
                 class="project-image-media__mobile"
               />
               <div class="project-text">
@@ -119,6 +116,8 @@ const data = allProjectData.projects;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    position: relative;
+    width: 100%;
   }
   /* 
   .project-entry {

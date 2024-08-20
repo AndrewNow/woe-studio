@@ -7,10 +7,9 @@ import { Image } from "astro:assets";
 
 <div class="video-player" id="episodePlayer">
   <div class="video-container">
+    {episodeData.length > 2 && <div class="hover-area" id="hoverAreaDiv" />}
     <video
-      class={episodeData.length < 2
-        ? "episode-video"
-        : "episode-video hover-area"}
+      class="episode-video"
       data-hover-text="Play video"
       id="episodeVideo"
       poster={episodeData[0].thumbnail}
@@ -84,6 +83,7 @@ import { Image } from "astro:assets";
   const title = document.getElementById("episodeTitle");
   const caret = document.getElementById("custom-select-caret");
   const episodeHeaderElements = document.querySelectorAll("#episodeHeader");
+  const hoverAreaDiv = document.getElementById("hoverAreaDiv");
 
   let isOpen = false;
   let lastMouseMoveTime = 0;
@@ -91,16 +91,19 @@ import { Image } from "astro:assets";
   let animationFrame;
   let isVideoPlaying = false;
 
-  video.addEventListener("click", (event) => {
+  hoverAreaDiv.addEventListener("click", (event) => {
     event.preventDefault(); // Prevent default behavior
     if (video.paused) {
+      video.style.filter = "brightness(.5)"
+      video.focus();
       video.play().catch((error) => console.error("Play failed:", error));
       video.play();
     } else {
       video.pause();
     }
+    video.style.filter = "brightness(1)"
     video.setAttribute("controls", "controls");
-    video.classList.remove("hover-area");
+    hoverAreaDiv.style.display = "none";
   });
 
   // Function to show headers
@@ -171,6 +174,7 @@ import { Image } from "astro:assets";
     video.src = selectedEpisode.episodeVideo;
     video.poster = selectedEpisode.thumbnail;
     video.load();
+    video.focus();
   });
 
   // logic for custom select (dropdown) element
@@ -227,6 +231,15 @@ import { Image } from "astro:assets";
 <style lang="scss">
   #episodeHeader {
     transition: 0.5s all ease;
+  }
+  #hoverAreaDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
   }
   .video-player {
     width: 100%;
@@ -355,8 +368,52 @@ import { Image } from "astro:assets";
   }
 
   @media (max-width: 992px) {
-    .video-player {
-      margin-bottom: 5rem;
+    #hoverAreaDiv {
+      height: 100%;
+    }
+    #hoverAreaDiv:after {
+      content: " ";
+      color: white;
+      display: block;
+      width: 50px;
+      height: 50px;
+      z-index: 10;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26' fill='none'%3E%3Cpath d='M6 20.8783V3.73703C6 2.13964 7.78029 1.18686 9.1094 2.07294L21.9654 10.6436C23.1529 11.4352 23.1529 13.1802 21.9654 13.9718L9.1094 22.5425C7.78029 23.4285 6 22.4757 6 20.8783Z' fill='%23EFEDED'/%3E%3C/svg%3E");
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 100%;
+      // backdrop-filter: blur(4px);
+      // -webkit-backdrop-filter: blur(4px);
+      // background: rgba(var(--rgb-white), 0.1);
+      // mix-blend-mode: exclusion;
+      // -webkit-mix-blend-mode: exclusion;
+    }
+    #hoverAreaDiv:before {
+      content: " ";
+      color: white;
+      display: block;
+      width: 50px;
+      height: 50px;
+      z-index: 9;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      background: rgba(var(--rgb-white), 0.1);
+      mix-blend-mode: exclusion;
+      -webkit-mix-blend-mode: exclusion;
+      border-radius: 100%;
+      border: 1px solid var(--white);
+    }
+    .episode-video {
+      filter: brightness(0.6);
     }
     .custom-select-display {
       width: 100%;
@@ -380,6 +437,7 @@ import { Image } from "astro:assets";
     }
 
     .video-player {
+      margin-bottom: 5rem;
       width: 100%;
       aspect-ratio: 16/10;
       height: auto;
