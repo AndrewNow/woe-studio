@@ -1,4 +1,4 @@
-import { animate } from 'motion'
+import { animate } from "motion";
 import { lerp, getMousePos } from "./utils";
 
 // Grab the mouse position and set it to mouse state
@@ -11,7 +11,7 @@ export default class Cursor {
     this.Cursor = el;
     this.Cursor.style.opacity = 0;
     this.hoverAreas = document.querySelectorAll(".hover-area");
-    this.cursorText = document.getElementById('cursor-text')
+    this.cursorText = document.getElementById("cursor-text");
     this.bounds = this.Cursor.getBoundingClientRect();
     this.cursorConfigs = {
       x: { previous: 0, current: 0, amt: 0.2 },
@@ -23,8 +23,8 @@ export default class Cursor {
 
       // Set cursor opacity to 1 when hovered on screen
       animate(this.Cursor, {
-        opacity: 1
-      })
+        opacity: 1,
+      });
       // Execute scale function
       this.onScaleMouse();
 
@@ -42,68 +42,71 @@ export default class Cursor {
     this.hoverAreas.forEach((hoverItem) => {
       // If I am hovering on the item for on page load I want to scale the cursor media
       if (hoverItem.matches(":hover")) {
-        this.setInnerText(hoverItem)
+        this.setInnerText(hoverItem);
         this.ScaleCursor(this.Cursor.children[0], 1, true);
       }
       //On mouse enter scale the media-cursor to .8
       hoverItem.addEventListener("mouseenter", () => {
         // re: episodePlayer, if the player is clicked, the hover-area class is removed to hide the cursor effect.
-        if (hoverItem.classList.contains('hover-area')) {
-          this.setInnerText(hoverItem)
+        if (hoverItem.classList.contains("hover-area")) {
+          this.setInnerText(hoverItem);
           this.ScaleCursor(this.Cursor.children[0], 1, true);
         } else {
           this.ScaleCursor(this.Cursor.children[0], 0, false);
         }
       });
-      hoverItem.addEventListener('mousedown', () => {
-        this.ScaleCursor(this.Cursor.children[0], .8, true);
-      })
+      hoverItem.addEventListener("mousedown", () => {
+        this.ScaleCursor(this.Cursor.children[0], 0.8, true);
+      });
       //On mouse enter scale the media-cursor to 0
       hoverItem.addEventListener("mouseleave", () => {
         this.ScaleCursor(this.Cursor.children[0], 0, false);
       });
 
-      const nextButton = document.querySelector('.embla__button--next');
-      const prevButton = document.querySelector('.embla__button--prev');
+      const nextButtons = document.querySelectorAll(".embla__button--next");
+      const prevButtons = document.querySelectorAll(".embla__button--prev");
 
-      if (nextButton) {
+      nextButtons.forEach((nextButton) => {
         nextButton.addEventListener("mouseenter", () => {
           this.setSvg();
           this.ScaleCursor(this.Cursor.children[0], 1, true);
         });
         nextButton.addEventListener("mouseleave", () => {
-          this.cursorText.innerHTML = ''; // Clear the SVG
+          this.cursorText.innerHTML = ""; // Clear the SVG
           this.ScaleCursor(this.Cursor.children[0], 0, false);
         });
-      }
+      });
 
-      if (prevButton) {
+      prevButtons.forEach((prevButton) => {
         prevButton.addEventListener("mouseenter", () => {
           this.setPrevSvg();
           this.ScaleCursor(this.Cursor.children[0], 1, true);
         });
         prevButton.addEventListener("mouseleave", () => {
-          this.cursorText.innerHTML = ''; // Clear the SVG
+          this.cursorText.innerHTML = ""; // Clear the SVG
           this.ScaleCursor(this.Cursor.children[0], 0, false);
         });
-      }
+      });
     });
   }
 
-
   ScaleCursor(el, amount, hideBrowserCursor) {
     document.body.style.cursor = hideBrowserCursor ? "none" : "";
-    animate(el, {
-      scale: amount
-    }, {
-      duration: .36
-    })
+    animate(
+      el,
+      {
+        scale: amount,
+      },
+      {
+        duration: 0.36,
+      }
+    );
   }
 
   setInnerText(el) {
-    let innerText = el.getAttribute('data-hover-text');
+    let innerText = el.getAttribute("data-hover-text");
     if (innerText) {
-      this.cursorText.innerText = innerText  
+      this.cursorText.innerText = innerText;
     }
   }
 
