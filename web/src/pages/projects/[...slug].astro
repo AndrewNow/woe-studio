@@ -347,8 +347,35 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     // Call the function to set the initial source
     updateVideoSource();
 
+    // Track the last window height to detect legitimate resize events
+    let lastWindowHeight = window.innerHeight;
+    let isScrolling = false;
+
+    // Function to handle the resize event
+    function handleResize() {
+      // Your resize handling logic here
+      updateVideoSource();
+    }
+
     // Add resize listener to handle screen size changes
-    window.addEventListener("resize", updateVideoSource);
+    window.addEventListener("resize", () => {
+      // Check if the height is different from the previous height
+      if (window.innerHeight !== lastWindowHeight) {
+        lastWindowHeight = window.innerHeight;
+
+        if (!isScrolling) {
+          handleResize();
+        }
+      }
+    });
+
+    // Detect scrolling and set the flag
+    window.addEventListener("scroll", () => {
+      isScrolling = true;
+      setTimeout(() => {
+        isScrolling = false;
+      }, 150); // Adjust the timeout as needed
+    });
 
     if (fullVideoExists !== "false") {
       const fullVideo = document.getElementById("fullVideo");
@@ -681,6 +708,11 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     }
     .item-small {
       font-size: 11px;
+    }
+    .main-video__mobile-title {
+      h1 {
+        width: 90%;
+      }
     }
   }
 </style>
