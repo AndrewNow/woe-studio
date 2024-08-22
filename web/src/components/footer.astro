@@ -48,6 +48,7 @@ const { data } = Astro.props;
               </div>
             )
           }
+          
           {
             data.tiktok && (
               <div class="footer-contact-item">
@@ -64,17 +65,19 @@ const { data } = Astro.props;
                     stroke="#EFEDED"
                   />
                 </svg>
+
                 <a
+                  href={data.tiktok}
                   class="link"
-                  href={data.tikok}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <h4>TikTok</h4>
+                  <h4>Tik Tok</h4>
                 </a>
               </div>
             )
           }
+          
         </div>
       </div>
       <div class="footer__flex">
