@@ -303,6 +303,9 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       "data-has-full-length-video"
     );
 
+    let lastWindowHeight = window.innerHeight;
+    let isScrolling = false;
+
     // Function to toggle playsinline attribute
     function togglePlaysinline() {
       const isMobile =
@@ -319,9 +322,6 @@ const nextProjectData = await getNextProject(currentProjectTitle);
 
     // Call the function to set initial state
     togglePlaysinline();
-
-    // Add resize listener to handle orientation changes
-    window.addEventListener("resize", togglePlaysinline);
 
     // Detect Safari
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -347,16 +347,6 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     // Call the function to set the initial source
     updateVideoSource();
 
-    // Track the last window height to detect legitimate resize events
-    let lastWindowHeight = window.innerHeight;
-    let isScrolling = false;
-
-    // Function to handle the resize event
-    function handleResize() {
-      // Your resize handling logic here
-      updateVideoSource();
-    }
-
     // Add resize listener to handle screen size changes
     window.addEventListener("resize", () => {
       // Check if the height is different from the previous height
@@ -364,7 +354,8 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         lastWindowHeight = window.innerHeight;
 
         if (!isScrolling) {
-          handleResize();
+          togglePlaysinline();
+          updateVideoSource();
         }
       }
     });
