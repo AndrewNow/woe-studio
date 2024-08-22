@@ -303,9 +303,6 @@ const nextProjectData = await getNextProject(currentProjectTitle);
       "data-has-full-length-video"
     );
 
-    let lastWindowHeight = window.innerHeight;
-    let isScrolling = false;
-
     // Function to toggle playsinline attribute
     function togglePlaysinline() {
       const isMobile =
@@ -323,24 +320,32 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     // Call the function to set initial state
     togglePlaysinline();
 
+    // Add resize listener to handle orientation changes
+    window.addEventListener("resize", togglePlaysinline);
+
     // Detect Safari
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
+    const windowWidth = window.innerWidth;
+
     // Function to set the correct video source
     function updateVideoSource() {
-      if (isSafari) {
-        const isDesktop = window.innerWidth >= 992;
-        const source = document.createElement("source");
-        source.type = "video/mp4";
-        source.src = isDesktop ? previewUrl : previewUrlMobile || previewUrl;
+      if (window.innerWidth != windowWidth) {
+        windowWidth = window.innerWidth;
+        if (isSafari) {
+          const isDesktop = window.innerWidth >= 992;
+          const source = document.createElement("source");
+          source.type = "video/mp4";
+          source.src = isDesktop ? previewUrl : previewUrlMobile || previewUrl;
 
-        // Remove existing sources
-        while (shortVideo.firstChild) {
-          shortVideo.removeChild(shortVideo.firstChild);
+          // Remove existing sources
+          while (shortVideo.firstChild) {
+            shortVideo.removeChild(shortVideo.firstChild);
+          }
+
+          shortVideo.appendChild(source);
+          shortVideo.load();
         }
-
-        shortVideo.appendChild(source);
-        shortVideo.load();
       }
     }
 
@@ -348,25 +353,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     updateVideoSource();
 
     // Add resize listener to handle screen size changes
-    window.addEventListener("resize", () => {
-      // Check if the height is different from the previous height
-      if (window.innerHeight !== lastWindowHeight) {
-        lastWindowHeight = window.innerHeight;
-
-        if (!isScrolling) {
-          togglePlaysinline();
-          updateVideoSource();
-        }
-      }
-    });
-
-    // Detect scrolling and set the flag
-    window.addEventListener("scroll", () => {
-      isScrolling = true;
-      setTimeout(() => {
-        isScrolling = false;
-      }, 150); // Adjust the timeout as needed
-    });
+    window.addEventListener("resize", updateVideoSource);
 
     if (fullVideoExists !== "false") {
       const fullVideo = document.getElementById("fullVideo");
