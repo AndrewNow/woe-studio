@@ -59,11 +59,7 @@ const data = allProjectData.projects;
                   muted
                   playsinline
                 >
-                  <source
-                    src={data.previewUrl}
-                    type="video/mp4"
-                    media="(min-width: 992px)"
-                  />
+                  <source data-src={data.previewUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -116,6 +112,24 @@ const data = allProjectData.projects;
         }
       });
     }
+    const lazyLoadVideo = (video) => {
+      const source = video.querySelector("source");
+      source.src = source.dataset.src;
+      video.load();
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          lazyLoadVideo(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    videos.forEach((video) => {
+      observer.observe(video);
+    });
     video.addEventListener("mouseenter", () => {
       video.play();
     });
