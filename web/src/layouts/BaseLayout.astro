@@ -23,7 +23,6 @@ const SEOdescription = description
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#ffc40d" />
-    <meta name="theme-color" content="#ffffff" />
     <link rel="icon" type="image/svg+xml" href="/woe-favicon.svg" />
     <meta name="theme-color" content="#000000" />
   </head>
@@ -186,6 +185,73 @@ const SEOdescription = description
     scale: 1;
   }
 
+  .footer-link {
+    position: relative;
+    color: var(--white);
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    // text-shadow: 0px 0px 2.3px #efeded;
+    overflow: hidden;
+    h4 {
+      padding-bottom: 5px;
+      transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+      opacity: 1;
+    }
+  }
+  .footer-link:after {
+    padding-bottom: 5px;
+    content: attr(data-content);
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--white);
+    font-size: 21px;
+    line-height: 135%;
+    letter-spacing: -0.03rem;
+    transform: translateY(100%);
+    transition: all 0.9s cubic-bezier(0.33, 1, 0.68, 1);
+    font-family: "n27-regular";
+    transform-origin: center;
+    opacity: 0;
+  }
+  .footer-link:hover {
+    &:after {
+      opacity: 1;
+      transform: translateY(0%);
+      transition: all 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    & h4 {
+      transform: translateY(-100%);
+      transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+      opacity: 0;
+    }
+    &:before {
+      transition-delay: 0.3s;
+      transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+  }
+  .footer-link:before {
+    text-shadow: 0px 0px 2.3px #efeded;
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    scale: 0;
+    transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+    transition-delay: 0.1s;
+    transform-origin: left;
+    border-bottom: 1px solid var(--white);
+  }
+
+  .footer-link:hover:before {
+    scale: 1;
+  }
+
   .corner {
     z-index: 10;
     position: absolute;
@@ -234,7 +300,13 @@ const SEOdescription = description
   #cursor-text.rotate-svg svg {
     transform: translate(-50%, -50%) rotate(180deg);
   }
-
+  @media (max-width: 1280px) {
+    .footer-link:after {
+      font-size: 20px;
+      line-height: 115%;
+      letter-spacing: -0.03rem;
+    }
+  }
   @media (max-width: 576px) {
     .corner {
       width: 20px;
@@ -244,6 +316,9 @@ const SEOdescription = description
     }
     .link {
       display: inline-block;
+    }
+    .footer-link:after {
+      font-size: 13px;
     }
   }
 </style>

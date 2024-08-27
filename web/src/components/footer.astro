@@ -14,7 +14,11 @@ const { data } = Astro.props;
             data.email && (
               <div class="footer-contact-email">
                 <h4>Work with WOE</h4>
-                <a href={`mailto:${data.email}`}>
+                <a
+                  href={`mailto:${data.email}`}
+                  class="footer-link email"
+                  data-content={data.email}
+                >
                   <h4>{data.email}</h4>
                 </a>
               </div>
@@ -39,10 +43,10 @@ const { data } = Astro.props;
 
                 <a
                   href={data.instagram}
-                  class="link"
+                  class="footer-link"
                   target="_blank"
                   rel="noreferrer"
-                  data-content={data.instagram}
+                  data-content="Instagram"
                 >
                   <h4>Instagram</h4>
                 </a>
@@ -69,10 +73,10 @@ const { data } = Astro.props;
 
                 <a
                   href={data.tiktok}
-                  class="link"
+                  class="footer-link"
                   target="_blank"
                   rel="noreferrer"
-                  data-content={data.tiktok}
+                  data-content="Tik Tok"
                 >
                   <h4>Tik Tok</h4>
                 </a>
@@ -147,7 +151,9 @@ const { data } = Astro.props;
     margin-bottom: 2rem;
     color: rgba(var(--rgb-white), 1);
     & a {
-      text-decoration: underline;
+      // text-decoration: underline;
+      display: inline-block;
+      margin-top: 0.25rem;
       color: rgba(var(--rgb-white), 0.5);
     }
   }
@@ -195,6 +201,7 @@ const { data } = Astro.props;
       height: 100%;
     }
   }
+
   @media (max-width: 992px) {
     .location {
       padding: 0;
@@ -234,7 +241,8 @@ const { data } = Astro.props;
     .footer-contact-item {
       /* justify-content: flex-end; */
       margin-bottom: 0.5;
-      width: 100px;
+      // width: 100px;
+      width: 140px;
       display: flex;
       justify-content: space-between;
       align-self: flex-end;
@@ -260,6 +268,9 @@ const { data } = Astro.props;
   @media (max-width: 576px) {
     .footer-contact {
       height: 120px;
+    }
+    .footer-contact-item {
+      width: 100px;
     }
   }
 </style>
