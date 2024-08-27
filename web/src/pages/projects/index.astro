@@ -47,10 +47,12 @@ const data = allProjectData.projects;
               href={`/projects/${data.slug}`}
             >
               <div class="loader" />
-              <div class="video-container">
+              <div
+                class="video-container hover-area"
+                data-hover-text="View project"
+              >
                 <video
-                  class="project-video-media hover-area"
-                  data-hover-text="View project"
+                  class="project-video-media"
                   preload="metadata"
                   autoplay
                   loop
@@ -151,6 +153,7 @@ const data = allProjectData.projects;
     height: 100%;
     border-radius: 20px;
     overflow: hidden;
+    cursor: none;
   }
 
   .loader {

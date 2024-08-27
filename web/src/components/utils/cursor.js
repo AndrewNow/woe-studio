@@ -63,6 +63,7 @@ export default class Cursor {
         this.ScaleCursor(this.Cursor.children[0], 0, false);
       });
 
+      // hover effect for carousel
       const nextButtons = document.querySelectorAll(".embla__button--next");
       const prevButtons = document.querySelectorAll(".embla__button--prev");
 
