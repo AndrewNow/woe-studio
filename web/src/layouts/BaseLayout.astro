@@ -267,6 +267,7 @@ const SEOdescription = description
     new Cursor(document.querySelector(".cursor-follower"));
   }
   function raf(time) {
+    if (!lenis) return;
     lenis.raf(time);
     requestAnimationFrame(raf);
   }

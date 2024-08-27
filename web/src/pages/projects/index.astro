@@ -46,12 +46,12 @@ const data = allProjectData.projects;
               style={{ color: "white" }}
               href={`/projects/${data.slug}`}
             >
+              <div class="loader" />
               <div class="video-container">
-                <div class="loader" />
                 <video
                   class="project-video-media hover-area"
                   data-hover-text="View project"
-                  preload="auto"
+                  preload="metadata"
                   autoplay
                   loop
                   muted
@@ -97,18 +97,23 @@ const data = allProjectData.projects;
 
 <script>
   const videos = document.querySelectorAll(".project-video-media");
+  const mobileImages = document.querySelectorAll(
+    ".project-image-media__mobile"
+  );
 
   videos.forEach((video) => {
-    video.load();
-    video.addEventListener("loadeddata", () => {
-      const loader = video.previousElementSibling;
-      if (loader && loader.classList.contains("loader")) {
-        loader.classList.add("fade-out");
-        loader.addEventListener("animationend", () => {
-          loader.style.display = "none";
-        });
-      }
-    });
+    // video.load();
+    if (window.innerWidth > 992) {
+      video.addEventListener("loadeddata", () => {
+        const loader = video.previousElementSibling;
+        if (loader && loader.classList.contains("loader")) {
+          loader.classList.add("fade-out");
+          loader.addEventListener("animationend", () => {
+            loader.style.display = "none";
+          });
+        }
+      });
+    }
     video.addEventListener("mouseenter", () => {
       video.play();
     });
@@ -116,6 +121,27 @@ const data = allProjectData.projects;
       video.pause();
     });
   });
+
+  // Apply loader for images on mobile
+  if (window.innerWidth <= 992) {
+    const images = document.querySelectorAll(".project-image-media__mobile");
+
+    images.forEach((image) => {
+      // Get the loader within the same parent container
+      const loader = image.parentNode.querySelector(".loader");
+
+      // Show the loader initially
+      loader.style.display = "block";
+
+      // Add event listener for image loading
+      image.addEventListener("load", () => {
+        loader.classList.add("fade-out"); // Trigger the fade-out animation
+        loader.addEventListener("animationend", () => {
+          loader.style.display = "none"; // Hide the loader after fade-out
+        });
+      });
+    });
+  }
 </script>
 
 <style lang="scss">
@@ -282,8 +308,12 @@ const data = allProjectData.projects;
   }
 
   @media (max-width: 992px) {
+    .video-container {
+      display: none;
+    }
     .project-image-media__mobile {
       display: block;
+      position: relative;
     }
     .project-video-media {
       display: none;
@@ -297,7 +327,7 @@ const data = allProjectData.projects;
     }
     .project-entry__double-column {
       border-radius: 6px;
-      height: auto;
+      height: 25vh;
     }
     .project-video-media {
       border-radius: 6px;
