@@ -63,6 +63,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
         muted
         loop
         playsinline
+        preload="auto"
         data-has-full-length-video=`${video != null}`
       >
         <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
