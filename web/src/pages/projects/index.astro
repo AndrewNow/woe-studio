@@ -113,6 +113,7 @@ const data = allProjectData.projects;
       const source = video.querySelector("source");
       source.src = source.dataset.src;
       video.load();
+      video.pause()
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
