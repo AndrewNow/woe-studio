@@ -54,7 +54,6 @@ const data = allProjectData.projects;
                 <video
                   class="project-video-media"
                   preload="metadata"
-                  autoplay
                   loop
                   muted
                   playsinline
@@ -113,7 +112,6 @@ const data = allProjectData.projects;
       const source = video.querySelector("source");
       source.src = source.dataset.src;
       video.load();
-      video.pause()
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
