@@ -42,13 +42,14 @@ const { data } = Astro.props;
                   class="link"
                   target="_blank"
                   rel="noreferrer"
+                  data-content={data.instagram}
                 >
                   <h4>Instagram</h4>
                 </a>
               </div>
             )
           }
-          
+
           {
             data.tiktok && (
               <div class="footer-contact-item">
@@ -71,13 +72,13 @@ const { data } = Astro.props;
                   class="link"
                   target="_blank"
                   rel="noreferrer"
+                  data-content={data.tiktok}
                 >
                   <h4>Tik Tok</h4>
                 </a>
               </div>
             )
           }
-          
         </div>
       </div>
       <div class="footer__flex">
