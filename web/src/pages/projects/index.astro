@@ -21,16 +21,15 @@ const data = allProjectData.projects;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
-
-  <!-- SVG symbol definition (moved outside the loop) -->
-  <svg style="display: none;">
+  <div class="lottie-container"></div>
+  <!-- <svg style="display: none;">
     <symbol id="video-placeholder" viewBox="0 0 24 24">
       <rect width="24" height="24" fill="#2c2c2c"></rect>
       <path
         d="M12 7c.55 0 1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3H8c-.55 0-1-.45-1-1s.45-1 1-1h3V8c0-.55.45-1 1-1zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
         fill="#ffffff"></path>
     </symbol>
-  </svg>
+  </svg> -->
 
   <div class="project-grid__container">
     <div class="project-entries-container">
@@ -46,7 +45,9 @@ const data = allProjectData.projects;
               style={{ color: "white" }}
               href={`/projects/${data.slug}`}
             >
-              <div class="loader" />
+              <div class="loader">
+                <div class="lottie-container" />
+              </div>
               <div
                 class="video-container hover-area"
                 data-hover-text="View project"
@@ -93,6 +94,20 @@ const data = allProjectData.projects;
 </Layout>
 
 <script>
+  import lottie from "lottie-web";
+
+  const animationContainers = document.querySelectorAll(".lottie-container");
+
+  animationContainers.forEach((container) => {
+    lottie.loadAnimation({
+      container: container,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "/lottie.json", // Replace with your Lottie JSON file path
+    });
+  });
+
   const videos = document.querySelectorAll(".project-video-media");
 
   videos.forEach((video) => {
@@ -157,6 +172,24 @@ const data = allProjectData.projects;
 </script>
 
 <style lang="scss">
+  .lottie-container {
+    width: 115px;
+    // height: 250px;
+    height: auto;
+    color: white;
+    // border: 1px solid red;
+    margin: 0 auto; /* This centers the container horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .lottie-container svg {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
   .video-container {
     position: relative;
     width: 100%;
