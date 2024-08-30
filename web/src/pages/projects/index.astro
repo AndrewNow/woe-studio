@@ -96,79 +96,106 @@ const data = allProjectData.projects;
 <script>
   import lottie from "lottie-web";
 
-  const animationContainers = document.querySelectorAll(".lottie-container");
+  const isMobile = window.innerWidth <= 992;
+  const projectEntries = document.querySelectorAll(".project-entry");
 
-  animationContainers.forEach((container) => {
-    lottie.loadAnimation({
-      container: container,
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: "/lottie.json", // Replace with your Lottie JSON file path
+  projectEntries.forEach((entry, index) => {
+    const video = entry.querySelector(".project-video-media");
+    const image = entry.querySelector(".project-image-media__mobile");
+    const loader = entry.querySelector(".loader");
+    const lottieContainer = entry.querySelector(".lottie-container");
+
+    console.log(`Entry ${index}:`, {
+      video: video ? "Found" : "Not found",
+      image: image ? "Found" : "Not found",
+      loader: loader ? "Found" : "Not found",
+      lottieContainer: lottieContainer ? "Found" : "Not found",
     });
-  });
 
-  const videos = document.querySelectorAll(".project-video-media");
-
-  videos.forEach((video) => {
-    // video.load();
-    if (window.innerWidth > 992) {
-      video.addEventListener("loadeddata", () => {
-        const loader = video.previousElementSibling;
-        if (loader && loader.classList.contains("loader")) {
-          loader.classList.add("fade-out");
-          loader.addEventListener("animationend", () => {
-            loader.style.display = "none";
-          });
-        }
-      });
+    if (!loader || !lottieContainer || (!video && !image)) {
+      console.error(`Missing elements in entry ${index}. Skipping.`);
+      return;
     }
-    const lazyLoadVideo = (video) => {
-      const source = video.querySelector("source");
-      source.src = source.dataset.src;
-      video.load();
+
+    let animation;
+    try {
+      animation = lottie.loadAnimation({
+        container: lottieContainer,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "/lottie.json",
+      });
+    } catch (error) {
+      console.error(
+        `Error loading Lottie animation for entry ${index}:`,
+        error
+      );
+    }
+
+    const hideLoader = () => {
+      loader.classList.add("fade-out");
+      loader.addEventListener(
+        "animationend",
+        () => {
+          loader.style.display = "none";
+          if (animation) {
+            animation.stop();
+          }
+        },
+        { once: true }
+      );
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          lazyLoadVideo(entry.target);
-          observer.unobserve(entry.target);
+    if (isMobile) {
+      // Mobile: Handle image loading
+      if (image) {
+        if (image.complete) {
+          hideLoader();
+        } else {
+          image.addEventListener("load", hideLoader, { once: true });
         }
-      });
-    });
+      }
+    } else {
+      // Desktop: Handle video loading
+      if (video) {
+        const lazyLoadVideo = () => {
+          const source = video.querySelector("source");
+          if (source && source.dataset.src) {
+            source.src = source.dataset.src;
+            video.load();
+          } else {
+            console.warn(
+              `Video source not found or missing data-src in entry ${index}`
+            );
+          }
+        };
 
-    videos.forEach((video) => {
-      observer.observe(video);
-    });
-    video.addEventListener("mouseenter", () => {
-      video.play();
-    });
-    video.addEventListener("mouseleave", () => {
-      video.pause();
-    });
-  });
-
-  // Apply loader for images on mobile
-  if (window.innerWidth <= 992) {
-    const images = document.querySelectorAll(".project-image-media__mobile");
-
-    images.forEach((image) => {
-      // Get the loader within the same parent container
-      const loader = image.parentNode.querySelector(".loader");
-
-      // Show the loader initially
-      loader.style.display = "block";
-
-      // Add event listener for image loading
-      image.addEventListener("load", () => {
-        loader.classList.add("fade-out"); // Trigger the fade-out animation
-        loader.addEventListener("animationend", () => {
-          loader.style.display = "none"; // Hide the loader after fade-out
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              lazyLoadVideo();
+              observer.unobserve(entry.target);
+            }
+          });
         });
-      });
-    });
-  }
+
+        observer.observe(video);
+
+        video.addEventListener(
+          "canplay",
+          () => {
+            console.log(`Video in entry ${index} can play. Hiding loader.`);
+            hideLoader();
+          },
+          { once: true }
+        );
+
+        video.addEventListener("mouseenter", () => video.play());
+        video.addEventListener("mouseleave", () => video.pause());
+      }
+    }
+  });
 </script>
 
 <style lang="scss">
@@ -189,6 +216,7 @@ const data = allProjectData.projects;
     position: absolute;
     width: 100%;
     height: 100%;
+    mix-blend-mode: difference;
   }
   .video-container {
     position: relative;
@@ -201,22 +229,27 @@ const data = allProjectData.projects;
 
   .loader {
     position: absolute;
-    z-index: 1;
-    height: 12px;
-    width: 60px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    --c: no-repeat linear-gradient(#fff 0 0);
-    background: var(--c), var(--c), var(--c), var(--c);
-    background-size: 26% 1px;
-    animation: l8 1s infinite;
+    z-index: 4;
+    // height: 12px;
+    // width: 60px;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    // --c: no-repeat linear-gradient(#fff 0 0);
+    // background: var(--c), var(--c), var(--c), var(--c);
+    // background-size: 26% 1px;
+    // animation: l8 1s infinite;
     opacity: 1;
-    transition: opacity 0.5s ease-out;
+    transition: opacity 0.35s ease-out;
   }
 
   .loader.fade-out {
-    animation: fadeOut 0.5s ease-out forwards;
+    animation: fadeOut 0.35s ease-out forwards;
   }
 
   @keyframes fadeOut {
@@ -228,38 +261,38 @@ const data = allProjectData.projects;
     }
   }
 
-  @keyframes l8 {
-    0%,
-    70%,
-    100% {
-      background-position:
-        calc(0 * 100% / 3) 50%,
-        calc(1 * 100% / 3) 50%,
-        calc(2 * 100% / 3) 50%,
-        calc(3 * 100% / 3) 50%;
-    }
-    23.33% {
-      background-position:
-        calc(0 * 100% / 3) 100%,
-        calc(1 * 100% / 3) 66%,
-        calc(2 * 100% / 3) 33%,
-        calc(3 * 100% / 3) 0;
-    }
-    46.67% {
-      background-position:
-        calc(3 * 100% / 3) 100%,
-        calc(2 * 100% / 3) 66%,
-        calc(1 * 100% / 3) 33%,
-        calc(0 * 100% / 3) 0;
-    }
-    69.99% {
-      background-position:
-        calc(3 * 100% / 3) 50%,
-        calc(2 * 100% / 3) 50%,
-        calc(1 * 100% / 3) 50%,
-        calc(0 * 100% / 3) 50%;
-    }
-  }
+  // @keyframes l8 {
+  //   0%,
+  //   70%,
+  //   100% {
+  //     background-position:
+  //       calc(0 * 100% / 3) 50%,
+  //       calc(1 * 100% / 3) 50%,
+  //       calc(2 * 100% / 3) 50%,
+  //       calc(3 * 100% / 3) 50%;
+  //   }
+  //   23.33% {
+  //     background-position:
+  //       calc(0 * 100% / 3) 100%,
+  //       calc(1 * 100% / 3) 66%,
+  //       calc(2 * 100% / 3) 33%,
+  //       calc(3 * 100% / 3) 0;
+  //   }
+  //   46.67% {
+  //     background-position:
+  //       calc(3 * 100% / 3) 100%,
+  //       calc(2 * 100% / 3) 66%,
+  //       calc(1 * 100% / 3) 33%,
+  //       calc(0 * 100% / 3) 0;
+  //   }
+  //   69.99% {
+  //     background-position:
+  //       calc(3 * 100% / 3) 50%,
+  //       calc(2 * 100% / 3) 50%,
+  //       calc(1 * 100% / 3) 50%,
+  //       calc(0 * 100% / 3) 50%;
+  //   }
+  // }
 
   .project-video-media {
     position: absolute;
@@ -377,6 +410,10 @@ const data = allProjectData.projects;
     }
     .project-video-media {
       border-radius: 6px;
+    }
+    .lottie-container {
+      width: 75px;
+      height: auto;
     }
   }
 </style>
