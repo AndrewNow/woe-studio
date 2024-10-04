@@ -21,24 +21,28 @@ const data = allProjectData.projects;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
-  <!-- <div class="lottie-container"></div> -->
-  <!-- <svg style="display: none;">
-    <symbol id="video-placeholder" viewBox="0 0 24 24">
-      <rect width="24" height="24" fill="#2c2c2c"></rect>
-      <path
-        d="M12 7c.55 0 1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3H8c-.55 0-1-.45-1-1s.45-1 1-1h3V8c0-.55.45-1 1-1zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-        fill="#ffffff"></path>
-    </symbol>
-  </svg> -->
-
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
         data.map((data, i) => {
-          const className =
-            i % 5 === 0
-              ? "project-entry__double-column"
-              : "project-entry__wrapper";
+          const mobileThumbnail = data.thumbnail;
+          const itemSpansTwoCols = i % 5 === 0;
+          const className = itemSpansTwoCols
+            ? "project-entry__double-column"
+            : "project-entry__wrapper";
+
+          const mobileImageSizes = {
+            width: itemSpansTwoCols ? 412 : 204,
+            height: itemSpansTwoCols ? 210 : 300,
+          };
+          const tabletImageSizes = {
+            width: itemSpansTwoCols ? 976 : 486,
+            height: itemSpansTwoCols ? 440 : 694,
+          };
+
+          const thumbnail = `${mobileThumbnail}?w=${mobileImageSizes.width * 2}&h=${mobileImageSizes.height * 2}&fit=crop&fm=webp`;
+          const tabletThumbnail = `${mobileThumbnail}?w=${tabletImageSizes.width}&h=${tabletImageSizes.height}&fit=crop&fm=webp`;
+
           return (
             <a
               class={`project-entry ${className}`}
@@ -63,13 +67,29 @@ const data = allProjectData.projects;
                   Your browser does not support the video tag.
                 </video>
               </div>
-              <Image
+              {/* <Image
                 src={data.thumbnail}
                 alt=""
-                width={i % 5 === 0 ? 410 : 510}
-                height={i % 5 === 0 ? 234 : 297}
-                quality="75"
+                width={itemSpansTwoCols ? 440 : 510}
+                height={itemSpansTwoCols ? 234 : 297}
+                quality="90"
                 class="project-image-media__mobile"
+              /> */}
+              <img
+                src={thumbnail}
+                alt=""
+                width={mobileImageSizes.width}
+                height={mobileImageSizes.height}
+                loading="lazy"
+                class="project-image-media__mobile hidden mobile-thumbnail"
+              />
+              <img
+                src={tabletThumbnail}
+                alt=""
+                width={tabletImageSizes.width}
+                height={tabletImageSizes.height}
+                loading="lazy"
+                class="project-image-media__tablet hidden tablet-thumbnail"
               />
               <div class="project-text">
                 <span class="project-titleset">
@@ -96,23 +116,29 @@ const data = allProjectData.projects;
 <script>
   import lottie from "lottie-web";
 
-  const isMobile = window.innerWidth <= 992;
+  const isMobile = window.innerWidth <= 576;
+  const isTablet = window.innerWidth > 576 && window.innerWidth <= 992;
   const projectEntries = document.querySelectorAll(".project-entry");
 
   projectEntries.forEach((entry, index) => {
     const video = entry.querySelector(".project-video-media");
-    const image = entry.querySelector(".project-image-media__mobile");
+    const mobileImage = entry.querySelector(".project-image-media__mobile");
+    const tabletImage = entry.querySelector(".project-image-media__tablet");
     const loader = entry.querySelector(".loader");
     const lottieContainer = entry.querySelector(".lottie-container");
 
-    console.log(`Entry ${index}:`, {
-      video: video ? "Found" : "Not found",
-      image: image ? "Found" : "Not found",
-      loader: loader ? "Found" : "Not found",
-      lottieContainer: lottieContainer ? "Found" : "Not found",
-    });
+    // console.log(`Entry ${index}:`, {
+    //   video: video ? "Found" : "Not found",
+    //   image: image ? "Found" : "Not found",
+    //   loader: loader ? "Found" : "Not found",
+    //   lottieContainer: lottieContainer ? "Found" : "Not found",
+    // });
 
-    if (!loader || !lottieContainer || (!video && !image)) {
+    if (
+      !loader ||
+      !lottieContainer ||
+      (!video && !mobileImage && !tabletImage)
+    ) {
       console.error(`Missing elements in entry ${index}. Skipping.`);
       return;
     }
@@ -148,14 +174,47 @@ const data = allProjectData.projects;
     };
 
     if (isMobile) {
-      // Mobile: Handle image loading
-      if (image) {
-        if (image.complete) {
+      // Mobile: Handle mobile image loading
+      if (mobileImage) {
+        mobileImage.classList.remove("hidden");
+        if (mobileImage.complete) {
+          mobileImage.classList.add("loaded");
           hideLoader();
         } else {
-          image.addEventListener("load", hideLoader, { once: true });
+          mobileImage.addEventListener(
+            "load",
+            () => {
+              mobileImage.classList.add("loaded");
+              hideLoader();
+            },
+            { once: true }
+          );
         }
       }
+      // Hide video and tablet image for mobile
+      if (video) video.style.display = "none";
+      if (tabletImage) tabletImage.classList.add("hidden");
+    } else if (isTablet) {
+      // Tablet: Handle tablet image loading
+      if (tabletImage) {
+        tabletImage.classList.remove("hidden");
+        if (tabletImage.complete) {
+          tabletImage.classList.add("loaded");
+          hideLoader();
+        } else {
+          tabletImage.addEventListener(
+            "load",
+            () => {
+              tabletImage.classList.add("loaded");
+              hideLoader();
+            },
+            { once: true }
+          );
+        }
+      }
+      // Hide video and mobile image for tablet
+      if (video) video.style.display = "none";
+      if (mobileImage) mobileImage.classList.add("hidden");
     } else {
       // Desktop: Handle video loading
       if (video) {
@@ -194,6 +253,10 @@ const data = allProjectData.projects;
         video.addEventListener("mouseenter", () => video.play());
         video.addEventListener("mouseleave", () => video.pause());
       }
+
+      // Hide mobile and tablet images for desktop
+      if (mobileImage) mobileImage.classList.add("hidden");
+      if (tabletImage) tabletImage.classList.add("hidden");
     }
   });
 </script>
@@ -293,6 +356,13 @@ const data = allProjectData.projects;
   //       calc(0 * 100% / 3) 50%;
   //   }
   // }
+  .mobile-thumbnail {
+    display: none;
+  }
+
+  .tablet-thumbnail {
+    display: none;
+  }
 
   .project-video-media {
     position: absolute;
@@ -379,14 +449,30 @@ const data = allProjectData.projects;
     }
   }
 
-  .project-image-media__mobile {
+  .project-image-media__mobile,
+  .project-image-media__tablet {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .project-image-media__mobile.loaded,
+  .project-image-media__tablet.loaded {
+    opacity: 1;
+  }
+
+  .project-image-media__mobile.hidden,
+  .project-image-media__tablet.hidden {
+    display: none;
   }
 
   @media (max-width: 992px) {
+    .project-image-media__tablet {
+      display: block;
+    }
     .video-container {
       display: none;
     }
@@ -406,14 +492,29 @@ const data = allProjectData.projects;
     }
     .project-entry__double-column {
       border-radius: 6px;
-      height: 25vh;
+      height: 440px;
     }
+
     .project-video-media {
       border-radius: 6px;
     }
     .lottie-container {
       width: 75px;
       height: auto;
+    }
+  }
+  @media (max-width: 576px) {
+    .project-image-media__mobile {
+      display: block;
+    }
+    .project-image-media__tablet {
+      display: none;
+    }
+    .project-entry__wrapper {
+      height: 300px;
+    }
+    .project-entry__double-column {
+      height: 210px;
     }
   }
 </style>

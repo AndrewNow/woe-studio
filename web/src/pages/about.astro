@@ -44,11 +44,7 @@ const isIndexPage = Astro.url.pathname == "/";
                   sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                   width="553"
                   height="287"
-                  alt={
-                    img.alt != null
-                      ? img.alt
-                      : "No descriptive text was entered for this image, sorry!"
-                  }
+                  alt={img.alt != null ? img.alt : ""}
                 />
               );
             })
@@ -65,11 +61,7 @@ const isIndexPage = Astro.url.pathname == "/";
                   sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                   width="553"
                   height="287"
-                  alt={
-                    img.alt != null
-                      ? img.alt
-                      : "No descriptive text was entered for this image, sorry!"
-                  }
+                  alt={img.alt != null ? img.alt : ""}
                 />
               );
             })
@@ -86,11 +78,7 @@ const isIndexPage = Astro.url.pathname == "/";
                   sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                   width="553"
                   height="287"
-                  alt={
-                    img.alt != null
-                      ? img.alt
-                      : "No descriptive text was entered for this image, sorry!"
-                  }
+                  alt={img.alt != null ? img.alt : ""}
                 />
               );
             })
@@ -107,11 +95,7 @@ const isIndexPage = Astro.url.pathname == "/";
                   sizes={`(max-width: 525px) 300px, (max-width: 768px) 430px, 553px`}
                   width="553"
                   height="287"
-                  alt={
-                    img.alt != null
-                      ? img.alt
-                      : "No descriptive text was entered for this image, sorry!"
-                  }
+                  alt={img.alt != null ? img.alt : ""}
                 />
               );
             })
@@ -129,9 +113,7 @@ const isIndexPage = Astro.url.pathname == "/";
         muted
         autoplay
         loop
-        src={settingsData.logoVideo}
-      >
-      </video>
+        src={settingsData.logoVideo}></video>
     </div>
     {
       data.teamArray != null && data.expertiseArray != null && (
@@ -143,24 +125,29 @@ const isIndexPage = Astro.url.pathname == "/";
         />
       )
     }
-    <div class="blend-wrapper">
-      <video
-        class="blend-video"
-        playsinline
-        muted
-        autoplay
-        loop
-        src={settingsData.logoVideo}
-      >
-      </video>
-    </div>
+    {
+      data.teamArray != null && (
+        <div class="blend-wrapper">
+          <video
+            class="blend-video"
+            playsinline
+            muted
+            autoplay
+            loop
+            src={settingsData.logoVideo}
+          />
+        </div>
+      )
+    }
   </div>
-
   {
     data.clientLogoImageArray != null && (
-      <Marquee logoData={data.clientLogoImageArray} />
+      <>
+        <Marquee logoData={data.clientLogoImageArray} />
+      </>
     )
   }
+  {!data.teamArray && <div class="spacer" />}
   <div class="sticky__container">
     <div class="sticky-gradient"></div>
     <div class="about-video__container">
@@ -207,6 +194,9 @@ const isIndexPage = Astro.url.pathname == "/";
 </Layout>
 
 <style lang="scss">
+  .spacer {
+    height: 10vh;
+  }
   .wrap-header {
     position: relative;
     z-index: 1;
@@ -287,6 +277,9 @@ const isIndexPage = Astro.url.pathname == "/";
     width: var(--inner-width);
     margin: 8rem auto;
     color: white;
+    opacity: 0;
+    max-width: 1300px;
+    transform: translateY(30px);
   }
   .canvas__wrapper {
     overflow: hidden;
@@ -408,6 +401,9 @@ const isIndexPage = Astro.url.pathname == "/";
     display: none;
   }
   @media (max-width: 576px) {
+    .spacer {
+      display: none;
+    }
     .canvas__wrapper {
       height: 200vh;
     }
@@ -482,6 +478,14 @@ const isIndexPage = Astro.url.pathname == "/";
   const col1 = document.getElementById("about-col1");
   const col2 = document.getElementById("about-col2");
   const col3 = document.getElementById("about-col3");
+
+  const bio = document.querySelector(".about-bio");
+
+  animate(
+    bio,
+    { opacity: 0.9, transform: "translateY(0px)" },
+    { duration: 1.5, delay: 0.9, easing: "ease-in-out" }
+  );
 
   if (window.innerWidth > 576) {
     animate(

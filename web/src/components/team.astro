@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import teamSample from "../assets/team-sample.png";
 const { data, expertiseData, logoVideo, email } = Astro.props;
 ---
 
@@ -19,10 +18,10 @@ const { data, expertiseData, logoVideo, email } = Astro.props;
             <div class="member-image__wrapper">
               <Image
                 class="member-image"
-                src={teamSample}
+                src={member.portrait}
                 width="270"
                 height="130"
-                quality="85"
+                quality="100"
                 alt={`Portrait image of ${member.name}`}
               />
             </div>
