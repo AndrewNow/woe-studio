@@ -304,15 +304,10 @@ const timerWrapperClass = isIndexPage
         startTimer();
       } else {
         // If it's the user's first visit and there's a loader, wait for the loader to finish
-        const loaderVideo = document.getElementById("loaderVideo");
-        loaderVideo.addEventListener(
-          "ended",
-          () => {
-            // Start the timer when the loader video ends
-            startTimer();
-          },
-          { once: true }
-        );
+        setTimeout(() => {
+          // Start the timer when the loader video ends
+          startTimer();
+        }, 3400); // make sure this matches the duration of the loader video on index.astro
       }
     } else {
       // If not on homepage, start the timer immediately
