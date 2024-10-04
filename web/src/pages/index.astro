@@ -15,25 +15,7 @@ const settingsData = await getSiteSettings();
   description="WOE (What On Earth) | Innovative Creative Studio Specializing in Video Production. We push the boundaries of conventional taste to deliver powerful, impactful visuals."
 >
   <div class="landing-loader" id="loaderWrapper">
-    <video
-      class="landing-loader-video"
-      id="loaderVideo"
-      preload="auto"
-      autoplay
-      muted="true"
-      playsinline
-    >
-      <source
-        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4"
-        type="video/mp4"
-        media="(min-width: 992px)"
-      />
-      <source
-        src="https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4"
-        type="video/mp4"
-      />
-      Your browser does not support the video tag.
-    </video>
+    <div class="lottie-container"></div>
   </div>
   <Hero data={previewData.projects} />
 </HomepageLayout>
@@ -41,6 +23,19 @@ const settingsData = await getSiteSettings();
 <style lang="scss">
   .hero {
     color: white;
+  }
+  .lottie-container {
+    width: 115px;
+    // height: 250px;
+    height: auto;
+    color: white;
+    // border: 1px solid red;
+    margin: 0 auto; /* This centers the container horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: opacity 0.5s ease;
   }
   .landing-loader {
     position: absolute;
@@ -50,6 +45,9 @@ const settingsData = await getSiteSettings();
     width: 100%;
     height: 100svh;
     overflow: hidden;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
   }
   .landing-loader-video {
     height: 100%;
@@ -58,24 +56,56 @@ const settingsData = await getSiteSettings();
     opacity: 0;
     transition: all 0.25s ease;
   }
+  .lottie-container.fade-out {
+    animation: fadeOut 0.55s ease-in-out forwards;
+  }
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
 </style>
 <script>
   import { animate } from "motion";
-  const loaderVideo = document.getElementById("loaderVideo");
+  import lottie from "lottie-web";
+  const lottieContainer = document.querySelector(".lottie-container");
   const loaderWrapper = document.getElementById("loaderWrapper");
   const videoContainer = document.getElementById("hero-video-container");
   const timerItems = document.getElementById("animateTimerIn");
   const userHasVisited = sessionStorage.getItem("visited");
   const navWrapper = document.querySelector(".wrap-homepage-nav");
 
-  const screenWidth = window.innerWidth;
+  let animation;
 
-  if (screenWidth >= 992) {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Intro+Animation+-+Early+fade.mp4";
-  } else {
-    loaderVideo.src =
-      "https://woe-branding-assets.s3.us-east-2.amazonaws.com/W+Particle+-+Landing+Page+Mobile.mp4";
+  const hideLoader = () => {
+    lottieContainer.classList.add("fade-out");
+    lottieContainer.addEventListener(
+      "animationend",
+      () => {
+        lottieContainer.style.display = "none";
+        if (animation) {
+          animation.stop();
+        }
+      },
+      { once: true }
+    );
+  };
+
+  try {
+    animation = lottie.loadAnimation({
+      container: lottieContainer,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "/lottie.json",
+    });
+  } catch (error) {
+    console.error(`Error loading Lottie animation`);
   }
 
   // if user has been on this page before, don't display the loader and animate hero as usual
@@ -112,15 +142,14 @@ const settingsData = await getSiteSettings();
     );
   } else {
     // else show the loader and wait for the video to end
-    loaderVideo.style.opacity = "1";
-    loaderVideo.addEventListener("ended", handleVideoEnd, false);
+    lottieContainer.style.opacity = "1";
+    handleAnimationComplete();
   }
 
-  function handleVideoEnd() {
-    animate(loaderVideo, {
-      opacity: 0,
-    }).finished.then(() => {
-      loaderWrapper.style.display = "none";
+  function handleAnimationComplete() {
+    sessionStorage.setItem("visited", "true");
+    setTimeout(() => {
+      hideLoader();
       animate(
         navWrapper,
         {
@@ -137,9 +166,9 @@ const settingsData = await getSiteSettings();
         },
         {
           duration: 1.6,
-          easing: [0.85, 0, 0.15, 1],
+          easing: [0.9, 0.1, 0.2, 1],
         }
-      );
+      ).finished.then(() => (loaderWrapper.style.display = "none"));
       animate(
         timerItems,
         {
@@ -150,8 +179,6 @@ const settingsData = await getSiteSettings();
           duration: 1.6,
         }
       );
-    });
-
-    sessionStorage.setItem("visited", "true");
+    }, 3400);
   }
 </script>
