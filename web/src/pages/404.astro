@@ -48,7 +48,7 @@ const settingsData = await getSiteSettings();
 <style lang="scss">
   .wrapper {
     width: 100vw;
-    height: 100vh;
+    height: 100svh;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -142,6 +142,14 @@ const settingsData = await getSiteSettings();
       moveGradient3 6s linear infinite alternate;
   }
 
+  @media (max-width: 768px) {
+    .cursor-mask {
+      display: none;
+    }
+    .title {
+      letter-spacing: -0.25rem;
+    }
+  }
   @keyframes moveGradient1 {
     0% {
       background-position:
