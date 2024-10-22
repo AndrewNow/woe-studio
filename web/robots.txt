@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /trnorth
+Disallow: /hudson
+Disallow: /yeticopy
+Disallow: /jayde
+Disallow: /tmlflipside
+Disallow: /migraine
+Disallow: /sylobento
