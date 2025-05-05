@@ -7,14 +7,14 @@ import { Image } from "astro:assets";
 
 <div class="video-player" id="episodePlayer">
   <div class="video-container">
-    {episodeData.length > 2 && <div class="hover-area" id="hoverAreaDiv" />}
+    {episodeData.length >= 2 && <div class="hover-area" id="hoverAreaDiv" />}
     <video
       class="episode-video"
       data-hover-text="Play video"
       id="episodeVideo"
       poster={episodeData[0].thumbnail}
-      autoplay={episodeData.length < 2}
-      muted={episodeData.length < 2}
+      autoplay={episodeData.length >= 2}
+      muted={episodeData.length >= 2}
     >
       <source src={episodeData[0].episodeVideo} type="video/mp4" />
     </video>
