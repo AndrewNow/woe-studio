@@ -1,0 +1,697 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {
+  getProjectPageData,
+  getNextProject,
+  getSiteSettings,
+} from "../../sanity/api";
+import PortableText from "../../components/utils/portableText.astro";
+import { Image } from "astro:assets";
+import EpisodePlayer from "../../components/projects/episodePlayer.astro";
+import ProjectMedia from "../../components/projects/projectMedia.astro";
+import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
+import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
+import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
+import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
+import Footer from "../../components/footer.astro";
+import NextProject from "../../components/projects/nextProject.astro";
+import PageTransition from "../../components/pageTransition.astro";
+
+const pages = await getProjectPageData();
+const settingsData = await getSiteSettings();
+
+const { slug } = Astro.params;
+const page = pages.find((page) => page.slug === slug);
+if (!page) return Astro.redirect("/404");
+
+const {
+  title,
+  awardArray,
+  awardImageArray,
+  clientArray,
+  creditsArray,
+  servicesArray,
+  description,
+  secondaryDescription,
+  thumbnail,
+  previewUrl,
+  previewUrlMobile,
+  video,
+  episodeArray,
+  mediaArray,
+} = page;
+
+const currentProjectTitle = title;
+const nextProjectData = await getNextProject(currentProjectTitle);
+
+// if (nextProjectData) {
+//   console.log("Next project data:", nextProjectData);
+// } else {
+//   console.log("No next project found.");
+// }
+---
+
+<Layout data={settingsData}>
+  <PageTransition />
+  <article class="page__wrapper">
+    <section class="main-video__wrapper">
+      <video
+        class=`main-video ${video && 'hover-area'}`
+        data-hover-text="Play video"
+        id="shortVideo"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        data-has-full-length-video=`${video != null}`
+      >
+        <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
+        <source src={previewUrlMobile || previewUrl} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      {
+        video && (
+          <video class="main-video" id="fullVideo" controls>
+            <source src={video} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )
+      }
+      <div class="main-video__mobile-title-wrapper">
+        <div class="main-video__mobile-title">
+          <h1>
+            {title}
+          </h1>
+          {
+            clientArray != null &&
+              clientArray.reverse().map((client) => {
+                return <small>{client}</small>;
+              })
+          }
+        </div>
+        {
+          video && (
+            <div class="wrap-mobile-play-btn">
+              <div class="mobile-play-btn-invert" />
+              <div class="mobile-play-btn">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 26 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 20.8783V3.73703C6 2.13964 7.78029 1.18686 9.1094 2.07294L21.9654 10.6436C23.1529 11.4352 23.1529 13.1802 21.9654 13.9718L9.1094 22.5425C7.78029 23.4285 6 22.4757 6 20.8783Z"
+                    fill="#EFEDED"
+                  />
+                </svg>
+              </div>
+            </div>
+          )
+        }
+        <!-- <svg
+          class="arrow-svg"
+          viewBox="0 0 50 50"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="25" cy="25" r="24" stroke="#EFEDED"></circle>
+          <path
+            d="M25 20V30.3333M25 30.3333L21 26.3333M25 30.3333L29 26.3333"
+            stroke="#EFEDED"></path>
+        </svg> -->
+      </div>
+    </section>
+    <section class="project-details__wrapper">
+      <div class="project-details__flex">
+        <div class="project-details-left">
+          <div>
+            <h1>{title}</h1>
+            {
+              clientArray != null && (
+                <div class="project-details-item clients-item">
+                  <p class="item-title item-small">
+                    {clientArray.length > 1 ? "Clients" : "Client"}
+                  </p>
+                  {clientArray.reverse().map((client) => {
+                    return <p class="item-small">{client}</p>;
+                  })}
+                </div>
+              )
+            }
+          </div>
+          <div class="project-details-left-bottom">
+            {
+              awardArray != null && (
+                <>
+                  <p class="item-title item-small">
+                    Awards & Recognitions
+                    {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
+                  </p>
+                  <div class="project-details-item item-two-col">
+                    {awardArray.map((award) => {
+                      return <p class="item-small">{award}</p>;
+                    })}
+                  </div>
+                </>
+              )
+            }
+            {
+              awardImageArray != null && (
+                <div class="project-details-awards-images">
+                  {awardImageArray.map((award) => {
+                    return (
+                      <Image
+                        quality={25}
+                        inferSize
+                        src={award.imageSrc}
+                        alt="Image of an award badge"
+                        class="award-image"
+                      />
+                    );
+                  })}
+                </div>
+              )
+            }
+          </div>
+        </div>
+        <div class="project-details-right">
+          {
+            description != null && (
+              <div class="project-details-overview">
+                <h5>Project Overview</h5>
+                <p class="project-details-overview-text">
+                  <PortableText data={description} />
+                </p>
+              </div>
+            )
+          }
+          <div class="project-details-credits">
+            {
+              servicesArray != null && (
+                <div class="project-details-item">
+                  <p class="item-title item-small">Services</p>
+                  {servicesArray.map((service) => {
+                    return <p class="item-small">{service}</p>;
+                  })}
+                </div>
+              )
+            }
+            {
+              creditsArray != null && (
+                <div class="project-details-item">
+                  <p class="item-title item-small">Credits</p>
+                  {creditsArray.map((credit) => {
+                    return <p class="item-small">{credit}</p>;
+                  })}
+                </div>
+              )
+            }
+          </div>
+          <div class="project-details-mobile-awards">
+            {
+              awardArray != null && (
+                <div class="project-details-mobile-awards-wrapper">
+                  <p class="item-title item-small">
+                    Awards & Recognitions
+                    {/* {awardArray.length > 1 ? "Awards" : "Awards"} */}
+                  </p>
+                  <div class="project-details-item item-two-col">
+                    {awardArray.map((award) => {
+                      return <p class="item-small">{award}</p>;
+                    })}
+                  </div>
+                </div>
+              )
+            }
+            {
+              awardImageArray != null && (
+                <div class="project-details-awards-images">
+                  {awardImageArray.map((award) => {
+                    return (
+                      <Image
+                        quality={25}
+                        inferSize
+                        src={award.imageSrc}
+                        alt="Image of an award badge"
+                        class="award-image"
+                      />
+                    );
+                  })}
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+    {
+      episodeArray != null && (
+        <section class="episode__wrapper">
+          <EpisodePlayer episodeData={episodeArray} />
+        </section>
+      )
+    }
+    {
+      secondaryDescription != null && (
+        <section class="project-overview__wrapper">
+          <div class="project-overview-text">
+            <PortableText data={secondaryDescription} />
+          </div>
+        </section>
+      )
+    }
+    {
+      mediaArray !== null && (
+        <section class="project-media__wrapper">
+          <CornerTopLeft />
+          <CornerTopRight />
+          <CornerBottomLeft />
+          <CornerBottomRight />
+          <ProjectMedia mediaArray={mediaArray} />
+        </section>
+      )
+    }
+    <div class="woe-monogram__wrapper">
+      <video
+        class="blend-video"
+        playsinline
+        muted
+        autoplay
+        loop
+        src={settingsData.logoVideo}
+      >
+      </video>
+    </div>
+    {
+      nextProjectData !== null && (
+        <section class="next-project">
+          <NextProject nextProjectData={nextProjectData} />
+        </section>
+      )
+    }
+  </article>
+
+  <Footer data={settingsData} />
+</Layout>
+
+<script define:vars={{ previewUrl, previewUrlMobile }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const shortVideo = document.getElementById("shortVideo");
+    const fullVideoExists = shortVideo.getAttribute(
+      "data-has-full-length-video"
+    );
+
+    // Function to toggle playsinline attribute
+    function togglePlaysinline() {
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+
+      if (isMobile) {
+        shortVideo.setAttribute("playsinline", "");
+      } else {
+        shortVideo.removeAttribute("playsinline");
+      }
+    }
+
+    // Call the function to set initial state
+    togglePlaysinline();
+
+    // Add resize listener to handle orientation changes
+    window.addEventListener("resize", togglePlaysinline);
+
+    // Detect Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    const windowWidth = window.innerWidth;
+
+    // Function to set the correct video source
+    function updateVideoSource() {
+      if (window.innerWidth != windowWidth) {
+        windowWidth = window.innerWidth;
+        if (isSafari) {
+          const isDesktop = window.innerWidth >= 992;
+          const source = document.createElement("source");
+          source.type = "video/mp4";
+          source.src = isDesktop ? previewUrl : previewUrlMobile || previewUrl;
+
+          // Remove existing sources
+          while (shortVideo.firstChild) {
+            shortVideo.removeChild(shortVideo.firstChild);
+          }
+
+          shortVideo.appendChild(source);
+          shortVideo.load();
+        }
+      }
+    }
+
+    // Call the function to set the initial source
+    updateVideoSource();
+
+    // Add resize listener to handle screen size changes
+    window.addEventListener("resize", updateVideoSource);
+
+    if (fullVideoExists !== "false") {
+      const fullVideo = document.getElementById("fullVideo");
+      shortVideo.addEventListener("click", () => {
+        // Hide the short video
+        shortVideo.style.display = "none";
+        // Show the full video
+        fullVideo.style.display = "block";
+        // Start playing the full video
+        fullVideo.play();
+      });
+
+      const playBtn = document.querySelector(".wrap-mobile-play-btn");
+      playBtn.addEventListener("click", () => {
+        fullVideo.play();
+      });
+    }
+  });
+</script>
+
+<style lang="scss">
+  .page__wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .woe-monogram__wrapper {
+    width: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .blend-video {
+    z-index: 0;
+    position: relative;
+    mix-blend-mode: lighten;
+    -webkit-mix-blend-mode: lighten;
+    user-select: none;
+    pointer-events: none;
+    aspect-ratio: 800/544;
+    max-width: 80vw;
+    margin: 0 auto;
+  }
+  .main-video__wrapper {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+  }
+  .wrap-mobile-play-btn {
+    position: relative;
+    display: block;
+    margin-right: 0.5rem;
+    width: 50px;
+    height: 50px;
+    svg {
+      width: 18px;
+      height: 18px;
+      z-index: 1;
+    }
+  }
+  .mobile-play-btn-invert {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 51px;
+    height: 51px;
+    border-radius: 100%;
+    pointer-events: none;
+  }
+  .mobile-play-btn {
+    pointer-events: none;
+    background: rgba(var(--rgb-white), 0.1);
+    mix-blend-mode: exclusion;
+    -webkit-mix-blend-mode: exclusion;
+    display: none;
+    border-radius: 100%;
+    overflow: hidden;
+    border: 1px solid var(--white);
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .main-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #fullVideo {
+    display: none;
+  }
+
+  .project-details__wrapper {
+    position: relative;
+    width: var(--inner-width);
+    color: var(--white);
+    margin: 4rem auto;
+  }
+  .project-details__flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  .project-details-left {
+    flex: 2;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    h1 {
+      max-width: 60%;
+    }
+  }
+
+  .project-details-left-bottom {
+    margin-top: 4rem;
+    position: relative;
+    width: 80%;
+  }
+
+  .item-two-col {
+    column-count: 2;
+    column-gap: 1.5rem;
+    width: 500px;
+  }
+
+  .project-details-awards-images {
+    margin-top: 2rem;
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(100px, auto)); */
+    grid-template-columns: repeat(4, min-content);
+    gap: 2rem;
+    opacity: 0.5;
+    width: 100%;
+    max-width: 950px;
+    position: relative;
+  }
+  .award-image {
+    height: 100px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+  }
+
+  .project-details-right {
+    color: var(--white);
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+  }
+  .project-details-overview {
+    width: 100%;
+    position: relative;
+    & h5 {
+      margin-bottom: 2rem;
+    }
+  }
+  .project-details-credits {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .project-details-item {
+    color: rgba(var(--rgb-white), 0.5);
+  }
+  .clients-item {
+    margin-top: 2rem;
+  }
+  .item-title {
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  .episode__wrapper {
+    position: relative;
+    width: 100%;
+  }
+  .project-overview__wrapper {
+    color: var(--white);
+    width: var(--inner-width);
+    margin: 4rem auto;
+  }
+  .project-overview-text {
+    margin-top: 2rem;
+    column-count: 3;
+    column-gap: 1.5rem;
+    width: 100%;
+  }
+  .project-media__wrapper {
+    position: relative;
+    width: calc(100% - 1rem * 2);
+    margin: 1rem;
+  }
+  .next-project {
+    position: relative;
+  }
+  .main-video__mobile-title-wrapper {
+    display: none;
+    width: calc(100% - 2rem);
+    justify-content: space-between;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--white);
+  }
+  .arrow-svg {
+    min-width: 50px;
+    height: 50px;
+  }
+  .main-video__mobile-title {
+    display: flex;
+    flex-direction: column-reverse;
+    h1 {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .project-details-mobile-awards {
+    display: none;
+  }
+
+  @media (max-width: 1280px) {
+    .project-details-awards-images {
+      grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+    }
+    .award-image {
+      height: 100px;
+      width: auto;
+      max-width: 100px;
+      object-fit: contain;
+    }
+  }
+  @media (max-width: 992px) {
+    .mobile-play-btn,
+    .mobile-play-btn-invert {
+      display: grid;
+      pointer-events: none;
+    }
+    .project-details-overview {
+      & h5 {
+        margin-top: 2.5rem;
+        margin-bottom: 5rem;
+        font-size: 15px;
+      }
+    }
+    .main-video__wrapper {
+      height: 100svh;
+    }
+    .project-details-left {
+      display: none;
+    }
+    .project-details__wrapper,
+    .project-overview__wrapper {
+      margin: 1rem;
+    }
+    .project-details__wrapper {
+      margin: 0 auto;
+      width: 90%;
+      margin-bottom: 4rem;
+    }
+    .project-overview-text {
+      column-count: 1;
+    }
+    .sticky-gradient {
+      display: none;
+    }
+    .main-video__mobile-title-wrapper {
+      display: flex;
+    }
+    .project-details-mobile-awards {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+    .project-details-mobile-awards-wrapper {
+      width: 100%;
+      margin-top: 2rem;
+      position: relative;
+    }
+    .item-two-col {
+      width: 100%;
+      column-gap: 2rem;
+      /* matches 2rem gap for .project-details-credits */
+    }
+    .project-details-item {
+      flex: 1;
+    }
+    .project-details-awards-images {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      row-gap: 1rem;
+      opacity: 0.5;
+      width: 100%;
+      max-width: 95vw;
+    }
+    .award-image {
+      height: auto;
+      width: 100px;
+    }
+  }
+  @media (max-width: 576px) {
+    .project-details-credits {
+      gap: 1rem;
+    }
+    .item-two-col {
+      column-gap: 1rem;
+    }
+    .project-details-awards-images {
+      grid-template-columns: repeat(4, minmax(60px, auto));
+      gap: 0.25rem;
+    }
+    .award-image {
+      height: 60px;
+      width: auto;
+      max-width: 80px;
+      object-fit: contain;
+    }
+    .item-small {
+      font-size: 11px;
+    }
+    .main-video__mobile-title {
+      h1 {
+        width: 90%;
+      }
+    }
+  }
+</style>
