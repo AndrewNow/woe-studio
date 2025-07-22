@@ -161,7 +161,7 @@ const timerWrapperClass = isIndexPage
   timerWrapper.innerHTML = timerData
     .map(
       (video) => `
-          <a class="timer-item" href="/projects/${video.slug}">
+          <a class="timer-item" href="/motion/${video.slug}">
             <p>${video.title}</p>
             <p>${video.clientArray ? video.clientArray : ""}</p>
             <div class="timer-countdown">

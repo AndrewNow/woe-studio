@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import { getProjectsInOrder, getSiteSettings } from "../../sanity/api";
+import { getStillsProjectsInOrder, getSiteSettings } from "../../sanity/api";
 import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
@@ -9,27 +9,29 @@ import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.a
 import Footer from "../../components/footer.astro";
 import PageTransition from "../../components/pageTransition.astro";
 
-const allProjectData = await getProjectsInOrder();
+const allProjectData = await getStillsProjectsInOrder();
+
 const settingsData = await getSiteSettings();
 
-const data = allProjectData.projects;
+const data = allProjectData?.stills;
 ---
 
 <Layout
-  title="Projects | WOE Studio"
+  title="Stills | WOE Studio"
   data={settingsData}
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
-  <div class="project-grid__container">
-    <div class="project-entries-container">
+  <div class="stills-grid__container">
+    <div class="stills-entries-container">
       {
         data.map((data, i) => {
           const mobileThumbnail = data.thumbnail;
-          const itemSpansTwoCols = i % 5 === 0;
+          // New logic: Every 5th item (index 4, 9, 14, etc.) should span two columns
+          const itemSpansTwoCols = (i + 1) % 5 === 0;
           const className = itemSpansTwoCols
-            ? "project-entry__double-column"
-            : "project-entry__wrapper";
+            ? "stills-entry__double-column"
+            : "stills-entry__wrapper";
 
           const mobileImageSizes = {
             width: itemSpansTwoCols ? 412 : 204,
@@ -45,19 +47,19 @@ const data = allProjectData.projects;
 
           return (
             <a
-              class={`project-entry ${className}`}
+              class={`stills-entry ${className}`}
               style={{ color: "white" }}
-              href={`/projects/${data.slug}`}
+              href={`/stills/${data.slug}`}
             >
-              <div class="loader">
-                <div class="lottie-container" />
+              <div class="stills-loader">
+                <div class="stills-lottie-container" />
               </div>
               <div
-                class="video-container hover-area"
-                data-hover-text="View project"
+                class="stills-video-container hover-area"
+                data-hover-text="View still"
               >
                 <video
-                  class="project-video-media"
+                  class="stills-video-media"
                   preload="metadata"
                   loop
                   muted
@@ -73,7 +75,7 @@ const data = allProjectData.projects;
                 width={itemSpansTwoCols ? 440 : 510}
                 height={itemSpansTwoCols ? 234 : 297}
                 quality="90"
-                class="project-image-media__mobile"
+                class="stills-image-media__mobile"
               /> */}
               <img
                 src={thumbnail}
@@ -81,7 +83,7 @@ const data = allProjectData.projects;
                 width={mobileImageSizes.width}
                 height={mobileImageSizes.height}
                 loading="lazy"
-                class="project-image-media__mobile hidden mobile-thumbnail"
+                class="stills-image-media__mobile hidden mobile-thumbnail"
               />
               <img
                 src={tabletThumbnail}
@@ -89,14 +91,14 @@ const data = allProjectData.projects;
                 width={tabletImageSizes.width}
                 height={tabletImageSizes.height}
                 loading="lazy"
-                class="project-image-media__tablet hidden tablet-thumbnail"
+                class="stills-image-media__tablet hidden tablet-thumbnail"
               />
-              <div class="project-text">
-                <span class="project-titleset">
+              <div class="stills-text">
+                <span class="stills-titleset">
                   {data.clientArray !== null && <p>{data.clientArray[0]}</p>}
                   <p>{data.title}</p>
                 </span>
-                <span class="project-titleset titleset-services">
+                <span class="stills-titleset titleset-services">
                   <p>{data.servicesArray ? data.servicesArray[0] : null}</p>
                 </span>
               </div>
@@ -118,25 +120,38 @@ const data = allProjectData.projects;
 
   const isMobile = window.innerWidth <= 576;
   const isTablet = window.innerWidth > 576 && window.innerWidth <= 992;
-  const projectEntries = document.querySelectorAll(".project-entry");
+  const stillsEntries = document.querySelectorAll(".stills-entry");
 
-  projectEntries.forEach((entry, index) => {
-    const video = entry.querySelector(".project-video-media");
-    const mobileImage = entry.querySelector(".project-image-media__mobile");
-    const tabletImage = entry.querySelector(".project-image-media__tablet");
-    const loader = entry.querySelector(".loader");
-    const lottieContainer = entry.querySelector(".lottie-container");
+  console.log(`Found ${stillsEntries.length} stills entries`);
+  console.log(
+    `Device type: ${isMobile ? "Mobile" : isTablet ? "Tablet" : "Desktop"}`
+  );
 
-    // console.log(`Entry ${index}:`, {
-    //   video: video ? "Found" : "Not found",
-    //   image: image ? "Found" : "Not found",
-    //   loader: loader ? "Found" : "Not found",
-    //   lottieContainer: lottieContainer ? "Found" : "Not found",
-    // });
+  stillsEntries.forEach((entry, index) => {
+    const video = entry.querySelector(".stills-video-media");
+    const mobileImage = entry.querySelector(".stills-image-media__mobile");
+    const tabletImage = entry.querySelector(".stills-image-media__tablet");
+    const stillsLoader = entry.querySelector(".stills-loader");
+    const stillsLottieContainer = entry.querySelector(
+      ".stills-lottie-container"
+    );
+
+    console.log(`Entry ${index}:`, {
+      video: video ? "Found" : "Not found",
+      mobileImage: mobileImage ? "Found" : "Not found",
+      tabletImage: tabletImage ? "Found" : "Not found",
+      stillsLoader: stillsLoader ? "Found" : "Not found",
+      stillsLottieContainer: stillsLottieContainer ? "Found" : "Not found",
+      videoSrc: video
+        ? video.querySelector("source")?.dataset.src
+        : "No video source",
+      mobileImageSrc: mobileImage ? mobileImage.src : "No mobile image",
+      tabletImageSrc: tabletImage ? tabletImage.src : "No tablet image",
+    });
 
     if (
-      !loader ||
-      !lottieContainer ||
+      !stillsLoader ||
+      !stillsLottieContainer ||
       (!video && !mobileImage && !tabletImage)
     ) {
       console.error(`Missing elements in entry ${index}. Skipping.`);
@@ -146,12 +161,13 @@ const data = allProjectData.projects;
     let animation;
     try {
       animation = lottie.loadAnimation({
-        container: lottieContainer,
+        container: stillsLottieContainer,
         renderer: "svg",
         loop: true,
         autoplay: true,
         path: "/lottie.json",
       });
+      console.log(`Lottie animation loaded for entry ${index}`);
     } catch (error) {
       console.error(
         `Error loading Lottie animation for entry ${index}:`,
@@ -160,67 +176,97 @@ const data = allProjectData.projects;
     }
 
     const hideLoader = () => {
-      loader.classList.add("fade-out");
-      loader.addEventListener(
+      console.log(`Hiding loader for entry ${index}`);
+      stillsLoader.classList.add("fade-out");
+      stillsLoader.addEventListener(
         "animationend",
         () => {
-          loader.style.display = "none";
+          stillsLoader.style.display = "none";
           if (animation) {
             animation.stop();
           }
+          console.log(`Loader hidden for entry ${index}`);
         },
         { once: true }
       );
     };
 
     if (isMobile) {
+      console.log(`Entry ${index}: Mobile device - handling mobile image`);
       // Mobile: Handle mobile image loading
       if (mobileImage) {
         mobileImage.classList.remove("hidden");
         if (mobileImage.complete) {
+          console.log(`Entry ${index}: Mobile image already loaded`);
           mobileImage.classList.add("loaded");
           hideLoader();
         } else {
           mobileImage.addEventListener(
             "load",
             () => {
+              console.log(`Entry ${index}: Mobile image loaded`);
               mobileImage.classList.add("loaded");
               hideLoader();
             },
             { once: true }
           );
+          mobileImage.addEventListener(
+            "error",
+            (e) => {
+              console.error(`Entry ${index}: Mobile image failed to load:`, e);
+            },
+            { once: true }
+          );
         }
+      } else {
+        console.warn(`Entry ${index}: No mobile image found`);
       }
       // Hide video and tablet image for mobile
       if (video) video.style.display = "none";
       if (tabletImage) tabletImage.classList.add("hidden");
     } else if (isTablet) {
+      console.log(`Entry ${index}: Tablet device - handling tablet image`);
       // Tablet: Handle tablet image loading
       if (tabletImage) {
         tabletImage.classList.remove("hidden");
         if (tabletImage.complete) {
+          console.log(`Entry ${index}: Tablet image already loaded`);
           tabletImage.classList.add("loaded");
           hideLoader();
         } else {
           tabletImage.addEventListener(
             "load",
             () => {
+              console.log(`Entry ${index}: Tablet image loaded`);
               tabletImage.classList.add("loaded");
               hideLoader();
             },
             { once: true }
           );
+          tabletImage.addEventListener(
+            "error",
+            (e) => {
+              console.error(`Entry ${index}: Tablet image failed to load:`, e);
+            },
+            { once: true }
+          );
         }
+      } else {
+        console.warn(`Entry ${index}: No tablet image found`);
       }
       // Hide video and mobile image for tablet
       if (video) video.style.display = "none";
       if (mobileImage) mobileImage.classList.add("hidden");
     } else {
+      console.log(`Entry ${index}: Desktop device - handling video`);
       // Desktop: Handle video loading
       if (video) {
         const lazyLoadVideo = () => {
           const source = video.querySelector("source");
           if (source && source.dataset.src) {
+            console.log(
+              `Entry ${index}: Loading video from ${source.dataset.src}`
+            );
             source.src = source.dataset.src;
             video.load();
           } else {
@@ -233,6 +279,7 @@ const data = allProjectData.projects;
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
+              console.log(`Entry ${index}: Video is intersecting, loading...`);
               lazyLoadVideo();
               observer.unobserve(entry.target);
             }
@@ -250,8 +297,14 @@ const data = allProjectData.projects;
           { once: true }
         );
 
+        video.addEventListener("error", (e) => {
+          console.error(`Entry ${index}: Video failed to load:`, e);
+        });
+
         video.addEventListener("mouseenter", () => video.play());
         video.addEventListener("mouseleave", () => video.pause());
+      } else {
+        console.warn(`Entry ${index}: No video found for desktop`);
       }
 
       // Hide mobile and tablet images for desktop
@@ -262,7 +315,7 @@ const data = allProjectData.projects;
 </script>
 
 <style lang="scss">
-  .lottie-container {
+  .stills-lottie-container {
     width: 115px;
     // height: 250px;
     height: auto;
@@ -274,14 +327,14 @@ const data = allProjectData.projects;
     align-items: center;
     position: relative;
   }
-  .lottie-container svg {
+  .stills-lottie-container svg {
     display: block;
     position: absolute;
     width: 100%;
     height: 100%;
     mix-blend-mode: difference;
   }
-  .video-container {
+  .stills-video-container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -290,7 +343,7 @@ const data = allProjectData.projects;
     cursor: none;
   }
 
-  .loader {
+  .stills-loader {
     position: absolute;
     z-index: 4;
     // height: 12px;
@@ -311,7 +364,7 @@ const data = allProjectData.projects;
     transition: opacity 0.35s ease-out;
   }
 
-  .loader.fade-out {
+  .stills-loader.fade-out {
     animation: fadeOut 0.35s ease-out forwards;
   }
 
@@ -364,7 +417,7 @@ const data = allProjectData.projects;
     display: none;
   }
 
-  .project-video-media {
+  .stills-video-media {
     position: absolute;
     top: 0;
     left: 0;
@@ -375,7 +428,7 @@ const data = allProjectData.projects;
     border-radius: 20px;
   }
 
-  .project-entries-container {
+  .stills-entries-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -383,7 +436,7 @@ const data = allProjectData.projects;
     width: 100%;
   }
 
-  .project-grid__container {
+  .stills-grid__container {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -392,9 +445,9 @@ const data = allProjectData.projects;
     margin-bottom: 11rem;
   }
 
-  .project-entry {
+  .stills-entry {
   }
-  .project-entry__wrapper {
+  .stills-entry__wrapper {
     border-radius: 20px;
     overflow: hidden;
     flex: 1;
@@ -406,7 +459,7 @@ const data = allProjectData.projects;
     position: relative;
   }
 
-  .project-entry__double-column {
+  .stills-entry__double-column {
     height: 70vh;
     width: 100%;
     flex: 1 1 100%;
@@ -415,20 +468,20 @@ const data = allProjectData.projects;
     position: relative;
   }
 
-  .project-entry__wrapper:hover {
+  .stills-entry__wrapper:hover {
     transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
   }
 
-  .project-text {
+  .stills-text {
     position: absolute;
     bottom: 1.5vw;
     left: 1.5vw;
     z-index: 15;
   }
 
-  .project-titleset {
+  .stills-titleset {
     display: block;
     color: rgba(var(--rgb-white), 1);
   }
@@ -439,18 +492,18 @@ const data = allProjectData.projects;
   }
 
   @media (max-width: 1280px) {
-    .project-entries-container {
+    .stills-entries-container {
       gap: 0.5rem;
     }
-    .project-grid__container {
+    .stills-grid__container {
       gap: 0.5rem;
       width: calc(100% - 1rem);
       margin-top: 0.5rem;
     }
   }
 
-  .project-image-media__mobile,
-  .project-image-media__tablet {
+  .stills-image-media__mobile,
+  .stills-image-media__tablet {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -459,61 +512,61 @@ const data = allProjectData.projects;
     transition: opacity 0.3s ease-in-out;
   }
 
-  .project-image-media__mobile.loaded,
-  .project-image-media__tablet.loaded {
+  .stills-image-media__mobile.loaded,
+  .stills-image-media__tablet.loaded {
     opacity: 1;
   }
 
-  .project-image-media__mobile.hidden,
-  .project-image-media__tablet.hidden {
+  .stills-image-media__mobile.hidden,
+  .stills-image-media__tablet.hidden {
     display: none;
   }
 
   @media (max-width: 992px) {
-    .project-image-media__tablet {
+    .stills-image-media__tablet {
       display: block;
     }
-    .video-container {
+    .stills-video-container {
       display: none;
     }
-    .project-image-media__mobile {
+    .stills-image-media__mobile {
       display: block;
       position: relative;
     }
-    .project-video-media {
+    .stills-video-media {
       display: none;
     }
-    .project-entries-container {
+    .stills-entries-container {
       gap: 0.25rem;
     }
-    .project-entry__wrapper {
+    .stills-entry__wrapper {
       height: 70vw;
       border-radius: 6px;
     }
-    .project-entry__double-column {
+    .stills-entry__double-column {
       border-radius: 6px;
       height: 440px;
     }
 
-    .project-video-media {
+    .stills-video-media {
       border-radius: 6px;
     }
-    .lottie-container {
+    .stills-lottie-container {
       width: 75px;
       height: auto;
     }
   }
   @media (max-width: 576px) {
-    .project-image-media__mobile {
+    .stills-image-media__mobile {
       display: block;
     }
-    .project-image-media__tablet {
+    .stills-image-media__tablet {
       display: none;
     }
-    .project-entry__wrapper {
+    .stills-entry__wrapper {
       height: 300px;
     }
-    .project-entry__double-column {
+    .stills-entry__double-column {
       height: 210px;
     }
   }

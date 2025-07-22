@@ -155,7 +155,7 @@ const isIndexPage = Astro.url.pathname == "/";
         previewClipData.projects.map((video, i) => {
           return (
             <a
-              href={`/projects/${video.slug}`}
+              href={`/motion/${video.slug}`}
               class="hero-video hover-area"
               id="timer-video-parent"
             >
@@ -178,7 +178,7 @@ const isIndexPage = Astro.url.pathname == "/";
       {
         !isIndexPage && (
           <a
-            href="/projects"
+            href="/motion"
             class="link hero-projects-link"
             data-value="View all projects"
             data-content="View all projects"
