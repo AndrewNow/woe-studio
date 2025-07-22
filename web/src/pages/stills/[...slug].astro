@@ -1,8 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import {
-  getProjectPageData,
-  getNextProject,
+  getStillsPageData,
+  getNextStills,
   getSiteSettings,
 } from "../../sanity/api";
 import PortableText from "../../components/utils/portableText.astro";
@@ -14,10 +14,10 @@ import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.a
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import Footer from "../../components/footer.astro";
-import NextProject from "../../components/projects/nextProject.astro";
+import NextStills from "../../components/projects/nextStills.astro";
 import PageTransition from "../../components/pageTransition.astro";
 
-const pages = await getProjectPageData();
+const pages = await getStillsPageData();
 const settingsData = await getSiteSettings();
 
 const { slug } = Astro.params;
@@ -41,8 +41,8 @@ const {
   mediaArray,
 } = page;
 
-const currentProjectTitle = title;
-const nextProjectData = await getNextProject(currentProjectTitle);
+const currentStillsTitle = title;
+const nextProjectData = await getNextStills(currentStillsTitle);
 
 // if (nextProjectData) {
 //   console.log("Next project data:", nextProjectData);
@@ -288,7 +288,7 @@ const nextProjectData = await getNextProject(currentProjectTitle);
     {
       nextProjectData !== null && (
         <section class="next-project">
-          <NextProject nextProjectData={nextProjectData} />
+          <NextStills nextProjectData={nextProjectData} />
         </section>
       )
     }

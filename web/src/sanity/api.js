@@ -122,6 +122,42 @@ export async function getProjectPageData() {
   return data;
 }
 
+export async function getStillsPageData() {
+  const data = await sanityClient.fetch(
+    `*[_type == "stills"][]{
+        title,
+        "slug": slug.current,
+        description,
+        secondaryDescription,
+        clientArray[],        
+        awardArray[],
+        awardImageArray[]{
+          'imageSrc': asset->url,
+        },  
+        servicesArray[],
+        creditsArray[],
+        previewUrl,
+        previewUrlMobile,
+        "thumbnail": thumbnail.asset->url,
+        video,
+        episodeArray[]{
+          episodeTitle,
+          episodeSubtitle,
+          'thumbnail': episodeThumbnail.asset->url,
+          episodeVideo, 
+        },  
+        mediaArray[]{
+          nestedMediaArray[]{
+            "imageSrc": nestedImage.asset->url,
+            nestedVideo
+          },  
+        }  
+      }  
+    `
+  );
+  return data;
+}
+
 export async function getNextProject(currentProjectTitle) {
   try {
     // Step 1: Retrieve the Current Project's Position
@@ -164,6 +200,52 @@ export async function getNextProject(currentProjectTitle) {
     return nextProjectData;
   } catch (error) {
     console.error("Error fetching next project:", error);
+    return null;
+  }
+}
+
+export async function getNextStills(currentStillsTitle) {
+  try {
+    // Step 1: Retrieve the Current Stills Position
+    const currentPositionQuery = `
+      *[_type == 'stillsInOrder'][0] {
+        "stills":stills[]->{
+          _id,
+          _key,
+          title
+        }
+      }
+    `;
+    const orderData = await sanityClient.fetch(currentPositionQuery);
+    const stills = orderData.stills;
+    const currentIndex = orderData.stills.findIndex(
+      (stills) => stills.title === currentStillsTitle
+    );
+
+    if (currentIndex === -1) {
+      console.error(
+        `Stills with title "${currentStillsTitle}" not found in stillsInOrder.`
+      );
+      return null;
+    }
+
+    const nextIndex = (currentIndex + 1) % stills.length;
+
+    // Step 2: Retrieve the Next Stills Based on Position
+    const nextStillsQuery = `
+     *[_type == 'stillsInOrder'][0] {
+      stills[${nextIndex}]->{
+        title,
+        previewUrl,
+        "slug": slug.current,
+      }
+    }
+    `;
+    const nextStillsData = await sanityClient.fetch(nextStillsQuery);
+
+    return nextStillsData;
+  } catch (error) {
+    console.error("Error fetching next stills:", error);
     return null;
   }
 }
