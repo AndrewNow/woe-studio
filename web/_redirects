@@ -1,9 +1,18 @@
 
-/timstmldrew /projects/house-of-hockey 301
-/syloamerican /projects/breakthrough-artist-of-the-month-sylo 301
-/val1 /projects/valevictorious 301
-/dotdotdot-1 /projects/dot-dot-dot 301
-/mastercardthedish /projects/the-dish 301
-/haven-1 /projects/projects/f-w22-campaign 301
-/dearmadibagoa /projects/dear-madiba 301
+/timstmldrew /motion/house-of-hockey 301
+/syloamerican /motion/breakthrough-artist-of-the-month-sylo 301
+/val1 /motion/valevictorious 301
+/dotdotdot-1 /motion/dot-dot-dot 301
+/mastercardthedish /motion/the-dish 301
+/haven-1 /motion/motion/f-w22-campaign 301
+/dearmadibagoa /motion/dear-madiba 301
 /contact /about 301
+/projects /motion 301
+
+/projects/house-of-hockey /motion/house-of-hockey 301
+/projects/breakthrough-artist-of-the-month-sylo /motion/breakthrough-artist-of-the-month-sylo 301
+/projects/valevictorious /motion/valevictorious 301
+/projects/dot-dot-dot /motion/dot-dot-dot 301
+/projects/the-dish /motion/the-dish 301
+/projects/f-w22-campaign /motion/motion/f-w22-campaign 301
+/projects/dear-madiba /motion/dear-madiba 301
