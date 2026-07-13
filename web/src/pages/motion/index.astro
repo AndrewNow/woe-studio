@@ -7,6 +7,7 @@ import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.ast
 import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
 import Footer from "../../components/footer.astro";
 import PageTransition from "../../components/pageTransition.astro";
+import MotionFilter from "../../components/motionFilter.astro";
 
 const allProjectData = await getMotionProjectsInOrder();
 const settingsData = await getSiteSettings();
@@ -20,6 +21,7 @@ const data = allProjectData.projects;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
+  <MotionFilter />
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
@@ -47,6 +49,7 @@ const data = allProjectData.projects;
               class={`project-entry ${className}`}
               style={{ color: "white" }}
               href={`/motion/${data.slug}`}
+              data-category={data.filterCategory || ""}
             >
               <div class="loader">
                 <div class="lottie-container" />
@@ -391,8 +394,10 @@ const data = allProjectData.projects;
     margin-bottom: 11rem;
   }
 
-  .project-entry {
+  .project-entry.is-filtered-out {
+    display: none;
   }
+
   .project-entry__wrapper {
     border-radius: 20px;
     overflow: hidden;
@@ -401,7 +406,7 @@ const data = allProjectData.projects;
     flex-basis: 33.1%;
     height: 50vh;
     width: 100%;
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: flex-grow 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     position: relative;
   }
 
@@ -415,9 +420,16 @@ const data = allProjectData.projects;
   }
 
   .project-entry__wrapper:hover {
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
+  }
+
+  .project-entries-container.is-filtering {
+    pointer-events: none;
+
+    .project-entry__wrapper {
+      transition: none;
+    }
   }
 
   .project-text {
@@ -500,6 +512,10 @@ const data = allProjectData.projects;
     .lottie-container {
       width: 75px;
       height: auto;
+    }
+
+    .project-grid__container {
+      margin-bottom: 8rem;
     }
   }
   @media (max-width: 576px) {

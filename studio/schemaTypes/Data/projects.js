@@ -25,6 +25,21 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'filterCategory',
+      title: 'Filter category',
+      description:
+        'Tag this project for the Motion page filters. Choose Commercials or Music Videos — every tagged project also appears under All Projects.',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Commercials', value: 'commercials'},
+          {title: 'Music Videos', value: 'music-videos'},
+        ],
+        layout: 'radio',
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'description',
       title: 'Project description',
       description: 'Enter project description here.',
@@ -259,12 +274,20 @@ export default defineType({
     select: {
       title: 'title',
       thumbnail: 'thumbnail',
+      filterCategory: 'filterCategory',
     },
     prepare(selection) {
-      const {title, thumbnail} = selection
+      const {title, thumbnail, filterCategory} = selection
+      const categoryLabel =
+        filterCategory === 'commercials'
+          ? 'Commercials'
+          : filterCategory === 'music-videos'
+            ? 'Music Videos'
+            : 'Untagged'
 
       return {
         title,
+        subtitle: categoryLabel,
         media: thumbnail,
       }
     },

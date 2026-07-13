@@ -46,6 +46,7 @@ export async function getMotionProjectsInOrder() {
         video,
         "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
+        filterCategory,
         clientArray[],        
         awardArray[],
         awardImageArray[]{

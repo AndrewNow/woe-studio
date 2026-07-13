@@ -1,0 +1,153 @@
+.root {
+  position: fixed;
+  top: 50%;
+  right: clamp(1.25rem, 3vw, 2.75rem);
+  transform: translateY(-50%);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: auto;
+  width: max-content;
+  min-width: 0;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  /* Tight enough to feel compact; still clear of shallow pointed ends */
+  padding: 0.32rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  font-family: "n27-regular", system-ui, sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+
+.btnSolid {
+  color: var(--black);
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: visible;
+}
+
+.path {
+  fill: transparent;
+  transition: fill 0.2s ease;
+}
+
+.btnSolid .path {
+  fill: var(--white);
+}
+
+/* Frosted glass only at rest — pill clip matches resting silhouette */
+.frost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: rgba(90, 90, 90, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.btnSolid .frost {
+  opacity: 0;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 992px) {
+  .root {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%);
+  }
+
+  .list {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.28rem;
+    width: auto;
+    min-width: 0;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .item {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .btn {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .root {
+    bottom: max(0.85rem, env(safe-area-inset-bottom));
+    width: calc(100% - 1.5rem);
+    max-width: 26rem;
+  }
+
+  .list {
+    width: 100%;
+  }
+
+  .btn {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (hover: none) {
+  .btn:hover:not(.btnActive):not(.btnSolid) {
+    color: var(--white);
+  }
+}
