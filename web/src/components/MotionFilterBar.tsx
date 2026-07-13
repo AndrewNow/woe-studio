@@ -14,7 +14,7 @@ type Pt = [number, number];
 const VB_W = 200;
 const VB_H = 40;
 
-const FILL_IDLE = "rgba(90, 90, 90, 0.55)";
+const FILL_IDLE = "rgba(70, 70, 70, 0.22)";
 const FILL_SOLID = "rgb(239, 237, 237)";
 
 function sub(a: Pt, b: Pt): Pt {
@@ -161,6 +161,7 @@ function FilterButton({
       onPointerUp={() => setPressed(false)}
       onPointerCancel={() => setPressed(false)}
     >
+      <span className={styles.frost} aria-hidden="true" />
       <svg
         className={styles.shape}
         viewBox={`0 0 ${VB_W} ${VB_H}`}
