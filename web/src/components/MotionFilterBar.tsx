@@ -8,11 +8,14 @@ const FILTERS = [
   { id: "music-videos", label: "Music Videos" },
 ] as const;
 
-type Shape = "rest" | "hover" | "active";
+type Shape = "idle" | "active";
 type Pt = [number, number];
 
 const VB_W = 200;
 const VB_H = 40;
+
+const FILL_IDLE = "rgba(90, 90, 90, 0.55)";
+const FILL_SOLID = "rgb(239, 237, 237)";
 
 function sub(a: Pt, b: Pt): Pt {
   return [a[0] - b[0], a[1] - b[1]];
@@ -94,23 +97,11 @@ function shapePath(leftCap: Pt[], radius: number): string {
 }
 
 /**
- * Shared topology for morphing.
- * Active tip is shallow so label stays clear of the slopes.
+ * idle   — soft chamfered rect (unselected + hover share this silhouette)
+ * active — soft pointed hexagon on press/selection
  */
 const PATHS: Record<Shape, string> = {
-  // Pill
-  rest: shapePath(
-    [
-      [20, 0],
-      [5, 6],
-      [0, 20],
-      [5, 34],
-      [20, VB_H],
-    ],
-    5
-  ),
-  // Chamfered rectangle, soft corners
-  hover: shapePath(
+  idle: shapePath(
     [
       [11, 0],
       [0, 11],
@@ -120,7 +111,6 @@ const PATHS: Record<Shape, string> = {
     ],
     3.5
   ),
-  // Soft pointed hexagon — shallow tips for text clearance
   active: shapePath(
     [
       [14, 0],
@@ -151,8 +141,8 @@ function FilterButton({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const shape: Shape = isActive || pressed ? "active" : hovered ? "hover" : "rest";
-  const solid = shape !== "rest";
+  const shape: Shape = isActive || pressed ? "active" : "idle";
+  const solid = isActive || pressed || hovered;
 
   return (
     <button
@@ -171,7 +161,6 @@ function FilterButton({
       onPointerUp={() => setPressed(false)}
       onPointerCancel={() => setPressed(false)}
     >
-      <span className={styles.frost} aria-hidden="true" />
       <svg
         className={styles.shape}
         viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -180,7 +169,10 @@ function FilterButton({
       >
         <motion.path
           d={PATHS[shape]}
-          animate={{ d: PATHS[shape] }}
+          animate={{
+            d: PATHS[shape],
+            fill: solid ? FILL_SOLID : FILL_IDLE,
+          }}
           initial={false}
           transition={morphTransition}
           className={styles.path}
