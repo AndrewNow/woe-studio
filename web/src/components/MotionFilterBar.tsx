@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./MotionFilterBar.module.scss";
 
@@ -13,6 +13,7 @@ type Pt = [number, number];
 
 const VB_W = 200;
 const VB_H = 40;
+const MOBILE_MQ = "(max-width: 992px)";
 
 const FILL_IDLE = "rgba(70, 70, 70, 0.22)";
 const FILL_SOLID = "rgb(239, 237, 237)";
@@ -96,32 +97,31 @@ function shapePath(leftCap: Pt[], radius: number): string {
   return filletedPath(ringFromLeftCap(leftCap), radius);
 }
 
+const IDLE_CAP: Pt[] = [
+  [11, 0],
+  [0, 11],
+  [0, 20],
+  [0, 29],
+  [11, VB_H],
+];
+
+const ACTIVE_CAP: Pt[] = [
+  [14, 0],
+  [5, 12],
+  [0, 20],
+  [5, 28],
+  [14, VB_H],
+];
+
 /**
  * idle   — soft chamfered rect (unselected + hover share this silhouette)
  * active — soft pointed hexagon on press/selection
  */
-const PATHS: Record<Shape, string> = {
-  idle: shapePath(
-    [
-      [11, 0],
-      [0, 11],
-      [0, 20],
-      [0, 29],
-      [11, VB_H],
-    ],
-    3.5
-  ),
-  active: shapePath(
-    [
-      [14, 0],
-      [5, 12],
-      [0, 20],
-      [5, 28],
-      [14, VB_H],
-    ],
-    4
-  ),
-};
+const PATHS = {
+  idle: shapePath(IDLE_CAP, 3.5),
+  idleMobile: shapePath(IDLE_CAP, 1.6),
+  active: shapePath(ACTIVE_CAP, 4),
+} as const;
 
 const morphTransition = {
   type: "tween" as const,
@@ -129,20 +129,40 @@ const morphTransition = {
   ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(MOBILE_MQ);
+    const sync = () => setIsMobile(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  return isMobile;
+}
+
 function FilterButton({
   label,
   isActive,
   onSelect,
+  isMobile,
 }: {
   label: string;
   isActive: boolean;
   onSelect: () => void;
+  isMobile: boolean;
 }) {
+  const clipId = useId().replace(/:/g, "");
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
   const shape: Shape = isActive || pressed ? "active" : "idle";
   const solid = isActive || pressed || hovered;
+  const idlePath = isMobile ? PATHS.idleMobile : PATHS.idle;
+  const pathD = shape === "active" ? PATHS.active : idlePath;
+  const frostClip = `url(#${clipId})`;
 
   return (
     <button
@@ -161,7 +181,21 @@ function FilterButton({
       onPointerUp={() => setPressed(false)}
       onPointerCancel={() => setPressed(false)}
     >
-      <span className={styles.frost} aria-hidden="true" />
+      <svg width={0} height={0} aria-hidden="true" className={styles.clipSvg}>
+        <defs>
+          <clipPath id={clipId} clipPathUnits="objectBoundingBox">
+            <path
+              d={idlePath}
+              transform={`scale(${1 / VB_W} ${1 / VB_H})`}
+            />
+          </clipPath>
+        </defs>
+      </svg>
+      <span
+        className={styles.frost}
+        aria-hidden="true"
+        style={{ clipPath: frostClip, WebkitClipPath: frostClip }}
+      />
       <svg
         className={styles.shape}
         viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -169,9 +203,9 @@ function FilterButton({
         aria-hidden="true"
       >
         <motion.path
-          d={PATHS[shape]}
+          d={pathD}
           animate={{
-            d: PATHS[shape],
+            d: pathD,
             fill: solid ? FILL_SOLID : FILL_IDLE,
           }}
           initial={false}
@@ -186,6 +220,7 @@ function FilterButton({
 
 export default function MotionFilterBar() {
   const [activeId, setActiveId] = useState<string>("all");
+  const isMobile = useIsMobile();
 
   const selectFilter = (id: string) => {
     setActiveId(id);
@@ -203,6 +238,7 @@ export default function MotionFilterBar() {
               label={filter.label}
               isActive={activeId === filter.id}
               onSelect={() => selectFilter(filter.id)}
+              isMobile={isMobile}
             />
           </li>
         ))}

@@ -59,6 +59,13 @@
   overflow: visible;
 }
 
+.clipSvg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .path {
   stroke: none;
 }
@@ -68,7 +75,7 @@
   inset: 0;
   z-index: 0;
   border: 0;
-  border-radius: 0.55rem;
+  border-radius: 0;
   background: rgba(40, 40, 40, 0.2);
   backdrop-filter: blur(28px) saturate(160%);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
