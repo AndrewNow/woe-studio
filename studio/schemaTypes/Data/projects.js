@@ -28,16 +28,38 @@ export default defineType({
       name: 'filterCategory',
       title: 'Filter category',
       description:
-        'Tag this project for the Motion page filters. Choose Commercials or Music Videos — every tagged project also appears under All Projects.',
+        'Tag this project for the Motion page filters. Every tagged project also appears under All Projects.',
+      type: 'reference',
+      to: [{type: 'filterCategory'}],
+      options: {
+        filter: 'section == $section',
+        filterParams: {section: 'motion'},
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'bannerMediaType',
+      title: 'Banner media type',
+      description:
+        'Choose a looping preview video or a full-bleed image for the project page banner.',
       type: 'string',
       options: {
         list: [
-          {title: 'Commercials', value: 'commercials'},
-          {title: 'Music Videos', value: 'music-videos'},
+          {title: 'Video', value: 'video'},
+          {title: 'Image', value: 'image'},
         ],
         layout: 'radio',
       },
+      initialValue: 'video',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'bannerImage',
+      title: 'Banner image',
+      description:
+        'Optional full-bleed banner image. Used when Banner media type is Image. Falls back to the project thumbnail if empty.',
+      type: 'image',
+      hidden: ({parent}) => parent?.bannerMediaType !== 'image',
     }),
     defineField({
       name: 'description',
@@ -274,20 +296,14 @@ export default defineType({
     select: {
       title: 'title',
       thumbnail: 'thumbnail',
-      filterCategory: 'filterCategory',
+      categoryTitle: 'filterCategory.title',
     },
     prepare(selection) {
-      const {title, thumbnail, filterCategory} = selection
-      const categoryLabel =
-        filterCategory === 'commercials'
-          ? 'Commercials'
-          : filterCategory === 'music-videos'
-            ? 'Music Videos'
-            : 'Untagged'
+      const {title, thumbnail, categoryTitle} = selection
 
       return {
         title,
-        subtitle: categoryLabel,
+        subtitle: categoryTitle || 'Untagged',
         media: thumbnail,
       }
     },
