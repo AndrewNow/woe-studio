@@ -2,13 +2,26 @@ import { useEffect, useId, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./MotionFilterBar.module.scss";
 
-const FILTERS = [
-  { id: "all", label: "All Projects" },
-  { id: "commercials", label: "Commercials" },
-  { id: "music-videos", label: "Music Videos" },
-] as const;
+export type FilterOption = {
+  id: string;
+  label: string;
+};
 
 type Shape = "idle" | "active";
+
+declare global {
+  interface Window {
+    lenis?: { scrollTo: (target: number | string, options?: object) => void };
+  }
+}
+
+function scrollPageToTop() {
+  if (window.lenis) {
+    window.lenis.scrollTo(0, { immediate: false });
+    return;
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 type Pt = [number, number];
 
 const VB_W = 200;
@@ -218,21 +231,43 @@ function FilterButton({
   );
 }
 
-export default function MotionFilterBar() {
+type MotionFilterBarProps = {
+  filters?: FilterOption[];
+  eventName?: string;
+};
+
+export default function MotionFilterBar({
+  filters = [],
+  eventName = "woe:project-filter",
+}: MotionFilterBarProps) {
   const [activeId, setActiveId] = useState<string>("all");
   const isMobile = useIsMobile();
 
+  const categories = filters.filter((filter) => filter.id && filter.id !== "all");
+
+  // All Projects is only useful when there are categories to toggle between.
+  if (categories.length === 0) return null;
+
+  const chips: FilterOption[] = [
+    { id: "all", label: "All Projects" },
+    ...categories,
+  ];
+  const isCompact = chips.length <= 2;
+
   const selectFilter = (id: string) => {
     setActiveId(id);
+    scrollPageToTop();
     window.dispatchEvent(
-      new CustomEvent("woe:motion-filter", { detail: { filterId: id } })
+      new CustomEvent(eventName, { detail: { filterId: id } })
     );
   };
 
   return (
     <nav className={styles.root} aria-label="Filter projects">
-      <ul className={styles.list}>
-        {FILTERS.map((filter) => (
+      <ul
+        className={`${styles.list}${isCompact ? ` ${styles.listCompact}` : ""}`}
+      >
+        {chips.map((filter) => (
           <li key={filter.id} className={styles.item}>
             <FilterButton
               label={filter.label}

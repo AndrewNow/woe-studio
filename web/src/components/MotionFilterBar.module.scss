@@ -103,46 +103,70 @@
     left: 50%;
     bottom: 1.25rem;
     transform: translateX(-50%);
+    width: min(22.5rem, calc(100% - 1.5rem));
+    max-width: calc(100% - 1.5rem);
   }
 
   .list {
-    flex-direction: row;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-content: center;
+    justify-items: stretch;
+    align-items: stretch;
     gap: 0.45rem;
     padding: 0;
-    width: auto;
+    width: 100%;
     min-width: 0;
   }
 
+  /* 1–2 chips: flex-center the group instead of a left-skewed 3-col grid */
+  .listCompact {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    width: auto;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .listCompact .item {
+    width: auto;
+    flex: 0 1 auto;
+  }
+
+  .listCompact .btn {
+    width: auto;
+    min-width: 6.5rem;
+  }
+
   .item {
-    flex: 1 1 auto;
+    width: 100%;
     min-width: 0;
   }
 
   .btn {
-    padding: 0.48rem 0.7rem;
+    padding: 0.48rem 0.55rem;
     font-size: 0.76rem;
-    min-width: 6.5rem;
+    min-width: 0;
   }
 }
 
 @media (max-width: 576px) {
   .root {
     bottom: max(0.85rem, env(safe-area-inset-bottom));
-    width: auto;
+    width: min(20.5rem, calc(100% - 1.25rem));
     max-width: calc(100% - 1.25rem);
   }
 
   .list {
-    width: max-content;
-    max-width: 100%;
+    gap: 0.4rem;
   }
 
   .btn {
-    padding: 0.5rem 0.65rem;
+    padding: 0.5rem 0.45rem;
     font-size: 0.7rem;
-    min-width: 5.75rem;
   }
 }
 

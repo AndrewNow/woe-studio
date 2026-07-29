@@ -38,6 +38,17 @@ export async function getPreviewClips() {
   return data;
 }
 
+export async function getFilterCategories(section) {
+  const data = await sanityClient.fetch(
+    `*[_type == "filterCategory" && section == $section] | order(title asc) {
+      title,
+      "id": slug.current
+    }`,
+    { section }
+  );
+  return data || [];
+}
+
 export async function getMotionProjectsInOrder() {
   const data = await sanityClient.fetch(
     `*[_type == 'projectsInOrder'][0] {
@@ -46,7 +57,10 @@ export async function getMotionProjectsInOrder() {
         video,
         "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
-        filterCategory,
+        "filterCategory": filterCategory->{
+          title,
+          "id": slug.current
+        },
         clientArray[],        
         awardArray[],
         awardImageArray[]{
@@ -71,6 +85,10 @@ export async function getStillsProjectsInOrder() {
         video,
         "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
+        "filterCategory": filterCategory->{
+          title,
+          "id": slug.current
+        },
         clientArray[],        
         awardArray[],
         awardImageArray[]{
@@ -103,6 +121,8 @@ export async function getProjectPageData() {
         creditsArray[],
         previewUrl,
         previewUrlMobile,
+        bannerMediaType,
+        "bannerImage": coalesce(bannerImage.asset->url, thumbnail.asset->url),
         "thumbnail": thumbnail.asset->url,
         video,
         episodeArray[]{
@@ -139,6 +159,8 @@ export async function getStillsPageData() {
         creditsArray[],
         previewUrl,
         previewUrlMobile,
+        bannerMediaType,
+        "bannerImage": coalesce(bannerImage.asset->url, thumbnail.asset->url),
         "thumbnail": thumbnail.asset->url,
         video,
         episodeArray[]{

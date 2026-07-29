@@ -1,6 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getMotionProjectsInOrder, getSiteSettings } from "../../sanity/api";
+import {
+  getFilterCategories,
+  getMotionProjectsInOrder,
+  getSiteSettings,
+} from "../../sanity/api";
 import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
@@ -11,8 +15,12 @@ import MotionFilter from "../../components/motionFilter.astro";
 
 const allProjectData = await getMotionProjectsInOrder();
 const settingsData = await getSiteSettings();
+const filterCategories = await getFilterCategories("motion");
 
 const data = allProjectData.projects;
+const filters = filterCategories
+  .filter((category) => category?.id)
+  .map((category) => ({ id: category.id, label: category.title }));
 ---
 
 <Layout
@@ -21,7 +29,7 @@ const data = allProjectData.projects;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
-  <MotionFilter />
+  <MotionFilter filters={filters} />
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
@@ -43,13 +51,18 @@ const data = allProjectData.projects;
 
           const thumbnail = `${mobileThumbnail}?w=${mobileImageSizes.width * 2}&h=${mobileImageSizes.height * 2}&fit=crop&fm=webp`;
           const tabletThumbnail = `${mobileThumbnail}?w=${tabletImageSizes.width}&h=${tabletImageSizes.height}&fit=crop&fm=webp`;
+          const categoryId =
+            typeof data.filterCategory === "object" && data.filterCategory
+              ? data.filterCategory.id
+              : data.filterCategory || "";
 
           return (
             <a
               class={`project-entry ${className}`}
               style={{ color: "white" }}
               href={`/motion/${data.slug}`}
-              data-category={data.filterCategory || ""}
+              data-filterable
+              data-category={categoryId}
             >
               <div class="loader">
                 <div class="lottie-container" />
