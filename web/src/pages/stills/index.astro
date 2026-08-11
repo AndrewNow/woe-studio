@@ -1,19 +1,26 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import { getStillsProjectsInOrder, getSiteSettings } from "../../sanity/api";
+import {
+  getFilterCategories,
+  getStillsProjectsInOrder,
+  getSiteSettings,
+} from "../../sanity/api";
 import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
 import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
 import Footer from "../../components/footer.astro";
 import PageTransition from "../../components/pageTransition.astro";
+import ProjectFilter from "../../components/projectFilter.astro";
 
 const allProjectData = await getStillsProjectsInOrder();
-
 const settingsData = await getSiteSettings();
+const filterCategories = await getFilterCategories("stills");
 
-const data = allProjectData?.stills;
+const data = allProjectData?.stills || [];
+const filters = filterCategories
+  .filter((category) => category?.id)
+  .map((category) => ({ id: category.id, label: category.title }));
 ---
 
 <Layout
@@ -22,6 +29,15 @@ const data = allProjectData?.stills;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
+  <ProjectFilter
+    filters={filters}
+    eventName="woe:project-filter"
+    entrySelector="[data-filterable]"
+    containerSelector=".stills-entries-container"
+    spanOffset={1}
+    doubleClass="stills-entry__double-column"
+    singleClass="stills-entry__wrapper"
+  />
   <div class="stills-grid__container">
     <div class="stills-entries-container">
       {
@@ -44,12 +60,18 @@ const data = allProjectData?.stills;
 
           const thumbnail = `${mobileThumbnail}?w=${mobileImageSizes.width * 2}&h=${mobileImageSizes.height * 2}&fit=crop&fm=webp`;
           const tabletThumbnail = `${mobileThumbnail}?w=${tabletImageSizes.width}&h=${tabletImageSizes.height}&fit=crop&fm=webp`;
+          const categoryId =
+            typeof data.filterCategory === "object" && data.filterCategory
+              ? data.filterCategory.id
+              : data.filterCategory || "";
 
           return (
             <a
               class={`stills-entry ${className}`}
               style={{ color: "white" }}
               href={`/stills/${data.slug}`}
+              data-filterable
+              data-category={categoryId}
             >
               <div class="stills-loader">
                 <div class="stills-lottie-container" />
@@ -445,8 +467,10 @@ const data = allProjectData?.stills;
     margin-bottom: 11rem;
   }
 
-  .stills-entry {
+  .stills-entry.is-filtered-out {
+    display: none;
   }
+
   .stills-entry__wrapper {
     border-radius: 20px;
     overflow: hidden;
@@ -455,7 +479,7 @@ const data = allProjectData?.stills;
     flex-basis: 33.1%;
     height: 50vh;
     width: 100%;
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: flex-grow 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     position: relative;
   }
 
@@ -469,9 +493,16 @@ const data = allProjectData?.stills;
   }
 
   .stills-entry__wrapper:hover {
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
+  }
+
+  .stills-entries-container.is-filtering {
+    pointer-events: none;
+
+    .stills-entry__wrapper {
+      transition: none;
+    }
   }
 
   .stills-text {
@@ -554,6 +585,10 @@ const data = allProjectData?.stills;
     .stills-lottie-container {
       width: 75px;
       height: auto;
+    }
+
+    .stills-grid__container {
+      margin-bottom: 8rem;
     }
   }
   @media (max-width: 576px) {

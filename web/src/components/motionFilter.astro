@@ -1,0 +1,19 @@
+---
+import ProjectFilter from "./projectFilter.astro";
+
+interface Props {
+  filters?: { id: string; label: string }[];
+}
+
+const { filters = [] } = Astro.props;
+---
+
+<ProjectFilter
+  filters={filters}
+  eventName="woe:project-filter"
+  entrySelector="[data-filterable]"
+  containerSelector=".project-entries-container"
+  spanOffset={0}
+  doubleClass="project-entry__double-column"
+  singleClass="project-entry__wrapper"
+/>

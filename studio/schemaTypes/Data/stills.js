@@ -23,6 +23,42 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'filterCategory',
+      title: 'Filter category',
+      description:
+        'Tag this project for the Stills page filters. Every tagged project also appears under All Projects.',
+      type: 'reference',
+      to: [{type: 'filterCategory'}],
+      options: {
+        filter: 'section == $section',
+        filterParams: {section: 'stills'},
+      },
+    }),
+    defineField({
+      name: 'bannerMediaType',
+      title: 'Banner media type',
+      description:
+        'Choose a looping preview video or a full-bleed image for the project page banner.',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Video', value: 'video'},
+          {title: 'Image', value: 'image'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'image',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'bannerImage',
+      title: 'Banner image',
+      description:
+        'Optional full-bleed banner image. Used when Banner media type is Image. Falls back to the project thumbnail if empty.',
+      type: 'image',
+      hidden: ({parent}) => parent?.bannerMediaType !== 'image',
+    }),
+    defineField({
       name: 'description',
       title: 'Project description',
       description: 'Enter project description here.',
@@ -254,12 +290,14 @@ export default defineType({
     select: {
       title: 'title',
       thumbnail: 'thumbnail',
+      categoryTitle: 'filterCategory.title',
     },
     prepare(selection) {
-      const {title, thumbnail} = selection
+      const {title, thumbnail, categoryTitle} = selection
 
       return {
         title,
+        subtitle: categoryTitle || 'Untagged',
         media: thumbnail,
       }
     },

@@ -36,10 +36,16 @@ const {
   thumbnail,
   previewUrl,
   previewUrlMobile,
+  bannerMediaType,
+  bannerImage,
   video,
   episodeArray,
   mediaArray,
 } = page;
+
+const isImageBanner = (bannerMediaType || "image") === "image";
+const bannerSrc = bannerImage || thumbnail;
+const hasPlayableVideo = !isImageBanner && Boolean(video);
 
 const currentStillsTitle = title;
 const nextProjectData = await getNextStills(currentStillsTitle);
@@ -55,27 +61,45 @@ const nextProjectData = await getNextStills(currentStillsTitle);
   <PageTransition />
   <article class="page__wrapper">
     <section class="main-video__wrapper">
-      <video
-        class=`main-video ${video && 'hover-area'}`
-        data-hover-text="Play video"
-        id="shortVideo"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-        data-has-full-length-video=`${video != null}`
-      >
-        <source src={previewUrl} type="video/mp4" media="(min-width: 992px)" />
-        <source src={previewUrlMobile || previewUrl} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
       {
-        video && (
-          <video class="main-video" id="fullVideo" controls>
-            <source src={video} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+        isImageBanner ? (
+          <img
+            class="main-video main-banner-image"
+            src={bannerSrc}
+            alt=""
+            id="bannerImage"
+          />
+        ) : (
+          <>
+            <video
+              class:list={["main-video", { "hover-area": hasPlayableVideo }]}
+              data-hover-text={hasPlayableVideo ? "Play video" : undefined}
+              id="shortVideo"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              data-has-full-length-video={hasPlayableVideo ? "true" : "false"}
+            >
+              <source
+                src={previewUrl}
+                type="video/mp4"
+                media="(min-width: 992px)"
+              />
+              <source
+                src={previewUrlMobile || previewUrl}
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </video>
+            {hasPlayableVideo && (
+              <video class="main-video" id="fullVideo" controls>
+                <source src={video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </>
         )
       }
       <div class="main-video__mobile-title-wrapper">
@@ -91,7 +115,7 @@ const nextProjectData = await getNextStills(currentStillsTitle);
           }
         </div>
         {
-          video && (
+          hasPlayableVideo && (
             <div class="wrap-mobile-play-btn">
               <div class="mobile-play-btn-invert" />
               <div class="mobile-play-btn">
@@ -300,6 +324,8 @@ const nextProjectData = await getNextStills(currentStillsTitle);
 <script define:vars={{ previewUrl, previewUrlMobile }}>
   document.addEventListener("DOMContentLoaded", () => {
     const shortVideo = document.getElementById("shortVideo");
+    if (!shortVideo) return;
+
     const fullVideoExists = shortVideo.getAttribute(
       "data-has-full-length-video"
     );
@@ -327,7 +353,7 @@ const nextProjectData = await getNextStills(currentStillsTitle);
     // Detect Safari
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    const windowWidth = window.innerWidth;
+    let windowWidth = window.innerWidth;
 
     // Function to set the correct video source
     function updateVideoSource() {
@@ -368,7 +394,7 @@ const nextProjectData = await getNextStills(currentStillsTitle);
       });
 
       const playBtn = document.querySelector(".wrap-mobile-play-btn");
-      playBtn.addEventListener("click", () => {
+      playBtn?.addEventListener("click", () => {
         fullVideo.play();
       });
     }
@@ -449,6 +475,10 @@ const nextProjectData = await getNextStills(currentStillsTitle);
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .main-banner-image {
+    display: block;
   }
 
   #fullVideo {

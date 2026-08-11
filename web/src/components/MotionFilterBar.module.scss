@@ -1,0 +1,177 @@
+.root {
+  position: fixed;
+  top: 50%;
+  right: clamp(1.25rem, 3vw, 2.75rem);
+  transform: translateY(-50%);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: auto;
+  width: max-content;
+  min-width: 0;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  /* Tight enough to feel compact; still clear of shallow pointed ends */
+  padding: 0.32rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  font-family: "n27-regular", system-ui, sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+
+.btnSolid {
+  color: var(--black);
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: visible;
+}
+
+.clipSvg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.path {
+  stroke: none;
+}
+
+.frost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(40, 40, 40, 0.2);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.btnSolid .frost {
+  opacity: 0;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 992px) {
+  .root {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%);
+    width: min(22.5rem, calc(100% - 1.5rem));
+    max-width: calc(100% - 1.5rem);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: center;
+    justify-items: stretch;
+    align-items: stretch;
+    gap: 0.45rem;
+    padding: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* 1–2 chips: flex-center the group instead of a left-skewed 3-col grid */
+  .listCompact {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    width: auto;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .listCompact .item {
+    width: auto;
+    flex: 0 1 auto;
+  }
+
+  .listCompact .btn {
+    width: auto;
+    min-width: 6.5rem;
+  }
+
+  .item {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .btn {
+    padding: 0.48rem 0.55rem;
+    font-size: 0.76rem;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .root {
+    bottom: max(0.85rem, env(safe-area-inset-bottom));
+    width: min(20.5rem, calc(100% - 1.25rem));
+    max-width: calc(100% - 1.25rem);
+  }
+
+  .list {
+    gap: 0.4rem;
+  }
+
+  .btn {
+    padding: 0.5rem 0.45rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (hover: none) {
+  .btn:hover:not(.btnActive):not(.btnSolid) {
+    color: var(--white);
+  }
+}

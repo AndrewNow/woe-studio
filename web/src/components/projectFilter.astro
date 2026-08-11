@@ -1,0 +1,220 @@
+---
+import MotionFilterBar from "./MotionFilterBar";
+
+interface Props {
+  filters?: { id: string; label: string }[];
+  eventName?: string;
+  entrySelector?: string;
+  containerSelector?: string;
+  /** Visible index offset for double-column layout (0 = motion, 1 = stills). */
+  spanOffset?: number;
+  doubleClass?: string;
+  singleClass?: string;
+}
+
+const {
+  filters = [],
+  eventName = "woe:project-filter",
+  entrySelector = "[data-filterable]",
+  containerSelector = ".project-entries-container, .stills-entries-container",
+  spanOffset = 0,
+  doubleClass = "project-entry__double-column",
+  singleClass = "project-entry__wrapper",
+} = Astro.props;
+---
+
+<div
+  class="project-filter-root"
+  data-event-name={eventName}
+  data-entry-selector={entrySelector}
+  data-container-selector={containerSelector}
+  data-span-offset={String(spanOffset)}
+  data-double-class={doubleClass}
+  data-single-class={singleClass}
+  hidden
+></div>
+
+<MotionFilterBar client:load filters={filters} eventName={eventName} />
+
+<script>
+  import { animate } from "motion";
+
+  const configEl = document.querySelector(".project-filter-root");
+  if (configEl) {
+    const eventName =
+      configEl.getAttribute("data-event-name") || "woe:project-filter";
+    const entrySelector =
+      configEl.getAttribute("data-entry-selector") || "[data-filterable]";
+    const containerSelector =
+      configEl.getAttribute("data-container-selector") ||
+      ".project-entries-container, .stills-entries-container";
+    const spanOffset = Number(
+      configEl.getAttribute("data-span-offset") || "0"
+    );
+    const doubleClass =
+      configEl.getAttribute("data-double-class") ||
+      "project-entry__double-column";
+    const singleClass =
+      configEl.getAttribute("data-single-class") || "project-entry__wrapper";
+
+    const LAYOUT_EASE = [0.22, 1, 0.36, 1];
+    const EXIT_MS = 0.28;
+    const LAYOUT_MS = 0.5;
+
+    const entries = [...document.querySelectorAll(entrySelector)];
+    const entriesContainer = document.querySelector(containerSelector);
+
+    let filterGeneration = 0;
+
+    const clearInlineMotion = (el) => {
+      el.style.opacity = "";
+      el.style.transform = "";
+      el.style.transformOrigin = "";
+      el.style.willChange = "";
+      el.style.pointerEvents = "";
+      el.style.zIndex = "";
+    };
+
+    const matchesFilter = (entry, filterId) => {
+      const category = entry.getAttribute("data-category");
+      return filterId === "all" || category === filterId;
+    };
+
+    const updateSpanClasses = (filterId) => {
+      let visibleIndex = 0;
+      entries.forEach((entry) => {
+        if (!matchesFilter(entry, filterId)) return;
+        const spansTwo = (visibleIndex + spanOffset) % 5 === 0;
+        entry.classList.toggle(doubleClass, spansTwo);
+        entry.classList.toggle(singleClass, !spansTwo);
+        visibleIndex += 1;
+      });
+    };
+
+    const applyFilter = async (filterId) => {
+      if (!entries.length) return;
+
+      const generation = ++filterGeneration;
+      entriesContainer?.classList.add("is-filtering");
+
+      const toShow = [];
+      const toHide = [];
+      const toKeep = [];
+
+      entries.forEach((entry) => {
+        const matches = matchesFilter(entry, filterId);
+        const isHidden = entry.classList.contains("is-filtered-out");
+
+        if (matches && isHidden) toShow.push(entry);
+        else if (!matches && !isHidden) toHide.push(entry);
+        else if (matches && !isHidden) toKeep.push(entry);
+      });
+
+      if (!toShow.length && !toHide.length) {
+        updateSpanClasses(filterId);
+        entriesContainer?.classList.remove("is-filtering");
+        return;
+      }
+
+      const firstRects = new Map();
+      [...toKeep, ...toHide].forEach((el) => {
+        firstRects.set(el, el.getBoundingClientRect());
+      });
+
+      toHide.forEach((el) => {
+        el.style.willChange = "opacity, transform";
+        el.style.pointerEvents = "none";
+        el.style.zIndex = "1";
+      });
+
+      await Promise.all(
+        toHide.map((el) =>
+          animate(
+            el,
+            { opacity: 0, scale: 0.94 },
+            { duration: EXIT_MS, easing: LAYOUT_EASE }
+          ).finished.catch(() => {})
+        )
+      );
+
+      if (generation !== filterGeneration) return;
+
+      toHide.forEach((el) => {
+        el.classList.add("is-filtered-out");
+        el.setAttribute("aria-hidden", "true");
+        clearInlineMotion(el);
+      });
+
+      toShow.forEach((el) => {
+        el.classList.remove("is-filtered-out");
+        el.setAttribute("aria-hidden", "false");
+        el.style.opacity = "0";
+        el.style.transform = "scale(0.94)";
+        el.style.willChange = "opacity, transform";
+        el.style.pointerEvents = "none";
+      });
+
+      updateSpanClasses(filterId);
+      void document.body.offsetHeight;
+
+      if (generation !== filterGeneration) return;
+
+      const layoutAnimations = toKeep.map((el) => {
+        const first = firstRects.get(el);
+        if (!first) return Promise.resolve();
+
+        const last = el.getBoundingClientRect();
+        const dx = first.left - last.left;
+        const dy = first.top - last.top;
+        const sx = last.width ? first.width / last.width : 1;
+        const sy = last.height ? first.height / last.height : 1;
+
+        if (
+          Math.abs(dx) < 0.5 &&
+          Math.abs(dy) < 0.5 &&
+          Math.abs(sx - 1) < 0.01 &&
+          Math.abs(sy - 1) < 0.01
+        ) {
+          return Promise.resolve();
+        }
+
+        el.style.transformOrigin = "top left";
+        el.style.willChange = "transform";
+        el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+
+        return animate(
+          el,
+          { transform: "translate(0px, 0px) scale(1, 1)" },
+          { duration: LAYOUT_MS, easing: LAYOUT_EASE }
+        )
+          .finished.then(() => clearInlineMotion(el))
+          .catch(() => clearInlineMotion(el));
+      });
+
+      const enterAnimations = toShow.map((el, index) =>
+        animate(
+          el,
+          { opacity: 1, scale: 1 },
+          {
+            duration: LAYOUT_MS,
+            easing: LAYOUT_EASE,
+            delay: 0.04 + index * 0.03,
+          }
+        )
+          .finished.then(() => clearInlineMotion(el))
+          .catch(() => clearInlineMotion(el))
+      );
+
+      await Promise.all([...layoutAnimations, ...enterAnimations]);
+
+      if (generation === filterGeneration) {
+        entriesContainer?.classList.remove("is-filtering");
+      }
+    };
+
+    window.addEventListener(eventName, (event) => {
+      const filterId = event.detail?.filterId;
+      if (typeof filterId === "string") applyFilter(filterId);
+    });
+  }
+</script>

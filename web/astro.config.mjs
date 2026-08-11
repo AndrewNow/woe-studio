@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sanity from '@sanity/astro'
-import netlify from '@astrojs/netlify';
+import netlify from '@astrojs/netlify'
+import react from '@astrojs/react'
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
     domains: ['cdn.sanity.io', 'astro.build']
   },
   integrations: [
+    react(),
     sanity({
       projectId: "n8fc5ydg",
       dataset: "production",

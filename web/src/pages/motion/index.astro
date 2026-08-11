@@ -1,17 +1,26 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getMotionProjectsInOrder, getSiteSettings } from "../../sanity/api";
+import {
+  getFilterCategories,
+  getMotionProjectsInOrder,
+  getSiteSettings,
+} from "../../sanity/api";
 import CornerTopLeft from "../../components/cornerPieces/cornerTopLeft.astro";
 import CornerTopRight from "../../components/cornerPieces/cornerTopRight.astro";
 import CornerBottomLeft from "../../components/cornerPieces/cornerBottomLeft.astro";
 import CornerBottomRight from "../../components/cornerPieces/cornerBottomRight.astro";
 import Footer from "../../components/footer.astro";
 import PageTransition from "../../components/pageTransition.astro";
+import MotionFilter from "../../components/motionFilter.astro";
 
 const allProjectData = await getMotionProjectsInOrder();
 const settingsData = await getSiteSettings();
+const filterCategories = await getFilterCategories("motion");
 
 const data = allProjectData.projects;
+const filters = filterCategories
+  .filter((category) => category?.id)
+  .map((category) => ({ id: category.id, label: category.title }));
 ---
 
 <Layout
@@ -20,6 +29,7 @@ const data = allProjectData.projects;
   description="Explore the Projects page of WOE (What On Earth). Discover our portfolio showcasing select projects from captivating commercials to compelling documentaries, see how our unique approach transforms ideas into impactful visuals."
 >
   <PageTransition />
+  <MotionFilter filters={filters} />
   <div class="project-grid__container">
     <div class="project-entries-container">
       {
@@ -41,12 +51,18 @@ const data = allProjectData.projects;
 
           const thumbnail = `${mobileThumbnail}?w=${mobileImageSizes.width * 2}&h=${mobileImageSizes.height * 2}&fit=crop&fm=webp`;
           const tabletThumbnail = `${mobileThumbnail}?w=${tabletImageSizes.width}&h=${tabletImageSizes.height}&fit=crop&fm=webp`;
+          const categoryId =
+            typeof data.filterCategory === "object" && data.filterCategory
+              ? data.filterCategory.id
+              : data.filterCategory || "";
 
           return (
             <a
               class={`project-entry ${className}`}
               style={{ color: "white" }}
               href={`/motion/${data.slug}`}
+              data-filterable
+              data-category={categoryId}
             >
               <div class="loader">
                 <div class="lottie-container" />
@@ -391,8 +407,10 @@ const data = allProjectData.projects;
     margin-bottom: 11rem;
   }
 
-  .project-entry {
+  .project-entry.is-filtered-out {
+    display: none;
   }
+
   .project-entry__wrapper {
     border-radius: 20px;
     overflow: hidden;
@@ -401,7 +419,7 @@ const data = allProjectData.projects;
     flex-basis: 33.1%;
     height: 50vh;
     width: 100%;
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: flex-grow 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     position: relative;
   }
 
@@ -415,9 +433,16 @@ const data = allProjectData.projects;
   }
 
   .project-entry__wrapper:hover {
-    transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     min-width: none;
     flex-grow: 500;
+  }
+
+  .project-entries-container.is-filtering {
+    pointer-events: none;
+
+    .project-entry__wrapper {
+      transition: none;
+    }
   }
 
   .project-text {
@@ -500,6 +525,10 @@ const data = allProjectData.projects;
     .lottie-container {
       width: 75px;
       height: auto;
+    }
+
+    .project-grid__container {
+      margin-bottom: 8rem;
     }
   }
   @media (max-width: 576px) {
