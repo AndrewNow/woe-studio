@@ -39,12 +39,16 @@ export async function getPreviewClips() {
 }
 
 export async function getFilterCategories(section) {
+  const projectType = section === "stills" ? "stills" : "projects";
   const data = await sanityClient.fetch(
-    `*[_type == "filterCategory" && section == $section] | order(title asc) {
+    `*[_type == "filterCategory"
+      && $page in coalesce(sections, [section])
+      && count(*[_type == $projectType && references(^._id)]) > 0
+    ] | order(title asc) {
       title,
-      "id": slug.current
+      "id": _id
     }`,
-    { section }
+    { page: section, projectType }
   );
   return data || [];
 }
@@ -59,7 +63,7 @@ export async function getMotionProjectsInOrder() {
         "slug": slug.current,
         "filterCategory": filterCategory->{
           title,
-          "id": slug.current
+          "id": _id
         },
         clientArray[],        
         awardArray[],
@@ -87,7 +91,7 @@ export async function getStillsProjectsInOrder() {
         "slug": slug.current,
         "filterCategory": filterCategory->{
           title,
-          "id": slug.current
+          "id": _id
         },
         clientArray[],        
         awardArray[],

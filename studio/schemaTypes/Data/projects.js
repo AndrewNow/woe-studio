@@ -261,12 +261,11 @@ export default defineType({
                       video: 'nestedVideo',
                       media: 'nestedImage',
                     },
-                    prepare(selection) {
-                      const {media, video} = selection
-                      const hasVideo = video ? 'Video' : 'Image'
+                    prepare({media, video}) {
                       return {
-                        title: hasVideo,
-                        media: media,
+                        title: video ? 'Video' : media ? 'Image' : 'Empty media',
+                        subtitle: video || undefined,
+                        media: media || undefined,
                       }
                     },
                   },
@@ -276,18 +275,20 @@ export default defineType({
           ],
           preview: {
             select: {
-              nestedMediaArray: 'nestedMediaArray',
-              firstImage: 'nestedMediaArray',
+              items: 'nestedMediaArray',
+              media: 'nestedMediaArray.0.nestedImage',
+              firstVideo: 'nestedMediaArray.0.nestedVideo',
             },
-            prepare(selection) {
-              const {nestedMediaArray, firstImage} = selection
-              const array = Object.values(nestedMediaArray)
-              const length = array.length
-              const image = firstImage[0].nestedImage.asset
+            prepare({items, media, firstVideo}) {
+              const length = Array.isArray(items) ? items.length : 0
               return {
-                title: `Media group`,
-                subtitle: `Contains ${length} ${length > 1 ? 'items' : 'item'}`,
-                media: image,
+                title: 'Media group',
+                subtitle: length
+                  ? `Contains ${length} ${length === 1 ? 'item' : 'items'}${
+                      firstVideo && !media ? ' · video' : ''
+                    }`
+                  : 'Empty',
+                media: media || undefined,
               }
             },
           },
