@@ -7,47 +7,59 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Label',
-      description: 'Button label shown on the Motion or Stills filter bar.',
+      title: 'Name',
+      description:
+        'Label on the filter bar. Rename it here once to update every project that uses it.',
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      description: 'Stable id used for filtering (e.g. commercials, music-videos).',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'section',
-      title: 'Section',
-      description: 'Which page this filter appears on.',
-      type: 'string',
+      name: 'sections',
+      title: 'Appears on',
+      description:
+        'Which pages can use this filter. The site only shows the chip when at least one project on that page is tagged with it.',
+      type: 'array',
+      of: [{type: 'string'}],
       options: {
         list: [
           {title: 'Motion', value: 'motion'},
           {title: 'Stills', value: 'stills'},
         ],
-        layout: 'radio',
+        layout: 'grid',
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().min(1),
+    }),
+    // Legacy single-section field from earlier docs; kept so old data still matches queries.
+    defineField({
+      name: 'section',
+      type: 'string',
+      hidden: true,
+    }),
+    // Kept for older documents; not shown or required for new ones.
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      hidden: true,
     }),
   ],
   preview: {
     select: {
       title: 'title',
+      sections: 'sections',
       section: 'section',
-      slug: 'slug.current',
     },
-    prepare({title, section, slug}) {
+    prepare({title, sections, section}) {
+      const list = Array.isArray(sections) && sections.length
+        ? sections
+        : section
+          ? [section]
+          : []
+      const labels = list.map((value) =>
+        value === 'stills' ? 'Stills' : value === 'motion' ? 'Motion' : value,
+      )
       return {
         title,
-        subtitle: `${section || 'unassigned'}${slug ? ` · ${slug}` : ''}`,
+        subtitle: labels.length ? labels.join(' · ') : 'No pages selected',
       }
     },
   },

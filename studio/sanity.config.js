@@ -21,7 +21,11 @@ export default defineConfig({
               .child(
                 S.list()
                   .title('Content')
-                  .items([S.documentTypeListItem('projects'), S.documentTypeListItem('stills')]),
+                  .items([
+                    S.documentTypeListItem('projects'),
+                    S.documentTypeListItem('stills'),
+                    S.documentTypeListItem('filterCategory').title('Filter categories'),
+                  ]),
               ),
 
             S.listItem()

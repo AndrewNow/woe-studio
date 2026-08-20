@@ -12,14 +12,16 @@ const client = getCliClient({apiVersion: '2024-01-01'})
 const dryRun = process.argv.includes('--dry-run')
 
 const SEED = [
-  {title: 'Commercials', slug: 'commercials', section: 'motion'},
-  {title: 'Music Videos', slug: 'music-videos', section: 'motion'},
+  {title: 'Commercials', slug: 'commercials', sections: ['motion']},
+  {title: 'Music Videos', slug: 'music-videos', sections: ['motion']},
 ]
 
-async function ensureCategory({title, slug, section}) {
+async function ensureCategory({title, slug, sections}) {
   const existing = await client.fetch(
-    `*[_type == "filterCategory" && slug.current == $slug && section == $section][0]{ _id }`,
-    {slug, section}
+    `*[_type == "filterCategory" && slug.current == $slug && (
+      $section in sections || section == $section
+    )][0]{ _id }`,
+    {slug, section: sections[0]}
   )
 
   if (existing?._id) {
@@ -27,14 +29,14 @@ async function ensureCategory({title, slug, section}) {
   }
 
   if (dryRun) {
-    console.log(`Would create filterCategory: ${title} (${section}/${slug})`)
+    console.log(`Would create filterCategory: ${title} (${sections.join(',')}/${slug})`)
     return `draft.${slug}`
   }
 
   const created = await client.create({
     _type: 'filterCategory',
     title,
-    section,
+    sections,
     slug: {_type: 'slug', current: slug},
   })
   console.log(`Created filterCategory: ${title} → ${created._id}`)

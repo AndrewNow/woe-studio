@@ -26,12 +26,15 @@ export default defineType({
       name: 'filterCategory',
       title: 'Filter category',
       description:
-        'Tag this project for the Stills page filters. Every tagged project also appears under All Projects.',
+        'Pick a category from the shared list. To add or rename filters for every project, use Filter categories under Project Content.',
       type: 'reference',
       to: [{type: 'filterCategory'}],
       options: {
-        filter: 'section == $section',
-        filterParams: {section: 'stills'},
+        // Use $page — naming the param $section collides with the legacy `section` field
+        // and can make the reference autocomplete return no results.
+        filter: '$page in coalesce(sections, [section])',
+        filterParams: {page: 'stills'},
+        disableNew: true,
       },
     }),
     defineField({
