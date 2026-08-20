@@ -76,8 +76,11 @@ const {
     };
 
     const matchesFilter = (entry, filterId) => {
-      const category = entry.getAttribute("data-category");
-      return filterId === "all" || category === filterId;
+      if (filterId === "all") return true;
+      const categories = (entry.getAttribute("data-category") || "")
+        .split(/\s+/)
+        .filter(Boolean);
+      return categories.includes(filterId);
     };
 
     const updateSpanClasses = (filterId) => {

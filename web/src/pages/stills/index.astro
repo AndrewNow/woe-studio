@@ -60,10 +60,10 @@ const filters = filterCategories
 
           const thumbnail = `${mobileThumbnail}?w=${mobileImageSizes.width * 2}&h=${mobileImageSizes.height * 2}&fit=crop&fm=webp`;
           const tabletThumbnail = `${mobileThumbnail}?w=${tabletImageSizes.width}&h=${tabletImageSizes.height}&fit=crop&fm=webp`;
-          const categoryId =
-            typeof data.filterCategory === "object" && data.filterCategory
-              ? data.filterCategory.id
-              : data.filterCategory || "";
+          const categoryIds = (data.filterCategories || [])
+            .map((category) => category?.id)
+            .filter(Boolean)
+            .join(" ");
 
           return (
             <a
@@ -71,7 +71,7 @@ const filters = filterCategories
               style={{ color: "white" }}
               href={`/stills/${data.slug}`}
               data-filterable
-              data-category={categoryId}
+              data-category={categoryIds}
             >
               <div class="stills-loader">
                 <div class="stills-lottie-container" />

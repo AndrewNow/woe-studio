@@ -61,10 +61,17 @@ export async function getMotionProjectsInOrder() {
         video,
         "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
-        "filterCategory": filterCategory->{
-          title,
-          "id": _id
-        },
+        "filterCategories": select(
+          count(filterCategories) > 0 => filterCategories[]->{
+            title,
+            "id": _id
+          },
+          defined(filterCategory) => [filterCategory->{
+            title,
+            "id": _id
+          }],
+          []
+        ),
         clientArray[],        
         awardArray[],
         awardImageArray[]{
@@ -89,10 +96,17 @@ export async function getStillsProjectsInOrder() {
         video,
         "thumbnail": thumbnail.asset->url,
         "slug": slug.current,
-        "filterCategory": filterCategory->{
-          title,
-          "id": _id
-        },
+        "filterCategories": select(
+          count(filterCategories) > 0 => filterCategories[]->{
+            title,
+            "id": _id
+          },
+          defined(filterCategory) => [filterCategory->{
+            title,
+            "id": _id
+          }],
+          []
+        ),
         clientArray[],        
         awardArray[],
         awardImageArray[]{
