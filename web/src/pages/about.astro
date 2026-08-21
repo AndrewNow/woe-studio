@@ -6,6 +6,7 @@ import Team from "../components/team.astro";
 import Marquee from "../components/marquee.astro";
 import VideoTimer from "../components/videoTimer.astro";
 import Footer from "../components/footer.astro";
+import PortableText from "../components/utils/portableText.astro";
 import { getAboutData, getPreviewClips, getSiteSettings } from "../sanity/api";
 import PageTransition from "../components/pageTransition.astro";
 
@@ -102,9 +103,9 @@ const isIndexPage = Astro.url.pathname == "/";
           }
         </div>
       </div>
-      <h2 class="about-bio">
-        {data.description}
-      </h2>
+      <div class="about-bio">
+        {data.description != null && <PortableText data={data.description} />}
+      </div>
     </div>
     <div class="blend-wrapper-mobile">
       <video
@@ -280,6 +281,20 @@ const isIndexPage = Astro.url.pathname == "/";
     opacity: 0;
     max-width: 1300px;
     transform: translateY(30px);
+
+    :global(.styled-markdown) {
+      p {
+        margin: 0 0 1em;
+        text-align: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
   .canvas__wrapper {
     overflow: hidden;
